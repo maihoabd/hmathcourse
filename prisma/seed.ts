@@ -14,14 +14,14 @@ async function main() {
 
   console.log('Seeding initial users...');
   // Hashed passwords
-  const adminPasswordHash = bcrypt.hashSync('admin123', 10);
+  const adminPasswordHash = bcrypt.hashSync('10101988Hn@!xy', 10);
   const studentPasswordHash = bcrypt.hashSync('student123', 10);
 
   // 1. Create Admin
   const adminUser = await prisma.user.create({
     data: {
       name: 'Quản trị viên HMath',
-      email: 'admin@lms.com',
+      email: 'maihoabd3@gmail.com',
       password: adminPasswordHash,
       role: 'admin',
       status: 'active',
