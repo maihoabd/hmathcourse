@@ -101,30 +101,7 @@ function LoginForm() {
           </Button>
         </form>
 
-        {/* Quick Demo Logins Helper */}
-        <div className="pt-5 border-t border-slate-150 space-y-3">
-          <p className="text-[11px] font-bold text-slate-400 text-center uppercase tracking-wider">
-            Tài khoản Demo
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('student')}
-              className="flex flex-col items-center justify-center p-2.5 rounded-lg border border-indigo-100 bg-indigo-50/50 hover:bg-indigo-50 text-indigo-700 transition-colors text-center text-xs focus:outline-none"
-            >
-              <span className="font-bold">Học viên</span>
-              <span className="text-[10px] text-indigo-500">student@lms.com</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin')}
-              className="flex flex-col items-center justify-center p-2.5 rounded-lg border border-amber-100 bg-amber-50/50 hover:bg-amber-50 text-amber-700 transition-colors text-center text-xs focus:outline-none"
-            >
-              <span className="font-bold">Quản trị viên</span>
-              <span className="text-[10px] text-amber-500">admin@lms.com</span>
-            </button>
-          </div>
-        </div>
+
       </CardContent>
       <CardFooter className="px-6 py-4 border-t border-slate-100 flex items-center justify-center bg-slate-50/50 text-xs">
         <span className="text-slate-500 mr-1.5">Bạn chưa có tài khoản?</span>
