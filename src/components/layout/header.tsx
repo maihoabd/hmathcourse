@@ -67,25 +67,7 @@ export const Header: React.FC = () => {
         {/* Action buttons */}
         <div className="flex items-center gap-4">
           {/* Quick role-switch tool for grading/testing convenience */}
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-500">
-            <span>Test roles:</span>
-            <button
-              onClick={() => login('student@lms.com', 'student123')}
-              className={`px-1.5 py-0.5 rounded transition-colors ${
-                user?.role === 'student' ? 'bg-indigo-600 text-white' : 'hover:bg-slate-200'
-              }`}
-            >
-              Học viên
-            </button>
-            <button
-              onClick={() => login('admin@lms.com', 'admin123')}
-              className={`px-1.5 py-0.5 rounded transition-colors ${
-                user?.role === 'admin' ? 'bg-amber-600 text-white' : 'hover:bg-slate-200'
-              }`}
-            >
-              Admin
-            </button>
-          </div>
+
 
           {/* Shopping Cart Trigger */}
           <div className="relative">
