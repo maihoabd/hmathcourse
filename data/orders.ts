@@ -1,0 +1,172 @@
+import { Order } from './types';
+
+export const mockOrders: Order[] = [
+  {
+    id: 'ord1',
+    studentId: 's1',
+    studentName: 'Nguyễn Văn Hải',
+    studentEmail: 'student@lms.com',
+    courseId: 'c1',
+    courseTitle: 'Khóa học Toán Nâng cao lớp 7 - Bộ sách Kết Nối Tri Thức',
+    amount: 590000,
+    paymentMethod: 'credit_card',
+    status: 'completed',
+    date: '2026-06-10T08:35:00Z'
+  },
+  {
+    id: 'ord2',
+    studentId: 's1',
+    studentName: 'Nguyễn Văn Hải',
+    studentEmail: 'student@lms.com',
+    courseId: 'c2',
+    courseTitle: 'Khóa học Toán lớp 8 cơ bản - Bộ sách Kết Nối Tri Thức',
+    amount: 490000,
+    paymentMethod: 'bank_transfer',
+    status: 'completed',
+    date: '2026-06-12T14:20:00Z'
+  },
+  {
+    id: 'ord3',
+    studentId: 's2',
+    studentName: 'Trần Thị Mai',
+    studentEmail: 'mai.tran@gmail.com',
+    courseId: 'c1',
+    courseTitle: 'Khóa học Toán Nâng cao lớp 7 - Bộ sách Kết Nối Tri Thức',
+    amount: 590000,
+    paymentMethod: 'paypal',
+    status: 'completed',
+    date: '2026-06-15T11:00:00Z'
+  },
+  {
+    id: 'ord4',
+    studentId: 's3',
+    studentName: 'Lê Hoàng Long',
+    studentEmail: 'long.le@yahoo.com',
+    courseId: 'c1',
+    courseTitle: 'Khóa học Toán Nâng cao lớp 7 - Bộ sách Kết Nối Tri Thức',
+    amount: 590000,
+    paymentMethod: 'credit_card',
+    status: 'completed',
+    date: '2026-06-18T09:45:00Z'
+  },
+  {
+    id: 'ord5',
+    studentId: 's3',
+    studentName: 'Lê Hoàng Long',
+    studentEmail: 'long.le@yahoo.com',
+    courseId: 'c2',
+    courseTitle: 'Khóa học Toán lớp 8 cơ bản - Bộ sách Kết Nối Tri Thức',
+    amount: 490000,
+    paymentMethod: 'bank_transfer',
+    status: 'completed',
+    date: '2026-06-20T16:30:00Z'
+  },
+  {
+    id: 'ord6',
+    studentId: 's4',
+    studentName: 'Phạm Thảo Vy',
+    studentEmail: 'vy.pham@outlook.com',
+    courseId: 'c2',
+    courseTitle: 'Khóa học Toán lớp 8 cơ bản - Bộ sách Kết Nối Tri Thức',
+    amount: 490000,
+    paymentMethod: 'credit_card',
+    status: 'completed',
+    date: '2026-06-22T10:15:00Z'
+  },
+  {
+    id: 'ord7',
+    studentId: 's5',
+    studentName: 'Đặng Tuấn Anh',
+    studentEmail: 'tuananh.dang@gmail.com',
+    courseId: 'c1',
+    courseTitle: 'Khóa học Toán Nâng cao lớp 7 - Bộ sách Kết Nối Tri Thức',
+    amount: 590000,
+    paymentMethod: 'bank_transfer',
+    status: 'completed',
+    date: '2026-06-24T08:12:00Z'
+  },
+  {
+    id: 'ord8',
+    studentId: 's6',
+    studentName: 'Vũ Quốc Bảo',
+    studentEmail: 'bao.vu@hotmail.com',
+    courseId: 'c1',
+    courseTitle: 'Khóa học Toán Nâng cao lớp 7 - Bộ sách Kết Nối Tri Thức',
+    amount: 590000,
+    paymentMethod: 'credit_card',
+    status: 'completed',
+    date: '2026-06-26T13:50:00Z'
+  },
+  {
+    id: 'ord9',
+    studentId: 's7',
+    studentName: 'Hoàng Kim Chi',
+    studentEmail: 'chi.hoang@gmail.com',
+    courseId: 'c2',
+    courseTitle: 'Khóa học Toán lớp 8 cơ bản - Bộ sách Kết Nối Tri Thức',
+    amount: 490000,
+    paymentMethod: 'paypal',
+    status: 'completed',
+    date: '2026-06-29T10:30:00Z'
+  },
+  {
+    id: 'ord10',
+    studentId: 's8',
+    studentName: 'Đỗ Hùng Dũng',
+    studentEmail: 'dung.do@gmail.com',
+    courseId: 'c2',
+    courseTitle: 'Khóa học Toán lớp 8 cơ bản - Bộ sách Kết Nối Tri Thức',
+    amount: 490000,
+    paymentMethod: 'credit_card',
+    status: 'completed',
+    date: '2026-07-01T11:20:00Z'
+  },
+  {
+    id: 'ord11',
+    studentId: 's9',
+    studentName: 'Phan Huy Hoàng',
+    studentEmail: 'hoang.phan@gmail.com',
+    courseId: 'c1',
+    courseTitle: 'Khóa học Toán Nâng cao lớp 7 - Bộ sách Kết Nối Tri Thức',
+    amount: 590000,
+    paymentMethod: 'bank_transfer',
+    status: 'completed',
+    date: '2026-07-02T15:45:00Z'
+  },
+  {
+    id: 'ord12',
+    studentId: 's10',
+    studentName: 'Bùi Tiến Dũng',
+    studentEmail: 'dung.bui@yahoo.com',
+    courseId: 'c1',
+    courseTitle: 'Khóa học Toán Nâng cao lớp 7 - Bộ sách Kết Nối Tri Thức',
+    amount: 590000,
+    paymentMethod: 'paypal',
+    status: 'completed',
+    date: '2026-07-03T09:00:00Z'
+  },
+  {
+    id: 'ord13',
+    studentId: 's12',
+    studentName: 'Nguyễn Bích Ngọc',
+    studentEmail: 'ngoc.nguyen@gmail.com',
+    courseId: 'c2',
+    courseTitle: 'Khóa học Toán lớp 8 cơ bản - Bộ sách Kết Nối Tri Thức',
+    amount: 490000,
+    paymentMethod: 'bank_transfer',
+    status: 'completed',
+    date: '2026-07-07T16:20:00Z'
+  },
+  {
+    id: 'ord14',
+    studentId: 's1',
+    studentName: 'Nguyễn Văn Hải',
+    studentEmail: 'student@lms.com',
+    courseId: 'c2',
+    courseTitle: 'Khóa học Toán lớp 8 cơ bản - Bộ sách Kết Nối Tri Thức',
+    amount: 490000,
+    paymentMethod: 'credit_card',
+    status: 'pending',
+    date: '2026-07-09T08:15:00Z'
+  }
+];
