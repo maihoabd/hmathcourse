@@ -27,6 +27,8 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
     reviewsCount: 42,
     studentsCount: 320,
     isBestseller: true,
+    grade: 'lop-7',
+    productType: 'video',
     instructor: {
       name: 'Giáo viên HMath',
       role: 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
@@ -458,6 +460,8 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
     reviewsCount: 28,
     studentsCount: 210,
     isBestseller: false,
+    grade: 'lop-8',
+    productType: 'video',
     instructor: {
       name: 'Giáo viên HMath',
       role: 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',

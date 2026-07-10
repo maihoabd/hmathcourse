@@ -1,21 +1,33 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { formatPrice } from '../../lib/utils';
 
-export default function CoursesPage() {
+function CoursesContent() {
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  
+  const searchParams = useSearchParams();
+  const urlCategory = searchParams.get('category');
+  
+  const [selectedCategory, setSelectedCategory] = useState(urlCategory ?? 'All');
   const [selectedLevel, setSelectedLevel] = useState('All');
+  const [selectedGrade, setSelectedGrade] = useState('All');
+  const [selectedProductType, setSelectedProductType] = useState('All');
   const [sortBy, setSortBy] = useState('popular');
   const [visibleCount, setVisibleCount] = useState(6);
+
+  // Sync category state with search parameter changes
+  useEffect(() => {
+    setSelectedCategory(urlCategory ?? 'All');
+  }, [urlCategory]);
 
   // Fetch course listings from Supabase Database
   useEffect(() => {
@@ -35,7 +47,7 @@ export default function CoursesPage() {
     fetchCourses();
   }, []);
 
-  // Derive categories list dynamically
+  // Derive categories list dynamically from category column (fallback to existing category UI flow)
   const categories = useMemo(() => {
     const list = new Set(courses.map((c) => c.category));
     return ['All', ...Array.from(list)];
@@ -63,6 +75,16 @@ export default function CoursesPage() {
       result = result.filter((c) => c.level === selectedLevel);
     }
 
+    // Grade filter
+    if (selectedGrade !== 'All') {
+      result = result.filter((c) => c.grade === selectedGrade);
+    }
+
+    // Product Type filter
+    if (selectedProductType !== 'All') {
+      result = result.filter((c) => c.productType === selectedProductType);
+    }
+
     // Sorting
     if (sortBy === 'price-low') {
       result.sort((a, b) => a.price - b.price);
@@ -76,7 +98,7 @@ export default function CoursesPage() {
     }
 
     return result;
-  }, [courses, searchTerm, selectedCategory, selectedLevel, sortBy]);
+  }, [courses, searchTerm, selectedCategory, selectedLevel, selectedGrade, selectedProductType, sortBy]);
 
   const displayedCourses = filteredCourses.slice(0, visibleCount);
 
@@ -84,6 +106,8 @@ export default function CoursesPage() {
     setSearchTerm('');
     setSelectedCategory('All');
     setSelectedLevel('All');
+    setSelectedGrade('All');
+    setSelectedProductType('All');
     setSortBy('popular');
     setVisibleCount(6);
   };
@@ -96,17 +120,17 @@ export default function CoursesPage() {
           Danh mục Khóa học
         </h1>
         <p className="text-slate-500 text-sm max-w-xl">
-          Nâng cấp kiến thức kỹ năng lập trình, tư duy thiết kế trải nghiệm người dùng và kinh doanh kỹ thuật số với hàng chục khóa học chất lượng cao.
+          Học Toán thông minh, phát triển tư duy bản chất và bứt phá điểm số cùng các khóa học, sách điện tử và tài liệu ôn tập chất lượng cao từ HMath.
         </p>
       </div>
 
       {/* Filters Dashboard Panel */}
       <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Search box */}
-          <div className="md:col-span-2">
+          <div className="lg:col-span-2 col-span-1">
             <Input
-              placeholder="Tìm kiếm khóa học theo từ khóa..."
+              placeholder="Tìm kiếm khóa học..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-slate-50"
@@ -124,6 +148,38 @@ export default function CoursesPage() {
               <option value="Beginner">Cơ bản</option>
               <option value="Intermediate">Trung cấp</option>
               <option value="Advanced">Nâng cao</option>
+            </select>
+          </div>
+
+          {/* Product Type Filter */}
+          <div>
+            <select
+              value={selectedProductType}
+              onChange={(e) => setSelectedProductType(e.target.value)}
+              className="flex h-10 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            >
+              <option value="All">Tất cả loại sản phẩm</option>
+              <option value="video">Khóa học Video</option>
+              <option value="ebook">Sách điện tử Ebook</option>
+              <option value="tailieu">Tài liệu học tập</option>
+              <option value="combo">Combo học tập</option>
+            </select>
+          </div>
+
+          {/* Grade / Exam Prep Filter */}
+          <div>
+            <select
+              value={selectedGrade}
+              onChange={(e) => setSelectedGrade(e.target.value)}
+              className="flex h-10 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            >
+              <option value="All">Tất cả lớp học / ôn thi</option>
+              <option value="lop-6">Toán lớp 6</option>
+              <option value="lop-7">Toán lớp 7</option>
+              <option value="lop-8">Toán lớp 8</option>
+              <option value="lop-9">Toán lớp 9</option>
+              <option value="on-thi-lop-6">Ôn thi vào lớp 6</option>
+              <option value="on-thi-lop-10">Ôn thi vào lớp 10</option>
             </select>
           </div>
 
@@ -164,7 +220,7 @@ export default function CoursesPage() {
       {/* Course count and status */}
       <div className="flex justify-between items-center text-xs text-slate-500">
         <span>Tìm thấy <b>{filteredCourses.length}</b> khóa học phù hợp</span>
-        {(selectedCategory !== 'All' || selectedLevel !== 'All' || searchTerm !== '' || sortBy !== 'popular') && (
+        {(selectedCategory !== 'All' || selectedLevel !== 'All' || selectedGrade !== 'All' || selectedProductType !== 'All' || searchTerm !== '' || sortBy !== 'popular') && (
           <button onClick={resetFilters} className="text-indigo-600 font-semibold hover:underline">
             Đặt lại bộ lọc
           </button>
@@ -217,9 +273,14 @@ export default function CoursesPage() {
                 </div>
 
                 <CardHeader className="p-5 pb-3">
-                  <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wide">
-                    {course.category}
-                  </span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wide">
+                      {course.category}
+                    </span>
+                    <Badge variant="secondary" className="text-[10px] py-0 bg-slate-50 text-slate-600">
+                      {course.productType === 'video' ? 'Video' : course.productType === 'ebook' ? 'Ebook' : course.productType === 'tailieu' ? 'Tài liệu' : 'Combo'}
+                    </Badge>
+                  </div>
                   <CardTitle className="text-base font-bold text-slate-900 line-clamp-1 mt-1">
                     {course.title}
                   </CardTitle>
@@ -277,5 +338,20 @@ export default function CoursesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function CoursesPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex-1 flex items-center justify-center py-20">
+        <svg className="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+      </div>
+    }>
+      <CoursesContent />
+    </Suspense>
   );
 }

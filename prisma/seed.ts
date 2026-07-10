@@ -101,6 +101,8 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
       instructorRole: 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
       instructorAvatar: 'https://i.postimg.cc/MGshM4ZC/favico.png',
       instructorBio: 'Hơn 10 năm kinh nghiệm bồi dưỡng học sinh giỏi Toán THCS, có phương pháp dạy dễ hiểu, cuốn hút.',
+      grade: 'lop-7',
+      productType: 'video',
     },
   });
 
@@ -127,6 +129,8 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
       instructorRole: 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
       instructorAvatar: 'https://i.postimg.cc/MGshM4ZC/favico.png',
       instructorBio: 'Hơn 10 năm kinh nghiệm bồi dưỡng học sinh giỏi Toán THCS, có phương pháp dạy dễ hiểu, cuốn hút.',
+      grade: 'lop-8',
+      productType: 'video',
     },
   });
 

@@ -41,6 +41,8 @@ model Course {
   instructorRole   String
   instructorAvatar String
   instructorBio    String
+  grade            String       @default("lop-7")
+  productType      String       @default("video")
   enrollments      Enrollment[]
   orders           Order[]
 }

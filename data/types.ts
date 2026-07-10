@@ -51,6 +51,8 @@ export interface Course {
   chapters: Chapter[];
   reviews: Review[];
   isBestseller?: boolean;
+  grade: string;
+  productType: string;
 }
 
 export interface EnrolledCourse {

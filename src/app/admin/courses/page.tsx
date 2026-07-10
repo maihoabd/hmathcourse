@@ -154,7 +154,9 @@ export default function AdminCoursesPage() {
           bio: 'Đại diện bộ phận giáo trình số hóa.',
           coursesCount: 1,
           rating: 5.0
-        }
+        },
+        grade: 'lop-7',
+        productType: 'video'
       };
       saveCourses([newCourse, ...courses]);
     }
