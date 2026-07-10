@@ -34,7 +34,7 @@ export const mockCourses: Course[] = [
           {
             id: 'c1-l1',
             title: 'Buổi 1: Phép tính số hữu tỉ',
-            duration: '25:15',
+            duration: '113 phút',
             isPreview: true,
             videoUrl: 'https://www.youtube.com/embed/I9v8kjCGQtQ',
             documentUrl: 'https://drive.google.com/file/d/1n2HYFnYaPP95yWCsHukFRWmV103C0d2j/preview',
@@ -55,7 +55,7 @@ export const mockCourses: Course[] = [
           {
             id: 'c1-l2',
             title: 'Buổi 2: Số hữu tỉ và các phép tính (2)',
-            duration: '20:10',
+            duration: '107 phút',
             isPreview: false,
             videoUrl: 'https://www.youtube.com/embed/z_3rm6Ldh78',
             documentUrl: 'https://drive.google.com/file/d/15iEAj6HW85USuSZVy319JNrjV7Nssx6X/preview',
@@ -80,7 +80,7 @@ export const mockCourses: Course[] = [
           {
             id: 'c1-l3',
             title: 'Buổi 3: Số hữu tỉ và các phép tính (3)',
-            duration: '22:45',
+            duration: '112 phút',
             isPreview: false,
             videoUrl: 'https://www.youtube.com/embed/jZj8MmiyNC0',
             documentUrl: 'https://drive.google.com/file/d/1VogcqF5F5hQDpGgKi77972nZZb8DqlUl/preview',
@@ -105,7 +105,7 @@ export const mockCourses: Course[] = [
           {
             id: 'c1-l4',
             title: 'Buổi 4: Chữa bài tập tổng hợp Số hữu tỉ và các phép tính',
-            duration: '24:30',
+            duration: '102 phút',
             isPreview: false,
             videoUrl: 'https://www.youtube.com/embed/ND5xkVGOmgo',
             documentUrl: 'https://drive.google.com/file/d/1XsWBBRaqY9SoH2G6Qa1vOZ6R0H-1yuK7/preview',
@@ -128,7 +128,7 @@ export const mockCourses: Course[] = [
           {
             id: 'c1-l5',
             title: 'Buổi 5: Góc và đường thẳng song song (1)',
-            duration: '21:15',
+            duration: '105 phút',
             isPreview: false,
             videoUrl: 'https://www.youtube.com/embed/ZggS8THMXyU',
             documentUrl: 'https://drive.google.com/file/d/1paKtZ4luIfQEmXIWfncR_MPXxULxE8UD/preview',
