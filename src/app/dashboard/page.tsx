@@ -103,11 +103,17 @@ export default function StudentDashboardPage() {
       <div className="flex flex-col md:flex-row items-center justify-between p-6 bg-slate-900 text-white rounded-2xl gap-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-850 to-indigo-900 opacity-90" />
         <div className="relative flex items-center gap-4">
-          <img
-            src={user.avatar}
-            alt={user.name}
-            className="h-16 w-16 rounded-full object-cover border-2 border-indigo-400"
-          />
+          {user.avatar && !user.avatar.includes('unsplash.com') ? (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="h-16 w-16 rounded-full object-cover border-2 border-indigo-400"
+            />
+          ) : (
+            <div className="h-16 w-16 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xl border-2 border-indigo-400">
+              {user.name ? user.name.charAt(0).toUpperCase() : 'H'}
+            </div>
+          )}
           <div className="space-y-1">
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">Chào mừng quay lại, {user.name}!</h1>
             <p className="text-xs text-slate-400">Tài khoản học viên của bạn đang hoạt động bình thường.</p>
@@ -143,7 +149,7 @@ export default function StudentDashboardPage() {
               </div>
               <div className="flex justify-between items-center py-2">
                 <span className="text-slate-500">Loại tài khoản:</span>
-                <Badge variant="default" className="text-[10px] font-bold">STUDENT DEMO</Badge>
+                <Badge variant="success" className="text-[10px] font-bold">STUDENT</Badge>
               </div>
             </CardContent>
           </Card>

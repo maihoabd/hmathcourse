@@ -77,9 +77,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,#1e1b4b,transparent)] opacity-60" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center space-y-8">
           
-          <Badge variant="default" className="bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 px-3 py-1 text-xs">
-            📚 Toán THCS 2026: Đầy đủ chương trình Toán 7 & Toán 8 mới
-          </Badge>
+          
 
           <h1 className="max-w-4xl font-extrabold text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[1.15]">
             Học Toán Bản chất cùng{' '}

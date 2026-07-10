@@ -134,11 +134,17 @@ export const Header: React.FC = () => {
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                 className="flex items-center gap-2 p-1.5 hover:bg-slate-100 rounded-lg transition-colors focus:outline-none"
               >
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="h-8 w-8 rounded-full border border-slate-200 object-cover"
-                />
+                {user.avatar && !user.avatar.includes('unsplash.com') ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="h-8 w-8 rounded-full border border-slate-200 object-cover"
+                  />
+                ) : (
+                  <div className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-200">
+                    {user.name ? user.name.charAt(0).toUpperCase() : 'H'}
+                  </div>
+                )}
                 <span className="hidden sm:inline text-sm font-semibold text-slate-700">{user.name}</span>
               </button>
 
