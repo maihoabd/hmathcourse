@@ -215,7 +215,7 @@ export default function CourseDetailPage() {
                   : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
             >
-              Đánh giá ({course.reviews.length})
+              Đánh giá ({course.reviewsCount})
             </button>
           </div>
 
