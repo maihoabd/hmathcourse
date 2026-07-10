@@ -37,7 +37,7 @@ export default function LandingPage() {
     },
     {
       title: 'Phát triển Tư duy bản chất',
-      desc: 'Học Toán không học vẹt công thức. Thầy Hoàng giảng dạy đi sâu vào bản chất logic toán học để học sinh nhớ lâu, hiểu sâu.',
+      desc: 'Học Toán không học vẹt công thức. Giáo viên HMath giảng dạy đi sâu vào bản chất logic toán học để học sinh nhớ lâu, hiểu sâu.',
       icon: (
         <svg className="h-6 w-6 text-indigo-655" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -59,7 +59,7 @@ export default function LandingPage() {
     {
       name: 'Cô Nguyễn Bích Thủy',
       role: 'Phụ huynh bé Hoàng Lâm (Lớp 8)',
-      comment: 'Bé nhà mình học Toán lớp 8 của HMath đã hiểu sâu bài hơn rất nhiều, kết quả thi giữa kỳ vừa rồi đạt 9.2 điểm. Rất cảm ơn thầy Hoàng.',
+      comment: 'Bé nhà mình học Toán lớp 8 của HMath đã hiểu sâu bài hơn rất nhiều, kết quả thi giữa kỳ vừa rồi đạt 9.2 điểm. Rất cảm ơn giáo viên HMath.',
       avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=60'
     },
     {
@@ -255,7 +255,7 @@ export default function LandingPage() {
             Sẵn sàng đạt điểm cao môn Toán?
           </h2>
           <p className="text-slate-400 max-w-md mx-auto text-sm md:text-base">
-            Đăng ký học thử ngay các bài giảng đầu tiên của HMath để trải nghiệm phương pháp dạy trực quan, dễ hiểu của thầy Hoàng.
+            Đăng ký học thử ngay các bài giảng đầu tiên của HMath để trải nghiệm phương pháp dạy trực quan, dễ hiểu của giáo viên HMath.
           </p>
           <Link href="/register">
             <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500">

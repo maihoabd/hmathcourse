@@ -5,11 +5,20 @@ export const mockCourses: Course[] = [
     id: 'c1',
     slug: 'khoa-hoc-toan-nang-cao-lop-7-bo-sach-ket-noi-tri-thuc',
     title: 'Khóa học Toán 7 Kết nối tri thức',
-    shortDescription: 'Chương trình Toán 7 nâng cao bám sát bộ sách Kết Nối Tri Thức. Giúp học sinh đạt điểm 9, 10 trong các kỳ thi.',
-    description: 'Khóa học thiết kế chuyên sâu dành cho học sinh lớp 7 muốn chinh phục các bài toán khó, nâng cao tư duy logic và đạt kết quả tốt nhất trong các kỳ thi Học sinh giỏi và kiểm tra định kỳ. Nội dung bám sát khung chương trình sách giáo khoa Kết Nối Tri Thức Với Cuộc Sống, mở rộng thêm các chuyên đề bồi dưỡng nâng cao phong phú như Số hữu tỉ nâng cao, dãy tỉ số bằng nhau, bất đẳng thức tam giác và các bài toán hình học chuyên sâu.',
+    shortDescription: 'Chương trình Toán 7 Kết nối tri thức toàn diện với 30 buổi học chất lượng cao, bao trọn chuyên đề Số hữu tỉ, Góc & Đường thẳng song song, Số thực, Tam giác bằng nhau, Đa thức và Xác suất.',
+    description: `Khóa học Toán 7 Kết nối tri thức được thiết kế chuẩn mực nhằm giúp các em học sinh lớp 7 nắm vững toàn bộ kiến thức trọng tâm theo chương trình mới của Bộ Giáo dục và Đào tạo. 
+
+Lộ trình học bài bản gồm 30 buổi học chất lượng cao bám sát theo 5 chương chuyên đề hình học và đại số:
+• Chương 1: Số hữu tỉ nâng cao (Buổi 1 - 4)
+• Chương 2: Góc & Đường thẳng song song (Buổi 5 - 8)
+• Chương 3: Số thực & Giá trị tuyệt đối (Buổi 9 - 12)
+• Chương 4: Tam giác bằng nhau chuyên sâu (Buổi 13 - 20)
+• Chương 5: Đa thức một biến, hình học & xác suất (Buổi 21 - 30)
+
+Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bản chất, tài liệu học tập tóm tắt lý thuyết, bài tập về nhà chọn lọc cùng hướng dẫn giải PDF chi tiết để tự kiểm tra kết quả. Khóa học là bệ phóng giúp các em tự tin bứt phá điểm số 9, 10 trong các bài thi định kỳ.`,
     price: 590000,
     originalPrice: 990000,
-    thumbnail: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&auto=format&fit=crop&q=60',
+    thumbnail: '/images/math_7_thumbnail.jpg',
     category: 'Toán lớp 7',
     level: 'Advanced',
     lessonsCount: 30,
@@ -19,7 +28,7 @@ export const mockCourses: Course[] = [
     studentsCount: 320,
     isBestseller: true,
     instructor: {
-      name: 'Thầy Hoàng HMath',
+      name: 'Giáo viên HMath',
       role: 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
       avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=60',
       bio: 'Hơn 10 năm kinh nghiệm bồi dưỡng học sinh giỏi Toán THCS, có phương pháp dạy dễ hiểu, cuốn hút.',
@@ -428,16 +437,16 @@ export const mockCourses: Course[] = [
       }
     ],
     reviews: [
-      { id: 'rev1', userName: 'Nguyễn Tiến Đạt', rating: 5, comment: 'Bài giảng dãy tỉ số bằng nhau của thầy Hoàng cực hay, có nhiều bài tập độc lạ giúp mình đạt điểm 10.', date: '2026-06-15' },
-      { id: 'rev2', userName: 'Trần Bích Thủy', rating: 5, comment: 'Học hình học của thầy Hoàng rất dễ vẽ hình và hiểu bản chất chứng minh tam giác.', date: '2026-07-02' }
+      { id: 'rev1', userName: 'Nguyễn Tiến Đạt', rating: 5, comment: 'Bài giảng dãy tỉ số bằng nhau của giáo viên HMath cực hay, có nhiều bài tập độc lạ giúp mình đạt điểm 10.', date: '2026-06-15' },
+      { id: 'rev2', userName: 'Trần Bích Thủy', rating: 5, comment: 'Học hình học của giáo viên HMath rất dễ vẽ hình và hiểu bản chất chứng minh tam giác.', date: '2026-07-02' }
     ]
   },
   {
     id: 'c2',
     slug: 'khoa-hoc-toan-lop-8-co-ban-bo-sach-ket-noi-tri-thuc',
     title: 'Khóa học Toán 8 Kết nối tri thức',
-    shortDescription: 'Toàn bộ chương trình toán lớp 8 cơ bản chuẩn chỉnh theo sách giáo khoa Kết Nối Tri Thức. Tích hợp 3 bài giảng đầu hoàn chỉnh.',
-    description: 'Khóa học được xây dựng nhằm giúp các em học sinh lớp 8 nắm chắc kiến thức căn bản môn Toán. Chương trình bám sát bộ sách giáo khoa Kết Nối Tri Thức Với Cuộc Sống. Giai đoạn hiện tại hệ thống đã tải lên trước 3 video bài giảng chất lượng cao đầu tiên để học sinh tự học tại nhà, các bài giảng tiếp theo (tổng 30 bài) sẽ liên tục được cập nhật theo tiến độ năm học.',
+    shortDescription: 'Chương trình toán lớp 8 bám sát sách giáo khoa Kết Nối Tri Thức. Tích hợp các bài giảng hoàn chỉnh đầu tiên và cập nhật liên tục theo tiến độ học.',
+    description: `Khóa học được xây dựng nhằm giúp các em học sinh lớp 8 nắm chắc kiến thức căn bản môn Toán. Chương trình bám sát bộ sách giáo khoa Kết Nối Tri Thức Với Cuộc Sống. Hệ thống liên tục cập nhật các bài giảng chất lượng cao kết hợp tài liệu tóm tắt và bài tập rèn luyện để học sinh học tập tự tin và hiệu quả.`,
     price: 490000,
     originalPrice: 850000,
     thumbnail: 'https://images.unsplash.com/photo-1453733190148-c44698c26588?w=800&auto=format&fit=crop&q=60',
@@ -450,7 +459,7 @@ export const mockCourses: Course[] = [
     studentsCount: 210,
     isBestseller: false,
     instructor: {
-      name: 'Thầy Hoàng HMath',
+      name: 'Giáo viên HMath',
       role: 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
       avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=60',
       bio: 'Hơn 10 năm kinh nghiệm bồi dưỡng học sinh giỏi Toán THCS, có phương pháp dạy dễ hiểu, cuốn hút.',

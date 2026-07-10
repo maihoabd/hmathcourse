@@ -355,9 +355,9 @@ export default function CourseDetailPage() {
 
                 <div className="divide-y divide-slate-100">
                   {(course.reviews || [
-                    { id: 'rev1', userName: 'Nguyễn Văn Hải', rating: 5, comment: 'Thầy giảng bài rất dễ hiểu, chuyên đề số hữu tỉ nâng cao có nhiều bài tập rất hay và sát đề thi.', date: '2026-03-15' },
-                    { id: 'rev2', userName: 'Trần Thị Mai', rating: 5, comment: 'Con tôi học tiến bộ rõ rệt sau 2 tuần học tập. Cảm ơn HMath Course.', date: '2026-05-24' },
-                    { id: 'rev3', userName: 'Trần Văn Long', rating: 4, comment: 'Video bài giảng âm thanh rất rõ ràng. Đợi thầy cập nhật tiếp các bài học tiếp theo.', date: '2026-07-01' }
+                    { id: 'rev1', userName: 'Nguyễn Văn Hải', rating: 5, comment: 'Bài học 30 buổi rất đầy đủ và chi tiết. Tài liệu và BTVN được đính kèm chuẩn bị sẵn, rất tiện cho việc tự học và ôn thi.', date: '2026-03-15' },
+                    { id: 'rev2', userName: 'Trần Thị Mai', rating: 5, comment: 'Con tôi học bám sát chương trình Kết nối tri thức của HMath và tiến bộ rất nhanh. Giao diện xem video và tải PDF mượt mà.', date: '2026-05-24' },
+                    { id: 'rev3', userName: 'Trần Văn Long', rating: 5, comment: 'Video bài giảng âm thanh và hình ảnh vô cùng sắc nét, giáo viên giảng bài tỉ mỉ và dễ tiếp thu.', date: '2026-07-01' }
                   ]).map((rev: any) => (
                     <div key={rev.id} className="py-4 first:pt-0 last:pb-0 space-y-2">
                       <div className="flex justify-between items-center">
