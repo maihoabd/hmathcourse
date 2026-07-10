@@ -166,31 +166,155 @@ export const mockCourses: Course[] = [
 <h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
 <p class="text-xs text-slate-500 leading-relaxed">Bài học về hai đường thẳng song song và các góc đồng vị, so le trong nâng cao.</p>`
           },
-          { id: 'c1-l7', title: 'Buổi 7: Luyện tập về đường thẳng song song (3)', duration: '20:45', isPreview: false },
-          { id: 'c1-l8', title: 'Buổi 8: Góc và đường thẳng song song (4)', duration: '23:10', isPreview: false }
+          { id: 'c1-l7', title: 'Buổi 7: Luyện tập về đường thẳng song song (3)', duration: '103 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/EZ43xt22mrM', documentUrl: 'https://drive.google.com/file/d/1qDDmmQKVzmqwqb2fLT3H7hF6fyl3yahb/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 7:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1qDDmmQKVzmqwqb2fLT3H7hF6fyl3yahb/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 7 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/1lwSJfesaIare5XWjspSywBVVl020DXUY/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 7 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Luyện tập sâu về chứng minh hai đường thẳng song song và tính số đo góc nâng cao.</p>` },
+          { id: 'c1-l8', title: 'Buổi 8: Góc và đường thẳng song song (4)', duration: '101 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/s8qUWJOBbnc', documentUrl: 'https://drive.google.com/file/d/1hPkK5A2DRS7G_uamdQkeB4qzK_4gei6W/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 8:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1hPkK5A2DRS7G_uamdQkeB4qzK_4gei6W/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 8 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/18BNv-TDyRvpIUOI3-wtFteG-ag-2Ueif/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 8 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Buổi học chuyên sâu về định lý góc có cạnh tương ứng song song và các dạng bài kiểm tra 1 tiết.</p>` }
         ]
       },
       {
         id: 'c1-ch3',
         title: 'Chương 3: Số thực & Căn bậc hai (4 bài học)',
         lessons: [
-          { id: 'c1-l9', title: 'Buổi 9: Số thực (1)', duration: '19:40', isPreview: false },
-          { id: 'c1-l10', title: 'Buổi 10: Số thực (2)', duration: '22:15', isPreview: false },
-          { id: 'c1-l11', title: 'Buổi 11: Số thực (3)', duration: '20:50', isPreview: false },
-          { id: 'c1-l12', title: 'Buổi 12: Số thực (4)', duration: '21:30', isPreview: false }
+          { id: 'c1-l9', title: 'Buổi 9: Số thực (1)', duration: '102 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/3UVcRT4SotA', documentUrl: 'https://drive.google.com/file/d/1u2DgkiOwyB-pCOoHygYA627m6DFyDHPb/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 9:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1u2DgkiOwyB-pCOoHygYA627m6DFyDHPb/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 9 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/19hul3UEHwcGC8o9ZieByyq7RNUtZLYl2/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 9 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Bài giảng mở đầu về Số thực, khái niệm căn bậc hai số học và trục số thực.</p>` },
+          { id: 'c1-l10', title: 'Buổi 10: Số thực (2)', duration: '112 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/zhYs8-gBjh4', documentUrl: 'https://drive.google.com/file/d/1n2XlNI4ZaWXlTCC4_Hy0E_RWPUg64n9-/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 10:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1n2XlNI4ZaWXlTCC4_Hy0E_RWPUg64n9-/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 10 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/12_skSdOWqkNuk50jpHuvRBtEgO01ej7G/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 10 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Các phương pháp giải bài toán chứa dấu giá trị tuyệt đối chuyên sâu (Phần 1).</p>` },
+          { id: 'c1-l11', title: 'Buổi 11: Số thực (3)', duration: '108 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/rLXCMxhEla0', documentUrl: 'https://drive.google.com/file/d/1YeM-OkDZEqplY93f899xJ3e35a-1taH3/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 11:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1YeM-OkDZEqplY93f899xJ3e35a-1taH3/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tải Tài liệu & BTVN Buổi 11 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Nâng cao kỹ năng giải bài toán tìm x và chứng minh chứa dấu giá trị tuyệt đối (Phần 2).</p>` },
+          { id: 'c1-l12', title: 'Buổi 12: Số thực (4)', duration: '105 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/aV9TrY-pS_4', documentUrl: 'https://drive.google.com/file/d/1OJ8sd_cPlZznat7SuxfcH9VmSEiQbC0-/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 12:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1OJ8sd_cPlZznat7SuxfcH9VmSEiQbC0-/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tải Tài liệu & BTVN Buổi 12 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Các bài toán nâng cao cuối chương số thực, ước lượng số học và chuẩn bị ôn thi học kỳ.</p>` }
         ]
       },
       {
         id: 'c1-ch4',
         title: 'Chương 4: Tam giác bằng nhau chuyên sâu (8 bài học)',
         lessons: [
-          { id: 'c1-l13', title: 'Buổi 13: Tam giác bằng nhau (1)', duration: '23:45', isPreview: false },
-          { id: 'c1-l14', title: 'Buổi 14: Tam giác bằng nhau (2)', duration: '25:20', isPreview: false },
-          { id: 'c1-l15', title: 'Buổi 15: Tam giác bằng nhau (3)', duration: '24:10', isPreview: false },
-          { id: 'c1-l16', title: 'Buổi 16: Các trường hợp bằng nhau của tam giác vuông', duration: '26:15', isPreview: false },
-          { id: 'c1-l17', title: 'Buổi 17: Luyện tập tam giác bằng nhau', duration: '22:30', isPreview: false },
-          { id: 'c1-l18', title: 'Buổi 18: Tam giác cân', duration: '24:50', isPreview: false },
-          { id: 'c1-l19', title: 'Buổi 19: Luyện tập hình học', duration: '28:10', isPreview: false },
+          { id: 'c1-l13', title: 'Buổi 13: Tam giác bằng nhau (1)', duration: '107 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/rkw998dFad4', documentUrl: 'https://drive.google.com/file/d/1Ejto2BN_HAv8YIfyeJ175YkMEf0d-bXY/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 13:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1Ejto2BN_HAv8YIfyeJ175YkMEf0d-bXY/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 13 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/1r2_yIaqEeri0USA63UOP276FU-3zi0by/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 13 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Khái niệm hai tam giác bằng nhau và trường hợp bằng nhau thứ nhất: Cạnh - Cạnh - Cạnh (c-c-c).</p>` },
+          { id: 'c1-l14', title: 'Buổi 14: Tam giác bằng nhau (2)', duration: '113 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/9YJoJWAgUKk', documentUrl: 'https://drive.google.com/file/d/1oiB0a-tql6WGiQD3P90xPJIxaFTVddHx/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 14:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1oiB0a-tql6WGiQD3P90xPJIxaFTVddHx/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tải Tài liệu & BTVN Buổi 14 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Trường hợp bằng nhau thứ hai: Cạnh - Góc - Cạnh (c-g-c) và các định lý liên quan.</p>` },
+          { id: 'c1-l15', title: 'Buổi 15: Tam giác bằng nhau (3)', duration: '110 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/S9JXu7Mt-JQ', documentUrl: 'https://drive.google.com/file/d/1JtKwa8MANJuv7Dto6TGQBYW3RyBtDkzx/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 15:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1JtKwa8MANJuv7Dto6TGQBYW3RyBtDkzx/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tải Tài liệu & BTVN Buổi 15 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Trường hợp bằng nhau thứ ba: Góc - Cạnh - Góc (g-c-g) và ứng dụng đo đạc khoảng cách thực tế.</p>` },
+          { id: 'c1-l16', title: 'Buổi 16: Các trường hợp bằng nhau của tam giác vuông', duration: '99 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/qYk77fkHKsw', documentUrl: 'https://drive.google.com/file/d/177P1249e28gJitx5bLMPUmpwgqvFVLYH/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 16:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/177P1249e28gJitx5bLMPUmpwgqvFVLYH/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tải Tài liệu & BTVN Buổi 16 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Hệ thống hóa các trường hợp bằng nhau đặc biệt của tam giác vuông (cạnh huyền - góc nhọn, cạnh huyền - cạnh góc vuông).</p>` },
+          { id: 'c1-l17', title: 'Buổi 17: Luyện tập tam giác bằng nhau', duration: '103 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/4OPvysM-1Ic', documentUrl: 'https://drive.google.com/file/d/1-d0H7Nnjby9exF7Iek5alkhLnXTLKmsQ/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 17:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1-d0H7Nnjby9exF7Iek5alkhLnXTLKmsQ/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tải Tài liệu & BTVN Buổi 17 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Rèn luyện các chuyên đề chứng minh góc bằng nhau, chứng minh song song và thẳng hàng dựa vào tam giác bằng nhau.</p>` },
+          { id: 'c1-l18', title: 'Buổi 18: Tam giác cân', duration: '91 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/wv7hhfpAavM', documentUrl: 'https://drive.google.com/file/d/1zn0_eXrXZLfz0Wk3dGmDHER7DcAd1D10/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 18:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1zn0_eXrXZLfz0Wk3dGmDHER7DcAd1D10/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 18 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Lý thuyết tam giác cân, các định lý và cách chứng minh một tam giác là tam giác cân.</p>` },
+          { id: 'c1-l19', title: 'Buổi 19: Luyện tập hình học', duration: '102 phút', isPreview: false, videoUrl: 'https://www.youtube.com/embed/C4o5QqxL8xk', documentUrl: 'https://drive.google.com/file/d/1CX05V_1JyR50_1Q_5D7FsO2MWWMyFCaf/preview', textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 19:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1CX05V_1JyR50_1Q_5D7FsO2MWWMyFCaf/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tải Tài liệu & BTVN Buổi 19 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Luyện tập tổng hợp các dạng toán hình học phẳng, cách dựng hình và kỹ năng vẽ hình phụ.</p>` },
           { id: 'c1-l20', title: 'Buổi 20: Luyện tập tổng hợp hình học', duration: '30:00', isPreview: false }
         ]
       },

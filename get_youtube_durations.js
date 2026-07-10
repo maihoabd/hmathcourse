@@ -1,9 +1,18 @@
 const urls = {
-  'Buổi 1': 'https://www.youtube.com/watch?v=I9v8kjCGQtQ',
-  'Buổi 2': 'https://www.youtube.com/watch?v=z_3rm6Ldh78',
-  'Buổi 3': 'https://www.youtube.com/watch?v=jZj8MmiyNC0',
-  'Buổi 4': 'https://www.youtube.com/watch?v=ND5xkVGOmgo',
-  'Buổi 5': 'https://www.youtube.com/watch?v=ZggS8THMXyU'
+  'Buổi 6': 'https://www.youtube.com/watch?v=Qye3u2dfI0g',
+  'Buổi 7': 'https://www.youtube.com/watch?v=EZ43xt22mrM',
+  'Buổi 8': 'https://www.youtube.com/watch?v=s8qUWJOBbnc',
+  'Buổi 9': 'https://www.youtube.com/watch?v=3UVcRT4SotA',
+  'Buổi 10': 'https://www.youtube.com/watch?v=zhYs8-gBjh4',
+  'Buổi 11': 'https://www.youtube.com/watch?v=rLXCMxhEla0',
+  'Buổi 12': 'https://www.youtube.com/watch?v=aV9TrY-pS_4',
+  'Buổi 13': 'https://www.youtube.com/watch?v=rkw998dFad4',
+  'Buổi 14': 'https://www.youtube.com/watch?v=9YJoJWAgUKk',
+  'Buổi 15': 'https://www.youtube.com/watch?v=S9JXu7Mt-JQ',
+  'Buổi 16': 'https://www.youtube.com/watch?v=qYk77fkHKsw',
+  'Buổi 17': 'https://www.youtube.com/watch?v=4OPvysM-1Ic',
+  'Buổi 18': 'https://www.youtube.com/watch?v=wv7hhfpAavM',
+  'Buổi 19': 'https://www.youtube.com/watch?v=C4o5QqxL8xk'
 };
 
 async function getDuration(name, url) {
@@ -62,12 +71,10 @@ async function run() {
   for (const [name, url] of Object.entries(urls)) {
     const dur = await getDuration(name, url);
     if (dur) {
-      const formatted = dur.hrs > 0 
-        ? `${dur.hrs}:${dur.mins.toString().padStart(2, '0')}:${dur.secs.toString().padStart(2, '0')}`
-        : `${dur.mins}:${dur.secs.toString().padStart(2, '0')}`;
-      console.log(`${name}: ${formatted} (Total seconds: ${dur.totalSec})`);
+      const totalMins = Math.round(dur.totalSec / 60);
+      console.log(`'${name}': '${totalMins} phút',`);
     } else {
-      console.log(`${name}: Could not detect duration`);
+      console.log(`'${name}': Could not detect duration`);
     }
   }
 }
