@@ -166,9 +166,9 @@ export default function CheckoutPage() {
   }
 
   // VietQR generation url parameters
-  const bankId = 'VCB'; // Vietcombank
-  const accountNo = '1023456789'; // Bank account
-  const accountName = 'HOANG MANH HA'; // Account holder name
+  const bankId = 'MB'; // MB Bank
+  const accountNo = '0385048315'; // Bank account
+  const accountName = 'PHAM DANG HAI'; // Account holder name
   const qrUrl = orderCode 
     ? `https://img.vietqr.io/image/${bankId}-${accountNo}-compact.png?amount=${finalTotal}&addInfo=${orderCode}&accountName=${encodeURIComponent(accountName)}`
     : '';
@@ -278,7 +278,7 @@ export default function CheckoutPage() {
                       <p className="font-bold text-slate-800 text-sm border-b border-slate-200 pb-1.5">Thông tin tài khoản nhận:</p>
                       <div className="grid grid-cols-3 gap-y-1.5 text-slate-600">
                         <span className="col-span-1">Ngân hàng:</span>
-                        <span className="col-span-2 font-bold text-slate-800">Vietcombank (VCB)</span>
+                        <span className="col-span-2 font-bold text-slate-800">MB Bank (Ngân hàng Quân Đội)</span>
                         
                         <span className="col-span-1">Số tài khoản:</span>
                         <span className="col-span-2 font-bold text-indigo-600 select-all">{accountNo}</span>
