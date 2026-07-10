@@ -56,21 +56,24 @@ export default function CourseDetailPage() {
     if (user.role === 'admin') return true;
 
     if (user.role !== 'student') return false;
-    // For mock-up, let's also check localStorage student records
-    const storedUser = localStorage.getItem('auth_user');
-    if (storedUser) {
-      try {
-        const u = JSON.parse(storedUser);
-        // Student Hải (s1) has c1 and c3 enrolled initially
-        if (u.id === 's1' && (course.id === 'c1' || course.id === 'c3')) return true;
-        
-        // Also check if they just purchased in this session (we'll save purchases in local storage)
-        const purchasedList = localStorage.getItem(`purchased_${u.id}`);
-        if (purchasedList) {
-          const ids = JSON.parse(purchasedList) as string[];
-          if (ids.includes(course.id)) return true;
-        }
-      } catch (e) {}
+
+    if (typeof window !== 'undefined') {
+      // For mock-up, let's also check localStorage student records
+      const storedUser = localStorage.getItem('auth_user');
+      if (storedUser) {
+        try {
+          const u = JSON.parse(storedUser);
+          // Student Hải (s1) has c1 and c3 enrolled initially
+          if (u.id === 's1' && (course.id === 'c1' || course.id === 'c3')) return true;
+          
+          // Also check if they just purchased in this session (we'll save purchases in local storage)
+          const purchasedList = localStorage.getItem(`purchased_${u.id}`);
+          if (purchasedList) {
+            const ids = JSON.parse(purchasedList) as string[];
+            if (ids.includes(course.id)) return true;
+          }
+        } catch (e) {}
+      }
     }
     return false;
   }, [user, course]);
