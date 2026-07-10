@@ -9,8 +9,14 @@ export async function POST(request: Request) {
     let description = '';
     let amount = 0;
 
+    // 0. Support PayOS Webhook payload format
+    if (body.data && typeof body.data.orderCode !== 'undefined') {
+      const codeNum = body.data.orderCode;
+      description = `HM${codeNum} ${body.data.description || ''}`;
+      amount = body.data.amount || 0;
+    }
     // 1. Support Casso Webhook payload format
-    if (body.requests && Array.isArray(body.requests) && body.requests.length > 0) {
+    else if (body.requests && Array.isArray(body.requests) && body.requests.length > 0) {
       const transaction = body.requests[0];
       description = transaction.description || '';
       amount = transaction.amount || 0;
@@ -30,13 +36,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Nội dung chuyển khoản trống.' }, { status: 400 });
     }
 
-    // Extract the order code matching "HM" followed by 6 digits (e.g. HM123456)
-    const match = description.match(/(HM\d{6})/i);
+    // Extract the order code matching "HM" (with optional "ATH" or space) followed by 6 digits (e.g. HM123456 or HMATH 123456)
+    const match = description.match(/HM(?:ATH)?\s*(\d{6})/i);
     if (!match) {
       return NextResponse.json({ error: 'Không tìm thấy mã đơn hàng HMxxxxx trong nội dung chuyển khoản.' }, { status: 400 });
     }
 
-    const orderCode = match[0].toUpperCase();
+    const orderCode = 'HM' + match[1].toUpperCase();
 
     // Query pending orders associated with this transfer code
     const orders = await db.order.findMany({

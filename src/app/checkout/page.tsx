@@ -78,6 +78,19 @@ export default function CheckoutPage() {
     return () => clearInterval(interval);
   }, [orderCode, showSuccessModal]);
 
+  // Handle redirect callback from PayOS
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const status = params.get('status');
+      const code = params.get('code');
+      if (status === 'success' && code) {
+        setOrderCode(code);
+        setShowSuccessModal(true);
+      }
+    }
+  }, []);
+
   const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -101,7 +114,7 @@ export default function CheckoutPage() {
           userId: user.id,
           items: cartItems.map((item) => ({ id: item.id, price: item.price })),
           amount: finalTotal,
-          paymentMethod: 'vietqr',
+          paymentMethod: 'payos',
         }),
       });
 
@@ -111,6 +124,11 @@ export default function CheckoutPage() {
 
       const data = await response.json();
       setOrderCode(data.orderCode);
+
+      if (data.payos && data.checkoutUrl) {
+        // Redirect to PayOS Hosted Checkout URL
+        window.location.href = data.checkoutUrl;
+      }
     } catch (err) {
       console.error(err);
       alert('Không thể khởi tạo đơn hàng. Vui lòng thử lại.');
