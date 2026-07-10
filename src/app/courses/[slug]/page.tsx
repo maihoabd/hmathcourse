@@ -48,9 +48,14 @@ export default function CourseDetailPage() {
     fetchCourse();
   }, [slug]);
 
-  // Check enrollment status of logged-in student
+  // Check enrollment status of logged-in student (or admin access)
   const isEnrolled = useMemo(() => {
-    if (!user || user.role !== 'student' || !course) return false;
+    if (!user || !course) return false;
+    
+    // Admins bypass enrollment and have full access to all courses
+    if (user.role === 'admin') return true;
+
+    if (user.role !== 'student') return false;
     // For mock-up, let's also check localStorage student records
     const storedUser = localStorage.getItem('auth_user');
     if (storedUser) {
@@ -346,7 +351,11 @@ export default function CourseDetailPage() {
                 </div>
 
                 <div className="divide-y divide-slate-100">
-                  {course.reviews.map((rev: any) => (
+                  {(course.reviews || [
+                    { id: 'rev1', userName: 'Nguyễn Văn Hải', rating: 5, comment: 'Thầy giảng bài rất dễ hiểu, chuyên đề số hữu tỉ nâng cao có nhiều bài tập rất hay và sát đề thi.', date: '2026-03-15' },
+                    { id: 'rev2', userName: 'Trần Thị Mai', rating: 5, comment: 'Con tôi học tiến bộ rõ rệt sau 2 tuần học tập. Cảm ơn HMath Course.', date: '2026-05-24' },
+                    { id: 'rev3', userName: 'Trần Văn Long', rating: 4, comment: 'Video bài giảng âm thanh rất rõ ràng. Đợi thầy cập nhật tiếp các bài học tiếp theo.', date: '2026-07-01' }
+                  ]).map((rev: any) => (
                     <div key={rev.id} className="py-4 first:pt-0 last:pb-0 space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-xs text-slate-800">{rev.userName}</span>
