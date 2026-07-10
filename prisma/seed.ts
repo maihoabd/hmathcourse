@@ -112,15 +112,22 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
       id: 'c2',
       slug: 'khoa-hoc-toan-lop-8-co-ban-bo-sach-ket-noi-tri-thuc',
       title: 'Khóa học Toán 8 Kết nối tri thức',
-      shortDescription: 'Chương trình toán lớp 8 bám sát sách giáo khoa Kết Nối Tri Thức. Tích hợp các bài giảng hoàn chỉnh đầu tiên và cập nhật liên tục theo tiến độ học.',
-      description: `Khóa học được xây dựng nhằm giúp các em học sinh lớp 8 nắm chắc kiến thức căn bản môn Toán. Chương trình bám sát bộ sách giáo khoa Kết Nối Tri Thức Với Cuộc Sống. Hệ thống liên tục cập nhật các bài giảng chất lượng cao kết hợp tài liệu tóm tắt và bài tập rèn luyện để học sinh học tập tự tin và hiệu quả.`,
+      shortDescription: 'Chương trình Toán 8 bám sát sách giáo khoa Kết Nối Tri Thức. Tích hợp lộ trình 30 buổi học chất lượng cao, bài giảng chuyên sâu về Đa thức, Hằng đẳng thức, Phân thức và Hình học phẳng.',
+      description: `Khóa học Toán 8 Kết nối tri thức được xây dựng nhằm giúp các em học sinh lớp 8 nắm chắc toàn bộ kiến thức đại số và hình học theo chương trình mới của Bộ Giáo dục và Đào tạo. 
+
+Lộ trình học bài bản gồm 30 buổi học chất lượng cao, chia thành 3 chương chuyên đề cốt lõi:
+• Chương 1: Đa thức & Các phép toán đa thức (10 bài giảng)
+• Chương 2: Hằng đẳng thức đáng nhớ & Phân thức đại số (10 bài giảng)
+• Chương 3: Tứ giác & Hình học phẳng nâng cao (10 bài giảng)
+
+Các bài học được tích hợp video bài giảng thực chiến, tài liệu học và bài tập về nhà chi tiết giúp học sinh dễ dàng tiếp thu bài học, ôn tập hiệu quả và tự tin chinh phục điểm số cao.`,
       price: 490000,
       originalPrice: 850000,
-      thumbnail: 'https://images.unsplash.com/photo-1453733190148-c44698c26588?w=800&auto=format&fit=crop&q=60',
+      thumbnail: '/images/math_8_thumbnail.jpg',
       category: 'Toán lớp 8',
       level: 'Beginner',
       lessonsCount: 30,
-      duration: '20 giờ 30 phút',
+      duration: '15 giờ 17 phút',
       rating: 4.8,
       reviewsCount: 28,
       studentsCount: 210,
@@ -543,9 +550,9 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
   // Lessons for Course 2 (first 3 populated, remaining 27 placeholder locks)
   const c2Lessons = [
     // Ch 1 (First 3 populated)
-    { id: 'c2-l1', chapterId: ch2_1.id, title: '1. Đơn thức và đa thức nhiều biến', duration: '15:20', isPreview: true, videoUrl: 'https://www.youtube.com/embed/c9Wg6A_eLXY', documentUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Nội dung bài học 1:</h4><p class="text-xs text-slate-500 mb-2">Đơn thức là biểu thức đại số chỉ gồm một số, hoặc một biến, hoặc một tích giữa các số và các biến. Đa thức là một tổng của những đơn thức. Mỗi đơn thức trong tổng đó gọi là một hạng tử của đa thức.</p>' },
-    { id: 'c2-l2', chapterId: ch2_1.id, title: '2. Các phép toán cộng và trừ đa thức', duration: '18:10', isPreview: true, videoUrl: 'https://www.youtube.com/embed/c9Wg6A_eLXY', documentUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Nội dung bài học 2:</h4><p class="text-xs text-slate-500 mb-2">Để cộng hay trừ hai đa thức, ta thực hiện theo các bước: 1. Viết phép tính cộng/trừ giữa hai đa thức đặt trong ngoặc. 2. Phá ngoặc (lưu ý đổi dấu nếu trước ngoặc có dấu trừ). 3. Nhóm các đơn thức đồng dạng và thu gọn.</p>' },
-    { id: 'c2-l3', chapterId: ch2_1.id, title: '3. Nhân đơn thức và đa thức', duration: '20:15', isPreview: true, videoUrl: 'https://www.youtube.com/embed/c9Wg6A_eLXY', documentUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Nội dung bài học 3:</h4><p class="text-xs text-slate-500 mb-2">Quy tắc nhân đơn thức với đa thức: Muốn nhân một đơn thức với một đa thức, ta nhân đơn thức với từng hạng tử của đa thức rồi cộng các tích với nhau: A(B + C) = AB + AC.</p>' },
+    { id: 'c2-l1', chapterId: ch2_1.id, title: 'Buổi 1. Ôn tập Hình học 7 (1)', duration: '94 phút', isPreview: true, videoUrl: 'https://www.youtube.com/embed/h3ZnQByE060', documentUrl: 'https://drive.google.com/file/d/131fp02BUZ7KREvlkQdQY58JJnvXy9D0L/preview', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung bài học:</h4><p class="text-xs text-slate-500 mb-2">Hệ thống hóa toàn bộ kiến thức hình học lớp 7 bao gồm các góc tạo bởi một đường thẳng cắt hai đường thẳng song song, tính chất hai đường thẳng song song và các trường hợp bằng nhau của tam giác làm tiền đề vững chắc cho toán học lớp 8.</p>' },
+    { id: 'c2-l2', chapterId: ch2_1.id, title: 'Buổi 2. Ôn tập Đại số 7', duration: '96 phút', isPreview: true, videoUrl: 'https://www.youtube.com/embed/9DptLGAmEvA', documentUrl: 'https://drive.google.com/file/d/1MUd9HS1BUaNzyQhaIK0SPqueO-9No53d/preview', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung bài học:</h4><p class="text-xs text-slate-500 mb-2">Hệ thống hóa toàn bộ kiến thức đại số lớp 7 bao gồm số hữu tỉ, tỉ lệ thức, dãy tỉ số bằng nhau, số thực và các phép tính số thực cơ bản nâng cao.</p>' },
+    { id: 'c2-l3', chapterId: ch2_1.id, title: 'Buổi 3. Ôn tập Hình học 7 (2)', duration: '99 phút', isPreview: true, videoUrl: 'https://www.youtube.com/embed/MgNxO78fI4c', documentUrl: 'https://drive.google.com/file/d/1hFnGlRNrqaAuqllscEghohPkfO_j390y/preview', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung bài học:</h4><p class="text-xs text-slate-500 mb-2">Nâng cao tư duy hình học thông qua các bài toán chứng minh tam giác bằng nhau, tam giác cân, các đường đồng quy trong tam giác và kỹ thuật kẻ thêm đường phụ.</p>' },
     
     // Ch 1 placeholders
     { id: 'c2-l4', chapterId: ch2_1.id, title: '4. Phép chia đa thức cho đơn thức', duration: '19:40', isPreview: false },

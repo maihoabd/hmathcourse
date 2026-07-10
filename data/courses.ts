@@ -455,7 +455,7 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
     category: 'Toán lớp 8',
     level: 'Beginner',
     lessonsCount: 30,
-    duration: '20 giờ 30 phút',
+    duration: '15 giờ 17 phút',
     rating: 4.8,
     reviewsCount: 28,
     studentsCount: 210,
@@ -475,33 +475,9 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
         id: 'c2-ch1',
         title: 'Chương 1: Đa thức và Các phép toán đa thức (10 bài giảng)',
         lessons: [
-          {
-            id: 'c2-l1',
-            title: '1. Đơn thức và đa thức nhiều biến',
-            duration: '15:20',
-            isPreview: true,
-            videoUrl: 'https://www.youtube.com/embed/c9Wg6A_eLXY',
-            documentUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-            textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Nội dung bài học 1:</h4><p class="text-xs text-slate-500 mb-2">Đơn thức là biểu thức đại số chỉ gồm một số, hoặc một biến, hoặc một tích giữa các số và các biến. Đa thức là một tổng của những đơn thức. Mỗi đơn thức trong tổng đó gọi là một hạng tử của đa thức.</p>'
-          },
-          {
-            id: 'c2-l2',
-            title: '2. Các phép toán cộng và trừ đa thức',
-            duration: '18:10',
-            isPreview: true,
-            videoUrl: 'https://www.youtube.com/embed/c9Wg6A_eLXY',
-            documentUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-            textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Nội dung bài học 2:</h4><p class="text-xs text-slate-500 mb-2">Để cộng hay trừ hai đa thức, ta thực hiện theo các bước: 1. Viết phép tính cộng/trừ giữa hai đa thức đặt trong ngoặc. 2. Phá ngoặc (lưu ý đổi dấu nếu trước ngoặc có dấu trừ). 3. Nhóm các đơn thức đồng dạng và thu gọn.</p>'
-          },
-          {
-            id: 'c2-l3',
-            title: '3. Nhân đơn thức và đa thức',
-            duration: '20:15',
-            isPreview: true,
-            videoUrl: 'https://www.youtube.com/embed/c9Wg6A_eLXY',
-            documentUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-            textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Nội dung bài học 3:</h4><p class="text-xs text-slate-500 mb-2">Quy tắc nhân đơn thức với đa thức: Muốn nhân một đơn thức với một đa thức, ta nhân đơn thức với từng hạng tử của đa thức rồi cộng các tích với nhau: A(B + C) = AB + AC.</p>'
-          },
+          { id: 'c2-l1', title: 'Buổi 1. Ôn tập Hình học 7 (1)', duration: '94 phút', isPreview: true, videoUrl: 'https://www.youtube.com/embed/h3ZnQByE060', documentUrl: 'https://drive.google.com/file/d/131fp02BUZ7KREvlkQdQY58JJnvXy9D0L/preview', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung bài học:</h4><p class="text-xs text-slate-500 mb-2">Hệ thống hóa toàn bộ kiến thức hình học lớp 7 bao gồm các góc tạo bởi một đường thẳng cắt hai đường thẳng song song, tính chất hai đường thẳng song song và các trường hợp bằng nhau của tam giác làm tiền đề vững chắc cho toán học lớp 8.</p>' },
+          { id: 'c2-l2', title: 'Buổi 2. Ôn tập Đại số 7', duration: '96 phút', isPreview: true, videoUrl: 'https://www.youtube.com/embed/9DptLGAmEvA', documentUrl: 'https://drive.google.com/file/d/1MUd9HS1BUaNzyQhaIK0SPqueO-9No53d/preview', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung bài học:</h4><p class="text-xs text-slate-500 mb-2">Hệ thống hóa toàn bộ kiến thức đại số lớp 7 bao gồm số hữu tỉ, tỉ lệ thức, dãy tỉ số bằng nhau, số thực và các phép tính số thực cơ bản nâng cao.</p>' },
+          { id: 'c2-l3', title: 'Buổi 3. Ôn tập Hình học 7 (2)', duration: '99 phút', isPreview: true, videoUrl: 'https://www.youtube.com/embed/MgNxO78fI4c', documentUrl: 'https://drive.google.com/file/d/1hFnGlRNrqaAuqllscEghohPkfO_j390y/preview', textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung bài học:</h4><p class="text-xs text-slate-500 mb-2">Nâng cao tư duy hình học thông qua các bài toán chứng minh tam giác bằng nhau, tam giác cân, các đường đồng quy trong tam giác và kỹ thuật kẻ thêm đường phụ.</p>' },
           // Rest of lessons are placeholder placeholders (no video details - locked for students in frontend)
           { id: 'c2-l4', title: '4. Phép chia đa thức cho đơn thức', duration: '19:40', isPreview: false },
           { id: 'c2-l5', title: '5. Luyện tập tổng hợp Chương 1', duration: '22:15', isPreview: false },
