@@ -5,7 +5,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-slate-900 border-t border-slate-800 text-slate-400">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand Col */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -60,24 +60,6 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
             </ul>
-          </div>
-
-          {/* Contact / Newsletter Col */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-semibold text-white tracking-wider uppercase">Đăng ký nhận tài liệu</h4>
-            <p className="text-xs text-slate-400">
-              Nhận thông báo về các bài tập ôn thi giữa kỳ, cuối kỳ lớp 7, lớp 8 và các tài liệu Toán miễn phí.
-            </p>
-            <div className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Email nhận tài liệu..."
-                className="w-full bg-slate-800 text-slate-100 rounded-lg px-3 py-1.5 text-xs border border-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              />
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-colors shrink-0">
-                Đăng ký
-              </button>
-            </div>
           </div>
         </div>
 
