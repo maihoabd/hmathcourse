@@ -39,7 +39,9 @@ export async function POST(request: Request) {
     // Extract the order code matching "HM" (with optional "ATH" or space) followed by 6 digits (e.g. HM123456 or HMATH 123456)
     const match = description.match(/HM(?:ATH)?\s*(\d{6})/i);
     if (!match) {
-      return NextResponse.json({ error: 'Không tìm thấy mã đơn hàng HMxxxxx trong nội dung chuyển khoản.' }, { status: 400 });
+      // If it doesn't match, return 200 with error: 0 to bypass PayOS webhook test ping verification
+      console.log('No order code found in webhook description. Returning success to satisfy test ping.');
+      return NextResponse.json({ error: 0, message: 'Webhook verified' }, { status: 200 });
     }
 
     const orderCode = 'HM' + match[1].toUpperCase();
@@ -55,8 +57,10 @@ export async function POST(request: Request) {
     });
 
     if (orders.length === 0) {
+      // Return 200 with error: 0 if order is already processed or doesn't exist
       return NextResponse.json({ 
-        message: `Không tìm thấy đơn hàng chờ thanh toán với mã ${orderCode}. Có thể đơn hàng đã được kích hoạt trước đó.` 
+        error: 0,
+        message: `Không tìm thấy đơn hàng chờ thanh toán với mã ${orderCode}.` 
       }, { status: 200 });
     }
 
@@ -94,11 +98,13 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ 
+      error: 0,
       success: true, 
       message: `Đơn hàng ${orderCode} đã thanh toán thành công và kích hoạt khóa học.` 
     });
   } catch (error) {
-    console.error('Payment Webhook Error:', error);
-    return NextResponse.json({ error: 'Lỗi hệ thống khi xử lý webhook thanh toán.' }, { status: 500 });
+    console.error('Webhook processing error:', error);
+    // Return 200 with error: 1 to satisfy webhook response format during server errors
+    return NextResponse.json({ error: 1, message: 'Internal Server Error' }, { status: 200 });
   }
 }
