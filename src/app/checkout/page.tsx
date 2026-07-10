@@ -24,12 +24,10 @@ export default function CheckoutPage() {
   const [promoError, setPromoError] = useState('');
   const [promoSuccess, setPromoSuccess] = useState('');
 
-  const [paymentMethod, setPaymentMethod] = useState<'credit_card' | 'bank_transfer' | 'paypal'>('credit_card');
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardExpiry, setCardExpiry] = useState('');
-  const [cardCvv, setCardCvv] = useState('');
-
+  // Order state
+  const [orderCode, setOrderCode] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Pre-fill profile info if logged in
@@ -39,11 +37,6 @@ export default function CheckoutPage() {
       setEmail(user.email);
     }
   }, [user]);
-
-  // If not logged in, redirect to login page
-  useEffect(() => {
-    // We let them browse the cart, but force login to complete checkout
-  }, []);
 
   const handleApplyPromo = () => {
     setPromoError('');
@@ -63,7 +56,29 @@ export default function CheckoutPage() {
 
   const finalTotal = Math.max(0, cartTotal - discountAmount);
 
-  const handlePaymentSubmit = async (e: React.FormEvent) => {
+  // Poll for order status
+  useEffect(() => {
+    if (!orderCode || showSuccessModal) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/orders/status?code=${orderCode}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'completed') {
+            clearInterval(interval);
+            setShowSuccessModal(true);
+          }
+        }
+      } catch (err) {
+        console.error('Polling error:', err);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [orderCode, showSuccessModal]);
+
+  const handleCreateOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!user) {
@@ -76,61 +91,55 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (paymentMethod === 'credit_card' && (!cardNumber || !cardExpiry || !cardCvv)) {
-      alert('Vui lòng nhập đầy đủ thông tin thẻ tín dụng.');
-      return;
-    }
-
     setIsSubmitting(true);
-    // Simulate transaction processing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Save purchase records to local storage to persist access
-    const storedPurchases = localStorage.getItem(`purchased_${user.id}`);
-    let purchasedIds: string[] = [];
-    if (storedPurchases) {
-      try {
-        purchasedIds = JSON.parse(storedPurchases);
-      } catch (e) {}
-    }
-
-    // Add new course IDs
-    cartItems.forEach((item) => {
-      if (!purchasedIds.includes(item.id)) {
-        purchasedIds.push(item.id);
-      }
-    });
-
-    localStorage.setItem(`purchased_${user.id}`, JSON.stringify(purchasedIds));
-
-    // Save transaction to admin orders mock registry
-    const storedOrders = localStorage.getItem('mock_admin_orders');
-    let ordersList = [];
-    if (storedOrders) {
-      try {
-        ordersList = JSON.parse(storedOrders);
-      } catch (e) {}
-    }
-
-    cartItems.forEach((item) => {
-      ordersList.unshift({
-        id: `ord-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-        studentId: user.id,
-        studentName: user.name,
-        studentEmail: user.email,
-        courseId: item.id,
-        courseTitle: item.title,
-        amount: finalTotal / cartItems.length, // Split total if multiple
-        paymentMethod: paymentMethod,
-        status: 'completed',
-        date: new Date().toISOString()
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          items: cartItems.map((item) => ({ id: item.id, price: item.price })),
+          amount: finalTotal,
+          paymentMethod: 'vietqr',
+        }),
       });
-    });
 
-    localStorage.setItem('mock_admin_orders', JSON.stringify(ordersList));
+      if (!response.ok) {
+        throw new Error('Failed to create order');
+      }
 
-    setIsSubmitting(false);
-    setShowSuccessModal(true);
+      const data = await response.json();
+      setOrderCode(data.orderCode);
+    } catch (err) {
+      console.error(err);
+      alert('Không thể khởi tạo đơn hàng. Vui lòng thử lại.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSimulatePayment = async () => {
+    if (!orderCode) return;
+    setIsSimulating(true);
+
+    try {
+      const response = await fetch('/api/payment/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: orderCode }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || 'Lỗi giả lập thanh toán.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Kết nối máy chủ thất bại.');
+    } finally {
+      setIsSimulating(false);
+    }
   };
 
   const handleSuccessClose = () => {
@@ -156,19 +165,27 @@ export default function CheckoutPage() {
     );
   }
 
+  // VietQR generation url parameters
+  const bankId = 'VCB'; // Vietcombank
+  const accountNo = '1023456789'; // Bank account
+  const accountName = 'HOANG MANH HA'; // Account holder name
+  const qrUrl = orderCode 
+    ? `https://img.vietqr.io/image/${bankId}-${accountNo}-compact.png?amount=${finalTotal}&addInfo=${orderCode}&accountName=${encodeURIComponent(accountName)}`
+    : '';
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 space-y-6 flex-1">
       <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Thanh toán</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left 2 Cols: Form and Payment */}
+        {/* Left 2 Cols: Info & QR */}
         <div className="lg:col-span-2 space-y-6">
           
           {/* Step 1: Info */}
           <Card className="border-slate-200">
             <CardHeader>
-              <CardTitle className="text-lg">1. Thông tin liên hệ</CardTitle>
+              <CardTitle className="text-lg text-slate-800">1. Thông tin học viên</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
@@ -176,6 +193,7 @@ export default function CheckoutPage() {
                 placeholder="Nguyễn Văn A"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                disabled={orderCode !== null}
                 required
               />
               <Input
@@ -184,6 +202,7 @@ export default function CheckoutPage() {
                 placeholder="ten@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={orderCode !== null}
                 required
               />
               <Input
@@ -192,6 +211,7 @@ export default function CheckoutPage() {
                 placeholder="0987654321"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                disabled={orderCode !== null}
                 required
               />
             </CardContent>
@@ -200,132 +220,116 @@ export default function CheckoutPage() {
           {/* Step 2: Payment Method */}
           <Card className="border-slate-200">
             <CardHeader>
-              <CardTitle className="text-lg">2. Phương thức thanh toán</CardTitle>
+              <CardTitle className="text-lg text-slate-800">2. Phương thức thanh toán</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               
-              {/* Payment selector tabs */}
-              <div className="grid grid-cols-3 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('credit_card')}
-                  className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center text-xs font-semibold gap-1.5 transition-colors focus:outline-none ${
-                    paymentMethod === 'credit_card'
-                      ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700'
-                      : 'border-slate-200 hover:bg-slate-50 text-slate-500'
-                  }`}
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                  </svg>
-                  <span>Thẻ tín dụng</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('bank_transfer')}
-                  className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center text-xs font-semibold gap-1.5 transition-colors focus:outline-none ${
-                    paymentMethod === 'bank_transfer'
-                      ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700'
-                      : 'border-slate-200 hover:bg-slate-50 text-slate-500'
-                  }`}
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                  </svg>
-                  <span>Chuyển khoản</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('paypal')}
-                  className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center text-xs font-semibold gap-1.5 transition-colors focus:outline-none ${
-                    paymentMethod === 'paypal'
-                      ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700'
-                      : 'border-slate-200 hover:bg-slate-50 text-slate-500'
-                  }`}
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                  <span>PayPal</span>
-                </button>
-              </div>
-
-              {/* Form conditional rendering */}
-              {paymentMethod === 'credit_card' && (
-                <div className="space-y-4 pt-2 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="md:col-span-3">
-                    <Input
-                      label="Số thẻ tín dụng"
-                      placeholder="4111 2222 3333 4444"
-                      value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
-                    />
+              {!orderCode ? (
+                // Order Placement
+                <div className="space-y-4">
+                  <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/20 flex items-start gap-3">
+                    <div className="p-2 bg-indigo-500 rounded-lg text-white">
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div className="text-xs space-y-1">
+                      <p className="font-bold text-slate-800">Chuyển khoản Ngân hàng qua mã VietQR tự động</p>
+                      <p className="text-slate-500">Hệ thống của chúng tôi sẽ tự động phát hiện chuyển khoản qua Casso/Sepay và kích hoạt khóa học ngay lập tức.</p>
+                    </div>
                   </div>
-                  <Input
-                    label="Ngày hết hạn"
-                    placeholder="MM/YY"
-                    value={cardExpiry}
-                    onChange={(e) => setCardExpiry(e.target.value)}
-                  />
-                  <Input
-                    label="Mã bảo mật CVV"
-                    placeholder="123"
-                    type="password"
-                    maxLength={3}
-                    value={cardCvv}
-                    onChange={(e) => setCardCvv(e.target.value)}
-                  />
-                </div>
-              )}
 
-              {paymentMethod === 'bank_transfer' && (
-                <div className="p-4 rounded-xl border border-dashed border-indigo-200 bg-indigo-50/30 space-y-3 text-xs leading-relaxed text-slate-655">
-                  <p className="font-bold text-slate-800">Thông tin chuyển khoản ngân hàng:</p>
-                  <div className="grid grid-cols-2 gap-2 text-slate-600">
-                    <span>Ngân hàng:</span>
-                    <span className="font-bold text-slate-800">Vietcombank (VCB)</span>
-                    <span>Số tài khoản:</span>
-                    <span className="font-bold text-indigo-600 select-all">1023456789</span>
-                    <span>Chủ tài khoản:</span>
-                    <span className="font-bold text-slate-800">CONG TY TNHH GEMINI ACADEMY</span>
-                    <span>Số tiền cần chuyển:</span>
-                    <span className="font-bold text-rose-600">{formatPrice(finalTotal)}</span>
-                    <span>Nội dung chuyển khoản:</span>
-                    <span className="font-bold text-slate-800 select-all">GM {user ? user.id.slice(0, 5) : 'GUEST'}</span>
-                  </div>
-                  <p className="text-[10px] text-slate-400 italic pt-1 border-t border-indigo-100">
-                    * Đơn hàng sẽ được kích hoạt tự động sau 1-2 phút nhận được khoản thanh toán hợp lệ.
-                  </p>
+                  {!user ? (
+                    <Link href={`/login?redirect=/checkout`} className="block w-full">
+                      <Button className="w-full">Đăng nhập để đặt hàng</Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      onClick={handleCreateOrder}
+                      className="w-full shadow-lg shadow-indigo-500/20"
+                      loading={isSubmitting}
+                    >
+                      Xác nhận Đặt hàng ({formatPrice(finalTotal)})
+                    </Button>
+                  )}
                 </div>
-              )}
-
-              {paymentMethod === 'paypal' && (
-                <div className="p-6 text-center border border-dashed border-slate-200 rounded-xl">
-                  <p className="text-xs text-slate-500 mb-2">Thanh toán nhanh chóng bằng ví PayPal toàn cầu.</p>
-                  <Badge variant="secondary" className="px-3 py-1 font-bold text-slate-500">PayPal Mock integration active</Badge>
-                </div>
-              )}
-
-              {/* Action purchase */}
-              {!user ? (
-                <Link href={`/login?redirect=/checkout`} className="block w-full">
-                  <Button className="w-full">Đăng nhập để hoàn tất mua hàng</Button>
-                </Link>
               ) : (
-                <Button
-                  onClick={handlePaymentSubmit}
-                  className="w-full shadow-lg shadow-indigo-500/20"
-                  loading={isSubmitting}
-                >
-                  Hoàn tất Thanh toán ({formatPrice(finalTotal)})
-                </Button>
+                // VietQR Payment Display
+                <div className="space-y-6">
+                  <div className="text-center space-y-2">
+                    <Badge variant="secondary" className="px-2.5 py-0.5 bg-indigo-50 text-indigo-700 border-indigo-100 animate-pulse">
+                      Đang chờ chuyển khoản...
+                    </Badge>
+                    <p className="text-xs text-slate-500">Mở ứng dụng Ngân hàng trên điện thoại và quét mã QR dưới đây:</p>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row items-center justify-center gap-6 p-6 rounded-2xl bg-slate-50 border border-slate-200">
+                    {/* VietQR Code */}
+                    <div className="bg-white p-3 rounded-xl shadow-md border border-slate-150 shrink-0">
+                      <img
+                        src={qrUrl}
+                        alt="VietQR code"
+                        className="h-48 w-48 object-contain"
+                      />
+                    </div>
+
+                    {/* Transfer Details */}
+                    <div className="flex-1 w-full text-xs space-y-2">
+                      <p className="font-bold text-slate-800 text-sm border-b border-slate-200 pb-1.5">Thông tin tài khoản nhận:</p>
+                      <div className="grid grid-cols-3 gap-y-1.5 text-slate-600">
+                        <span className="col-span-1">Ngân hàng:</span>
+                        <span className="col-span-2 font-bold text-slate-800">Vietcombank (VCB)</span>
+                        
+                        <span className="col-span-1">Số tài khoản:</span>
+                        <span className="col-span-2 font-bold text-indigo-600 select-all">{accountNo}</span>
+                        
+                        <span className="col-span-1">Chủ tài khoản:</span>
+                        <span className="col-span-2 font-bold text-slate-800">{accountName}</span>
+                        
+                        <span className="col-span-1">Số tiền:</span>
+                        <span className="col-span-2 font-bold text-rose-600 text-sm">{formatPrice(finalTotal)}</span>
+                        
+                        <span className="col-span-1">Nội dung chuyển:</span>
+                        <span className="col-span-2 font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded select-all w-fit">
+                          {orderCode}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 italic pt-2 border-t border-slate-200 leading-normal">
+                        * Bạn lưu ý nhập chính xác nội dung chuyển khoản <b>{orderCode}</b> để hệ thống tự động kích hoạt.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Casso / Sepay Simulator Box */}
+                  <div className="p-4 rounded-xl border border-dashed border-amber-200 bg-amber-50/20 space-y-2">
+                    <p className="text-xs font-bold text-amber-800 flex items-center gap-1.5">
+                      <svg className="h-4 w-4 text-amber-600 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Casso / Sepay Sandbox Simulator (Thử nghiệm nhanh)
+                    </p>
+                    <p className="text-[10px] text-slate-500 leading-relaxed">
+                      Để kiểm tra nhanh tính năng tự động kích hoạt mà không cần chuyển khoản ngân hàng thật, bạn hãy bấm nút dưới đây. Nó sẽ giả lập webhook từ Casso/Sepay gửi đến máy chủ để kích hoạt ngay khóa học.
+                    </p>
+                    <Button 
+                      type="button" 
+                      onClick={handleSimulatePayment} 
+                      variant="outline" 
+                      className="h-8 text-[11px] border-amber-300 hover:bg-amber-100 hover:text-amber-900 bg-white"
+                      loading={isSimulating}
+                    >
+                      Bấm để giả lập thanh toán thành công
+                    </Button>
+                  </div>
+                </div>
               )}
 
             </CardContent>
           </Card>
         </div>
 
-        {/* Right 1 Col: Summary & Promo code */}
+        {/* Right 1 Col: Summary */}
         <div className="lg:col-span-1 space-y-6">
           <Card className="border-slate-200">
             <CardHeader className="pb-3">
@@ -348,37 +352,41 @@ export default function CheckoutPage() {
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-xs font-bold text-indigo-600">{formatPrice(item.price)}</p>
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="text-[10px] text-red-500 hover:text-red-700 font-medium"
-                      >
-                        Gỡ bỏ
-                      </button>
+                      {!orderCode && (
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-[10px] text-red-500 hover:text-red-700 font-medium"
+                        >
+                          Gỡ bỏ
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Promo Code input */}
-              <div className="pt-4 border-t border-slate-100 space-y-2">
-                <label className="text-xs font-semibold text-slate-700">Mã giảm giá</label>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Ví dụ: DISCOUNT10"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                    className="h-9 text-xs"
-                  />
-                  <Button onClick={handleApplyPromo} size="sm" variant="outline" className="h-9">
-                    Áp dụng
-                  </Button>
+              {!orderCode && (
+                <div className="pt-4 border-t border-slate-100 space-y-2">
+                  <label className="text-xs font-semibold text-slate-700">Mã giảm giá</label>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Ví dụ: DISCOUNT10"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value)}
+                      className="h-9 text-xs"
+                    />
+                    <Button onClick={handleApplyPromo} size="sm" variant="outline" className="h-9">
+                      Áp dụng
+                    </Button>
+                  </div>
+                  {promoError && <p className="text-[10px] text-red-500 font-medium">{promoError}</p>}
+                  {promoSuccess && <p className="text-[10px] text-emerald-600 font-medium">{promoSuccess}</p>}
+                  <p className="text-[9px] text-slate-400 italic">
+                    * Nhập mã: <b>DISCOUNT10</b> (giảm 10%) hoặc <b>FREE</b> (giảm 100%) để thử nghiệm.
+                  </p>
                 </div>
-                {promoError && <p className="text-[10px] text-red-500 font-medium">{promoError}</p>}
-                {promoSuccess && <p className="text-[10px] text-emerald-600 font-medium">{promoSuccess}</p>}
-                <p className="text-[9px] text-slate-400 italic">
-                  * Nhập mã: <b>DISCOUNT10</b> (giảm 10%) hoặc <b>FREE</b> (giảm 100%) để thử nghiệm.
-                </p>
-              </div>
+              )}
 
               {/* Total Summary */}
               <div className="pt-4 border-t border-slate-100 text-xs space-y-2">
@@ -408,19 +416,19 @@ export default function CheckoutPage() {
       {showSuccessModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
           <div className="bg-white max-w-md w-full rounded-2xl p-6 text-center space-y-5 border border-slate-200 shadow-2xl animate-slide-up">
-            <div className="h-16 w-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto text-3xl">
+            <div className="h-16 w-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto text-3xl font-bold">
               ✓
             </div>
             <div className="space-y-2">
-              <h2 className="text-xl font-bold text-slate-900">Đăng ký thành công!</h2>
+              <h2 className="text-xl font-bold text-slate-900">Thanh toán thành công!</h2>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Cảm ơn bạn đã tin tưởng chọn học cùng Gemini Academy. Khóa học đã được kích hoạt trong tài khoản của bạn.
+                Cảm ơn bạn đã tin tưởng chọn học cùng HMath Course. Giao dịch đã được hệ thống ghi nhận và kích hoạt tự động các khóa học của bạn.
               </p>
             </div>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-150 text-left text-xs leading-relaxed text-slate-655 space-y-1">
               <p className="font-bold text-slate-800">Thông tin biên lai:</p>
-              <p>Mã hóa đơn: <span className="font-semibold text-slate-900">INV-{(Date.now() + '').slice(-6)}</span></p>
-              <p>Trạng thái: <span className="font-semibold text-emerald-600">Đã kích hoạt</span></p>
+              <p>Mã chuyển khoản: <span className="font-mono font-semibold text-slate-900">{orderCode}</span></p>
+              <p>Trạng thái: <span className="font-semibold text-emerald-600">Đã kích hoạt tự động</span></p>
               <p>Học viên: <span className="font-semibold text-slate-900">{name}</span> ({email})</p>
             </div>
             <Button onClick={handleSuccessClose} className="w-full">

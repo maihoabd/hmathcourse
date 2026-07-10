@@ -41,55 +41,47 @@ export default function StudentDashboardPage() {
     setMounted(true);
   }, []);
 
-  // Fetch course list and merge mock data with local storage purchases
+  // Fetch course list from Supabase and sync local cache
   useEffect(() => {
     if (!mounted || !user) return;
 
-    // 1. Get initial mock courses registered to the student
-    const studentRecord = mockStudents.find((s) => s.email === user.email);
-    let initialEnrollments = studentRecord ? [...studentRecord.enrolledCourses] : [];
-
-    // 2. Get local storage purchased courses
-    const storedPurchases = localStorage.getItem(`purchased_${user.id}`);
-    if (storedPurchases) {
+    const syncEnrollments = async () => {
       try {
-        const ids = JSON.parse(storedPurchases) as string[];
-        ids.forEach((id) => {
-          if (!initialEnrollments.some((e) => e.courseId === id)) {
-            // New purchase in current session: starts with 0 progress
-            initialEnrollments.push({
-              courseId: id,
-              progress: 0,
-              completedLessons: [],
-              lastAccessed: new Date().toISOString()
-            });
-          }
-        });
-      } catch (e) {}
-    }
+        const res = await fetch(`/api/enrollments?userId=${user.id}`);
+        if (res.ok) {
+          const enrollments = await res.json();
+          // Extract enrolled course IDs
+          const dbCourseIds = enrollments.map((e: any) => e.courseId);
+          
+          // Sync with local storage so that other pages (like course detail) update instantly
+          localStorage.setItem(`purchased_${user.id}`, JSON.stringify(dbCourseIds));
 
-    // 3. Map details from mockCourses registry
-    const mergedList: UserEnrolledMerge[] = [];
-    initialEnrollments.forEach((enrollment) => {
-      const details = mockCourses.find((c) => c.id === enrollment.courseId);
-      if (details) {
-        mergedList.push({
-          id: details.id,
-          title: details.title,
-          slug: details.slug,
-          thumbnail: details.thumbnail,
-          category: details.category,
-          lessonsCount: details.lessonsCount,
-          progress: enrollment.progress,
-          completedCount: enrollment.completedLessons.length,
-          lastAccessed: enrollment.lastAccessed
-        });
+          // Map details from mockCourses registry
+          const mergedList: UserEnrolledMerge[] = enrollments.map((e: any) => {
+            const details = mockCourses.find((c: any) => c.id === e.courseId);
+            return {
+              id: e.courseId,
+              title: details?.title || 'Khóa học',
+              slug: details?.slug || '',
+              thumbnail: details?.thumbnail || '',
+              category: details?.category || '',
+              lessonsCount: details?.lessonsCount || 0,
+              progress: e.progress,
+              completedCount: e.completedLessons?.length || 0,
+              lastAccessed: e.lastAccessed || new Date().toISOString(),
+            };
+          });
+
+          // Sort by last accessed
+          mergedList.sort((a, b) => new Date(b.lastAccessed).getTime() - new Date(a.lastAccessed).getTime());
+          setCoursesMerged(mergedList);
+        }
+      } catch (err) {
+        console.error('Sync enrollments error:', err);
       }
-    });
+    };
 
-    // Sort by last accessed
-    mergedList.sort((a, b) => new Date(b.lastAccessed).getTime() - new Date(a.lastAccessed).getTime());
-    setCoursesMerged(mergedList);
+    syncEnrollments();
   }, [user, mounted]);
 
   if (loading || !mounted) {
