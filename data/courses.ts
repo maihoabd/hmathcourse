@@ -12,8 +12,8 @@ export const mockCourses: Course[] = [
     thumbnail: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&auto=format&fit=crop&q=60',
     category: 'Toán lớp 7',
     level: 'Advanced',
-    lessonsCount: 32,
-    duration: '24 giờ 15 phút',
+    lessonsCount: 30,
+    duration: '22 giờ 30 phút',
     rating: 4.9,
     reviewsCount: 42,
     studentsCount: 320,
@@ -29,66 +29,82 @@ export const mockCourses: Course[] = [
     chapters: [
       {
         id: 'c1-ch1',
-        title: 'Chương 1: Số hữu tỉ nâng cao (8 bài giảng)',
+        title: 'Chương 1: Số hữu tỉ nâng cao (4 bài học)',
         lessons: [
           {
             id: 'c1-l1',
-            title: '1. Khái niệm và biểu diễn số hữu tỉ nâng cao',
-            duration: '15:20',
+            title: 'Buổi 1: Phép tính số hữu tỉ',
+            duration: '25:15',
             isPreview: true,
-            videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY',
-            documentUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-            textContent: '<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt lý thuyết bài 1:</h4><p class="text-xs text-slate-500 mb-2">Số hữu tỉ là số viết được dưới dạng phân số a/b với a, b thuộc Z, b khác 0. Trong bài học này, chúng ta sẽ mở rộng các phương pháp so sánh số hữu tỉ nâng cao bằng phương pháp chọn số trung gian hoặc đánh giá phần bù.</p>'
+            videoUrl: 'https://www.youtube.com/embed/I9v8kjCGQtQ',
+            documentUrl: 'https://drive.google.com/file/d/1n2HYFnYaPP95yWCsHukFRWmV103C0d2j/preview',
+            textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 1:</h4>
+<div class="flex flex-col sm:flex-row gap-3 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1n2HYFnYaPP95yWCsHukFRWmV103C0d2j/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tải Tài liệu Buổi 1 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/1nuGFlfIS1SfxWCIZOsxrXvYatUX2uWGS/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Tải Bài tập Về nhà (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-555 leading-relaxed">Trong buổi học này, chúng ta sẽ làm quen với các khái niệm căn bản và nâng cao của phép tính số hữu tỉ. Thầy sẽ hướng dẫn các phương pháp tính nhanh, tính thuận tiện và cách tránh các bẫy thường gặp trong các đề kiểm tra học kỳ và thi học sinh giỏi toán lớp 7.</p>`
           },
-          { id: 'c1-l2', title: '2. Cộng, trừ, nhân, chia số hữu tỉ nâng cao', duration: '18:15', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l3', title: '3. Giá trị tuyệt đối của một số hữu tỉ', duration: '22:40', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l4', title: '4. Luyện tập phép tính số hữu tỉ (Dạng toán tính nhanh)', duration: '20:10', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l5', title: '5. Lũy thừa của một số hữu tỉ (Phần 1)', duration: '19:40', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l6', title: '6. Lũy thừa của một số hữu tỉ (Phần 2 nâng cao)', duration: '21:10', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l7', title: '7. Tỉ lệ thức và các tính chất cơ bản', duration: '25:15', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l8', title: '8. Chuyên đề Dãy tỉ số bằng nhau chuyên sâu', duration: '30:05', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' }
+          { id: 'c1-l2', title: 'Buổi 2: Số hữu tỉ và các phép tính (2)', duration: '20:10', isPreview: false },
+          { id: 'c1-l3', title: 'Buổi 3: Số hữu tỉ và các phép tính (3)', duration: '22:45', isPreview: false },
+          { id: 'c1-l4', title: 'Buổi 4: Chữa bài tập tổng hợp Số hữu tỉ và các phép tính', duration: '24:30', isPreview: false }
         ]
       },
       {
         id: 'c1-ch2',
-        title: 'Chương 2: Số thực & Căn bậc hai (8 bài giảng)',
+        title: 'Chương 2: Góc & Đường thẳng song song (4 bài học)',
         lessons: [
-          { id: 'c1-l9', title: '9. Số thập phân vô hạn và số vô tỉ', duration: '18:50', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l10', title: '10. Khái niệm căn bậc hai số học', duration: '21:15', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l11', title: '11. Số thực và trục số thực', duration: '19:30', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l12', title: '12. Làm tròn số và ước lượng kết quả', duration: '17:20', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l13', title: '13. Chuyên đề Đại lượng tỉ lệ thuận nâng cao', duration: '24:10', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l14', title: '14. Chuyên đề Đại lượng tỉ lệ nghịch nâng cao', duration: '22:45', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l15', title: '15. Khái niệm hàm số và đồ thị y = ax', duration: '26:10', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l16', title: '16. Luyện tập tổng hợp chương số thực', duration: '25:00', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' }
+          { id: 'c1-l5', title: 'Buổi 5: Góc và đường thẳng song song (1)', duration: '21:15', isPreview: false },
+          { id: 'c1-l6', title: 'Buổi 6: Góc và đường thẳng song song (2)', duration: '18:50', isPreview: false },
+          { id: 'c1-l7', title: 'Buổi 7: Luyện tập về đường thẳng song song (3)', duration: '20:45', isPreview: false },
+          { id: 'c1-l8', title: 'Buổi 8: Góc và đường thẳng song song (4)', duration: '23:10', isPreview: false }
         ]
       },
       {
         id: 'c1-ch3',
-        title: 'Chương 3: Góc và Đường thẳng song song (8 bài giảng)',
+        title: 'Chương 3: Số thực & Căn bậc hai (4 bài học)',
         lessons: [
-          { id: 'c1-l17', title: '17. Góc ở vị trí đặc biệt (kề bù, đối đỉnh)', duration: '19:15', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l18', title: '18. Tia phân giác của một góc', duration: '18:40', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l19', title: '19. Hai đường thẳng song song và dấu hiệu nhận biết', duration: '22:10', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l20', title: '20. Tiên đề Euclid về đường thẳng song song', duration: '24:35', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l21', title: '21. Định lí và chứng minh một định lí hình học', duration: '25:20', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l22', title: '22. Phương pháp chứng minh hai đường thẳng vuông góc', duration: '23:10', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l23', title: '23. Tổng các góc trong một tam giác', duration: '28:15', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l24', title: '24. Luyện tập chứng minh hình học chương 3', duration: '30:00', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' }
+          { id: 'c1-l9', title: 'Buổi 9: Số thực (1)', duration: '19:40', isPreview: false },
+          { id: 'c1-l10', title: 'Buổi 10: Số thực (2)', duration: '22:15', isPreview: false },
+          { id: 'c1-l11', title: 'Buổi 11: Số thực (3)', duration: '20:50', isPreview: false },
+          { id: 'c1-l12', title: 'Buổi 12: Số thực (4)', duration: '21:30', isPreview: false }
         ]
       },
       {
         id: 'c1-ch4',
-        title: 'Chương 4: Tam giác bằng nhau chuyên sâu (8 bài giảng)',
+        title: 'Chương 4: Tam giác bằng nhau chuyên sâu (8 bài học)',
         lessons: [
-          { id: 'c1-l25', title: '25. Hai tam giác bằng nhau và trường hợp c-c-c', duration: '24:15', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l26', title: '26. Trường hợp bằng nhau c-g-c của tam giác', duration: '25:30', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l27', title: '27. Trường hợp bằng nhau g-c-g của tam giác', duration: '26:50', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l28', title: '28. Các trường hợp bằng nhau của tam giác vuông', duration: '28:10', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l29', title: '29. Tam giác cân, tam giác đều và tính chất', duration: '27:40', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l30', title: '30. Đường trung trực của đoạn thẳng', duration: '22:15', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l31', title: '31. Chuyên đề Bất đẳng thức tam giác nâng cao', duration: '32:00', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' },
-          { id: 'c1-l32', title: '32. Ôn tập hình học học kỳ 1 tổng hợp', duration: '35:00', isPreview: false, videoUrl: 'https://www.youtube.com/embed/Sklc_fSGryY' }
+          { id: 'c1-l13', title: 'Buổi 13: Tam giác bằng nhau (1)', duration: '23:45', isPreview: false },
+          { id: 'c1-l14', title: 'Buổi 14: Tam giác bằng nhau (2)', duration: '25:20', isPreview: false },
+          { id: 'c1-l15', title: 'Buổi 15: Tam giác bằng nhau (3)', duration: '24:10', isPreview: false },
+          { id: 'c1-l16', title: 'Buổi 16: Các trường hợp bằng nhau của tam giác vuông', duration: '26:15', isPreview: false },
+          { id: 'c1-l17', title: 'Buổi 17: Luyện tập tam giác bằng nhau', duration: '22:30', isPreview: false },
+          { id: 'c1-l18', title: 'Buổi 18: Tam giác cân', duration: '24:50', isPreview: false },
+          { id: 'c1-l19', title: 'Buổi 19: Luyện tập hình học', duration: '28:10', isPreview: false },
+          { id: 'c1-l20', title: 'Buổi 20: Luyện tập tổng hợp hình học', duration: '30:00', isPreview: false }
+        ]
+      },
+      {
+        id: 'c1-ch5',
+        title: 'Chương 5: Chuyên đề nâng cao & Luyện đề (10 bài học)',
+        lessons: [
+          { id: 'c1-l21', title: 'Buổi 21: Luyện tập về tính chất dãy tỉ số bằng nhau', duration: '25:40', isPreview: false },
+          { id: 'c1-l22', title: 'Buổi 22: Bài tập về vẽ thêm đường thẳng phụ', duration: '28:15', isPreview: false },
+          { id: 'c1-l23', title: 'Buổi 23: Mối quan hệ giữa đường vuông góc và đường xiên', duration: '26:30', isPreview: false },
+          { id: 'c1-l24', title: 'Buổi 24: Mối quan hệ giữa ba cạnh của tam giác', duration: '24:50', isPreview: false },
+          { id: 'c1-l25', title: 'Buổi 25: Nhân, chia đa thức một biến', duration: '27:15', isPreview: false },
+          { id: 'c1-l26', title: 'Buổi 26: Tính chất đường trung tuyến trong tam giác', duration: '29:40', isPreview: false },
+          { id: 'c1-l27', title: 'Buổi 27: Tính chất đường phân giác trong tam giác', duration: '28:30', isPreview: false },
+          { id: 'c1-l28', title: 'Buổi 28: Xác suất của biến cố', duration: '22:15', isPreview: false },
+          { id: 'c1-l29', title: 'Buổi 29: Luyện đề hình học (1)', duration: '32:00', isPreview: false },
+          { id: 'c1-l30', title: 'Buổi 30: Luyện đề hình học (2)', duration: '35:00', isPreview: false }
         ]
       }
     ],
