@@ -165,9 +165,15 @@ export default function LandingPage() {
                         Nổi bật
                       </Badge>
                     )}
-                    <Badge variant="secondary" className="bg-slate-900/70 text-slate-100 border-0 backdrop-blur-xs">
-                      {course.level === 'Beginner' ? 'Cơ bản' : course.level === 'Advanced' ? 'Nâng cao' : 'Trung cấp'}
-                    </Badge>
+                    {course.level === 'Beginner' ? (
+                      <Badge variant="success" className="text-[10px] font-bold border-0 px-2 py-0.5 shadow-sm">
+                        Cơ bản
+                      </Badge>
+                    ) : (
+                      <Badge variant="default" className="bg-indigo-600 text-white text-[10px] font-bold border-0 px-2 py-0.5 shadow-sm">
+                        Nâng cao
+                      </Badge>
+                    )}
                   </div>
                 </div>
 

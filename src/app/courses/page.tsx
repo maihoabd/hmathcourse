@@ -146,7 +146,7 @@ function CoursesContent() {
             >
               <option value="All">Tất cả cấp độ</option>
               <option value="Beginner">Cơ bản</option>
-              <option value="Intermediate">Trung cấp</option>
+              
               <option value="Advanced">Nâng cao</option>
             </select>
           </div>
@@ -198,23 +198,7 @@ function CoursesContent() {
           </div>
         </div>
 
-        {/* Categories Pills scrollable list */}
-        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
-          <span className="text-xs font-semibold text-slate-400 mr-2">Chuyên mục:</span>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                selectedCategory === cat
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              {cat === 'All' ? 'Tất cả' : cat}
-            </button>
-          ))}
-        </div>
+
       </div>
 
       {/* Course count and status */}
@@ -266,9 +250,15 @@ function CoursesContent() {
                         Bán chạy
                       </Badge>
                     )}
-                    <Badge variant="secondary" className="bg-slate-900/70 text-slate-100 border-0 backdrop-blur-xs">
-                      {course.level === 'Beginner' ? 'Cơ bản' : course.level === 'Advanced' ? 'Nâng cao' : 'Trung cấp'}
-                    </Badge>
+                    {course.level === 'Beginner' ? (
+                      <Badge variant="success" className="text-[10px] font-bold border-0 px-2 py-0.5 shadow-sm">
+                        Cơ bản
+                      </Badge>
+                    ) : (
+                      <Badge variant="default" className="bg-indigo-600 text-white text-[10px] font-bold border-0 px-2 py-0.5 shadow-sm">
+                        Nâng cao
+                      </Badge>
+                    )}
                   </div>
                 </div>
 
