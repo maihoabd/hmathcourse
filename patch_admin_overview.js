@@ -1,4 +1,39 @@
-'use client';
+const fs = require('fs');
+const path = require('path');
+
+const statsRoutePath = path.join(__dirname, 'src', 'app', 'api', 'admin', 'stats', 'route.ts');
+const adminPagePath = path.join(__dirname, 'src', 'app', 'admin', 'page.tsx');
+
+// 1. Update stats API to include bestsellerCoursesCount
+if (fs.existsSync(statsRoutePath)) {
+  let content = fs.readFileSync(statsRoutePath, 'utf8');
+
+  // Insert bestsellerCoursesCount query logic
+  const queryInsert = `    // 3. Fetch total courses count
+    const totalCoursesCount = await db.course.count();
+
+    const bestsellerCoursesCount = await db.course.count({
+      where: { isBestseller: true }
+    });`;
+
+  content = content.replace(
+    /\/\/ 3\. Fetch total courses count.*?const totalCoursesCount = await db\.course\.count\(\);/s,
+    queryInsert
+  );
+
+  // Return bestsellerCoursesCount in JSON
+  content = content.replace(
+    /totalCourses: totalCoursesCount,/g,
+    'totalCourses: totalCoursesCount,\n      bestsellerCoursesCount,'
+  );
+
+  fs.writeFileSync(statsRoutePath, content, 'utf8');
+  console.log('SUCCESS: Updated admin stats API with bestsellerCoursesCount.');
+}
+
+// 2. Update E:\sale\src\app\admin\page.tsx
+if (fs.existsSync(adminPagePath)) {
+  const newAdminPageContent = `'use client';
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -156,31 +191,31 @@ export default function AdminOverviewPage() {
 
                   {/* Dynamic Path Calculation */}
                   <path
-                    d={`
+                    d={\`
                       M 50,200
-                      L 50,${180 - (salesChartData[0].value / maxChartValue) * 140}
-                      L 150,${180 - (salesChartData[1].value / maxChartValue) * 140}
-                      L 250,${180 - (salesChartData[2].value / maxChartValue) * 140}
-                      L 350,${180 - (salesChartData[3].value / maxChartValue) * 140}
-                      L 450,${180 - (salesChartData[4].value / maxChartValue) * 140}
-                      L 550,${180 - (salesChartData[5].value / maxChartValue) * 140}
-                      L 650,${180 - (salesChartData[6].value / maxChartValue) * 140}
+                      L 50,\${180 - (salesChartData[0].value / maxChartValue) * 140}
+                      L 150,\${180 - (salesChartData[1].value / maxChartValue) * 140}
+                      L 250,\${180 - (salesChartData[2].value / maxChartValue) * 140}
+                      L 350,\${180 - (salesChartData[3].value / maxChartValue) * 140}
+                      L 450,\${180 - (salesChartData[4].value / maxChartValue) * 140}
+                      L 550,\${180 - (salesChartData[5].value / maxChartValue) * 140}
+                      L 650,\${180 - (salesChartData[6].value / maxChartValue) * 140}
                       L 650,200 Z
-                    `}
+                    \`}
                     fill="url(#chartGradient)"
                   />
 
                   {/* Main Line Stroke */}
                   <path
-                    d={`
-                      M 50,${180 - (salesChartData[0].value / maxChartValue) * 140}
-                      L 150,${180 - (salesChartData[1].value / maxChartValue) * 140}
-                      L 250,${180 - (salesChartData[2].value / maxChartValue) * 140}
-                      L 350,${180 - (salesChartData[3].value / maxChartValue) * 140}
-                      L 450,${180 - (salesChartData[4].value / maxChartValue) * 140}
-                      L 550,${180 - (salesChartData[5].value / maxChartValue) * 140}
-                      L 650,${180 - (salesChartData[6].value / maxChartValue) * 140}
-                    `}
+                    d={\`
+                      M 50,\${180 - (salesChartData[0].value / maxChartValue) * 140}
+                      L 150,\${180 - (salesChartData[1].value / maxChartValue) * 140}
+                      L 250,\${180 - (salesChartData[2].value / maxChartValue) * 140}
+                      L 350,\${180 - (salesChartData[3].value / maxChartValue) * 140}
+                      L 450,\${180 - (salesChartData[4].value / maxChartValue) * 140}
+                      L 550,\${180 - (salesChartData[5].value / maxChartValue) * 140}
+                      L 650,\${180 - (salesChartData[6].value / maxChartValue) * 140}
+                    \`}
                     fill="none"
                     stroke="#4f46e5"
                     strokeWidth="3.5"
@@ -249,4 +284,8 @@ export default function AdminOverviewPage() {
       </div>
     </div>
   );
+}
+`;
+  fs.writeFileSync(adminPagePath, newAdminPageContent, 'utf8');
+  console.log('SUCCESS: Rewired src/app/admin/page.tsx to stats API.');
 }

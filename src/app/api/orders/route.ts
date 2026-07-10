@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
 import { payOS } from '../../../lib/payos';
 
+// 1. Create a pending order (used by checkout page)
 export async function POST(request: Request) {
   try {
     const { userId, items, amount, paymentMethod } = await request.json();
@@ -53,7 +54,6 @@ export async function POST(request: Request) {
         });
       } catch (payosError) {
         console.error('PayOS Link Generation Error:', payosError);
-        // Fall back to manual QR display if PayOS throws an error
       }
     }
 
@@ -61,5 +61,91 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Create Order Error:', error);
     return NextResponse.json({ error: 'Không thể tạo đơn hàng trong database.' }, { status: 500 });
+  }
+}
+
+// 2. Fetch all orders (used by admin pages)
+export async function GET(request: Request) {
+  try {
+    const orders = await db.order.findMany({
+      include: {
+        user: true,
+        course: true,
+      },
+      orderBy: {
+        date: 'desc',
+      },
+    });
+
+    const mappedOrders = orders.map((o) => ({
+      id: o.id,
+      studentId: o.userId,
+      studentName: o.user.name,
+      studentEmail: o.user.email,
+      courseId: o.courseId,
+      courseTitle: o.course.title,
+      amount: o.amount,
+      paymentMethod: o.paymentMethod,
+      status: o.status,
+      date: o.date.toISOString(),
+    }));
+
+    return NextResponse.json(mappedOrders);
+  } catch (error) {
+    console.error('Fetch Orders API Error:', error);
+    return NextResponse.json({ error: 'Lỗi tải danh sách đơn hàng.' }, { status: 500 });
+  }
+}
+
+// 3. Update order status (used by admin to manually complete / fail orders)
+export async function PUT(request: Request) {
+  try {
+    const { id, status } = await request.json();
+
+    if (!id || !status) {
+      return NextResponse.json({ error: 'Thiếu thông tin cập nhật.' }, { status: 400 });
+    }
+
+    // Find the existing order
+    const order = await db.order.findUnique({
+      where: { id },
+    });
+
+    if (!order) {
+      return NextResponse.json({ error: 'Không tìm thấy đơn hàng.' }, { status: 404 });
+    }
+
+    // Update the status in the database
+    const updatedOrder = await db.order.update({
+      where: { id },
+      data: { status },
+    });
+
+    // If status is updated to 'completed', unlock the course by creating an Enrollment
+    if (status === 'completed') {
+      await db.enrollment.upsert({
+        where: {
+          userId_courseId: {
+            userId: order.userId,
+            courseId: order.courseId,
+          },
+        },
+        create: {
+          userId: order.userId,
+          courseId: order.courseId,
+          progress: 0,
+          completedLessons: [],
+        },
+        update: {
+          lastAccessed: new Date(),
+        },
+      });
+      console.log(`Manually unlocked course ${order.courseId} for user ${order.userId}`);
+    }
+
+    return NextResponse.json({ success: true, order: updatedOrder });
+  } catch (error) {
+    console.error('Update Order Status Error:', error);
+    return NextResponse.json({ error: 'Lỗi cập nhật trạng thái đơn hàng.' }, { status: 500 });
   }
 }

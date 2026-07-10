@@ -63,3 +63,157 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Lỗi tải dữ liệu khóa học từ cơ sở dữ liệu.' }, { status: 500 });
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      id,
+      slug,
+      title,
+      shortDescription,
+      description,
+      price,
+      originalPrice,
+      thumbnail,
+      category,
+      level,
+      lessonsCount,
+      duration,
+      isBestseller,
+      grade,
+      productType,
+      instructor
+    } = body;
+
+    if (!id || !slug || !title) {
+      return NextResponse.json({ error: 'Thiếu các thông tin bắt buộc.' }, { status: 400 });
+    }
+
+    const newCourse = await db.course.create({
+      data: {
+        id,
+        slug,
+        title,
+        shortDescription,
+        description,
+        price: Number(price),
+        originalPrice: Number(originalPrice || price),
+        thumbnail,
+        category,
+        level,
+        lessonsCount: Number(lessonsCount || 0),
+        duration,
+        rating: 4.8,
+        reviewsCount: 0,
+        studentsCount: 0,
+        isBestseller: Boolean(isBestseller),
+        grade: grade || 'lop-7',
+        productType: productType || 'video',
+        instructorName: instructor?.name || 'Giáo viên HMath',
+        instructorRole: instructor?.role || 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
+        instructorAvatar: instructor?.avatar || 'https://i.postimg.cc/MGshM4ZC/favico.png',
+        instructorBio: instructor?.bio || 'Hơn 10 năm kinh nghiệm bồi dưỡng học sinh giỏi Toán THCS.'
+      }
+    });
+
+    return NextResponse.json({ success: true, course: newCourse });
+  } catch (error) {
+    console.error('Create Course API Error:', error);
+    return NextResponse.json({ error: 'Lỗi tạo khóa học mới.' }, { status: 500 });
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      id,
+      slug,
+      title,
+      shortDescription,
+      description,
+      price,
+      originalPrice,
+      thumbnail,
+      category,
+      level,
+      lessonsCount,
+      duration,
+      isBestseller,
+      grade,
+      productType,
+      instructor
+    } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: 'Thiếu ID khóa học cần chỉnh sửa.' }, { status: 400 });
+    }
+
+    const updatedCourse = await db.course.update({
+      where: { id },
+      data: {
+        slug,
+        title,
+        shortDescription,
+        description,
+        price: Number(price),
+        originalPrice: Number(originalPrice || price),
+        thumbnail,
+        category,
+        level,
+        lessonsCount: Number(lessonsCount || 0),
+        duration,
+        isBestseller: Boolean(isBestseller),
+        grade: grade || 'lop-7',
+        productType: productType || 'video',
+        instructorName: instructor?.name || 'Giáo viên HMath',
+        instructorRole: instructor?.role || 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
+        instructorAvatar: instructor?.avatar || 'https://i.postimg.cc/MGshM4ZC/favico.png',
+        instructorBio: instructor?.bio || 'Hơn 10 năm kinh nghiệm bồi dưỡng học sinh giỏi Toán THCS.'
+      }
+    });
+
+    return NextResponse.json({ success: true, course: updatedCourse });
+  } catch (error) {
+    console.error('Update Course API Error:', error);
+    return NextResponse.json({ error: 'Lỗi cập nhật thông tin khóa học.' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'Thiếu ID khóa học cần xóa.' }, { status: 400 });
+    }
+
+    // Delete associated lessons and chapters inside a Prisma transaction
+    await db.$transaction([
+      db.lesson.deleteMany({
+        where: {
+          chapter: {
+            courseId: id
+          }
+        }
+      }),
+      db.chapter.deleteMany({
+        where: {
+          courseId: id
+        }
+      }),
+      db.course.delete({
+        where: {
+          id
+        }
+      })
+    ]);
+
+    return NextResponse.json({ success: true, message: 'Đã xóa khóa học thành công.' });
+  } catch (error) {
+    console.error('Delete Course API Error:', error);
+    return NextResponse.json({ error: 'Lỗi xóa khóa học từ cơ sở dữ liệu.' }, { status: 500 });
+  }
+}

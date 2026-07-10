@@ -1,4 +1,10 @@
-'use client';
+const fs = require('fs');
+const path = require('path');
+
+const adminCoursesPath = path.join(__dirname, 'src', 'app', 'admin', 'courses', 'page.tsx');
+
+if (fs.existsSync(adminCoursesPath)) {
+  const newContent = `'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/ui/table';
@@ -95,11 +101,11 @@ export default function AdminCoursesPage() {
     const slug = title
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[\\u0300-\\u036f]/g, '')
       .replace(/[đĐ]/g, 'd')
-      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/[^a-z0-9\\s-]/g, '')
       .trim()
-      .replace(/\s+/g, '-');
+      .replace(/\\s+/g, '-');
 
     const courseData = {
       id: editingCourse ? editingCourse.id : 'c-' + Date.now(),
@@ -400,4 +406,8 @@ export default function AdminCoursesPage() {
       </Dialog>
     </div>
   );
+}
+`;
+  fs.writeFileSync(adminCoursesPath, newContent, 'utf8');
+  console.log('SUCCESS: Patched src/app/admin/courses/page.tsx with database CRUD.');
 }

@@ -1,4 +1,10 @@
-'use client';
+const fs = require('fs');
+const path = require('path');
+
+const adminOrdersPath = path.join(__dirname, 'src', 'app', 'admin', 'orders', 'page.tsx');
+
+if (fs.existsSync(adminOrdersPath)) {
+  const newContent = `'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/ui/table';
@@ -214,4 +220,8 @@ export default function AdminOrdersPage() {
       </Card>
     </div>
   );
+}
+`;
+  fs.writeFileSync(adminOrdersPath, newContent, 'utf8');
+  console.log('SUCCESS: Patched src/app/admin/orders/page.tsx with database CRUD.');
 }
