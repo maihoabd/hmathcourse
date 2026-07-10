@@ -22,7 +22,7 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
     category: 'Toán lớp 7',
     level: 'Advanced',
     lessonsCount: 30,
-    duration: '22 giờ 30 phút',
+    duration: '50 giờ 56 phút',
     rating: 4.9,
     reviewsCount: 42,
     studentsCount: 320,
@@ -30,7 +30,7 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
     instructor: {
       name: 'Giáo viên HMath',
       role: 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=60',
+      avatar: 'https://i.postimg.cc/MGshM4ZC/favico.png',
       bio: 'Hơn 10 năm kinh nghiệm bồi dưỡng học sinh giỏi Toán THCS, có phương pháp dạy dễ hiểu, cuốn hút.',
       coursesCount: 2,
       rating: 4.9
@@ -461,7 +461,7 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
     instructor: {
       name: 'Giáo viên HMath',
       role: 'Thạc sĩ Sư phạm Toán học - Đại học Sư phạm Hà Nội',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=60',
+      avatar: 'https://i.postimg.cc/MGshM4ZC/favico.png',
       bio: 'Hơn 10 năm kinh nghiệm bồi dưỡng học sinh giỏi Toán THCS, có phương pháp dạy dễ hiểu, cuốn hút.',
       coursesCount: 2,
       rating: 4.9
