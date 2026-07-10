@@ -1,18 +1,15 @@
 const urls = {
-  'Buổi 6': 'https://www.youtube.com/watch?v=Qye3u2dfI0g',
-  'Buổi 7': 'https://www.youtube.com/watch?v=EZ43xt22mrM',
-  'Buổi 8': 'https://www.youtube.com/watch?v=s8qUWJOBbnc',
-  'Buổi 9': 'https://www.youtube.com/watch?v=3UVcRT4SotA',
-  'Buổi 10': 'https://www.youtube.com/watch?v=zhYs8-gBjh4',
-  'Buổi 11': 'https://www.youtube.com/watch?v=rLXCMxhEla0',
-  'Buổi 12': 'https://www.youtube.com/watch?v=aV9TrY-pS_4',
-  'Buổi 13': 'https://www.youtube.com/watch?v=rkw998dFad4',
-  'Buổi 14': 'https://www.youtube.com/watch?v=9YJoJWAgUKk',
-  'Buổi 15': 'https://www.youtube.com/watch?v=S9JXu7Mt-JQ',
-  'Buổi 16': 'https://www.youtube.com/watch?v=qYk77fkHKsw',
-  'Buổi 17': 'https://www.youtube.com/watch?v=4OPvysM-1Ic',
-  'Buổi 18': 'https://www.youtube.com/watch?v=wv7hhfpAavM',
-  'Buổi 19': 'https://www.youtube.com/watch?v=C4o5QqxL8xk'
+  'Buổi 20': 'https://www.youtube.com/watch?v=uMaBCnyn0tU',
+  'Buổi 21': 'https://www.youtube.com/watch?v=a3-HTRu_Sv4',
+  'Buổi 22': 'https://www.youtube.com/watch?v=_FikRnE59SU',
+  'Buổi 23': 'https://www.youtube.com/watch?v=QhzcV-Ekgao',
+  'Buổi 24': 'https://www.youtube.com/watch?v=GaKAnMWK1Q0',
+  'Buổi 25': 'https://www.youtube.com/watch?v=SDDKBGzR7io',
+  'Buổi 26': 'https://www.youtube.com/watch?v=L2ntGLV7ojE',
+  'Buổi 27': 'https://www.youtube.com/watch?v=QOz9F1U1mzs',
+  'Buổi 28': 'https://www.youtube.com/watch?v=eLvRgv8QJKQ',
+  'Buổi 29': 'https://www.youtube.com/watch?v=ig5QB69G9h4',
+  'Buổi 30': 'https://www.youtube.com/watch?v=C3El5e_3044'
 };
 
 async function getDuration(name, url) {
