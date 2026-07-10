@@ -20,8 +20,6 @@ export const Footer: React.FC = () => {
               Nền tảng học Toán trực tuyến chất lượng cao dành cho học sinh THCS. Đồng hành cùng các em học sinh phát triển tư duy toán học bản chất, tự tin đạt điểm cao.
             </p>
             <div className="text-[11px] text-slate-500 space-y-1">
-              <p>📍 Địa chỉ: 12 Tây Sơn, Đống Đa, Hà Nội</p>
-              <p>📞 SĐT: 0987.654.321</p>
               <p>✉️ Email: contact.hmath@gmail.com</p>
             </div>
           </div>
@@ -84,7 +82,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-slate-850 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between text-[11px] text-slate-500">
-          <p>© 2026 HMath Course. All rights reserved. Powered by Antigravity AI.</p>
+          <p>© 2026 HMath Course. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link href="/terms" className="hover:text-slate-400 transition-colors">
               Điều khoản dịch vụ

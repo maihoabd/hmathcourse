@@ -349,7 +349,7 @@ export default function CourseDetailPage() {
                     <p className="text-[10px] text-slate-400 font-medium">{course.reviewsCount} Đánh giá</p>
                   </div>
                   <div className="flex-1 space-y-1.5 text-[11px] text-slate-500">
-                    <p>Khóa học nhận được phản hồi vô cùng tích cực từ cộng đồng lập trình viên.</p>
+                    <p>Khóa học nhận được phản hồi vô cùng tích cực từ các phụ huynh và học sinh.</p>
                   </div>
                 </div>
 
