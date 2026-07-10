@@ -52,17 +52,120 @@ export const mockCourses: Course[] = [
 <h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
 <p class="text-xs text-slate-555 leading-relaxed">Trong buổi học này, chúng ta sẽ làm quen với các khái niệm căn bản và nâng cao của phép tính số hữu tỉ. Thầy sẽ hướng dẫn các phương pháp tính nhanh, tính thuận tiện và cách tránh các bẫy thường gặp trong các đề kiểm tra học kỳ và thi học sinh giỏi toán lớp 7.</p>`
           },
-          { id: 'c1-l2', title: 'Buổi 2: Số hữu tỉ và các phép tính (2)', duration: '20:10', isPreview: false },
-          { id: 'c1-l3', title: 'Buổi 3: Số hữu tỉ và các phép tính (3)', duration: '22:45', isPreview: false },
-          { id: 'c1-l4', title: 'Buổi 4: Chữa bài tập tổng hợp Số hữu tỉ và các phép tính', duration: '24:30', isPreview: false }
+          {
+            id: 'c1-l2',
+            title: 'Buổi 2: Số hữu tỉ và các phép tính (2)',
+            duration: '20:10',
+            isPreview: false,
+            videoUrl: 'https://www.youtube.com/embed/z_3rm6Ldh78',
+            documentUrl: 'https://drive.google.com/file/d/15iEAj6HW85USuSZVy319JNrjV7Nssx6X/preview',
+            textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 2:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/15iEAj6HW85USuSZVy319JNrjV7Nssx6X/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 2 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/1xFlMHUYFyaGv3gI_dG6aprVyogMVr2vE/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 2 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/1lH_MVwZlIW32ehjsvoIUUx4HZyTdXgSu/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    HD Giải BTVN Buổi 1 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Tiếp tục chủ đề số hữu tỉ và các phép tính. Buổi học này đi sâu vào kỹ năng nhân chia số hữu tỉ nâng cao và các bài toán tìm x phức tạp.</p>`
+          },
+          {
+            id: 'c1-l3',
+            title: 'Buổi 3: Số hữu tỉ và các phép tính (3)',
+            duration: '22:45',
+            isPreview: false,
+            videoUrl: 'https://www.youtube.com/embed/jZj8MmiyNC0',
+            documentUrl: 'https://drive.google.com/file/d/1VogcqF5F5hQDpGgKi77972nZZb8DqlUl/preview',
+            textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 3:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1VogcqF5F5hQDpGgKi77972nZZb8DqlUl/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 3 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/1fXgqABceRCtGaKRrvMSbY5OQChA5ezVa/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 3 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/1Vbz3BTz1bcM28A5tLK-i1KVgGTMfxVJi/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    HD Giải BTVN Buổi 2 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Nâng cao tư duy với các bài toán lũy thừa số hữu tỉ, quy tắc dấu ngoặc và thứ tự thực hiện phép tính nâng cao.</p>`
+          },
+          {
+            id: 'c1-l4',
+            title: 'Buổi 4: Chữa bài tập tổng hợp Số hữu tỉ và các phép tính',
+            duration: '24:30',
+            isPreview: false,
+            videoUrl: 'https://www.youtube.com/embed/ND5xkVGOmgo',
+            documentUrl: 'https://drive.google.com/file/d/1XsWBBRaqY9SoH2G6Qa1vOZ6R0H-1yuK7/preview',
+            textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Đáp án Buổi 4:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1XsWBBRaqY9SoH2G6Qa1vOZ6R0H-1yuK7/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Đáp án & BT Bổ sung Buổi 3 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Buổi học chữa toàn bộ bài tập lớn tổng hợp của Chương 1 giúp học sinh hệ thống hóa kiến thức và cách giải bài toán số hữu tỉ nhanh.</p>`
+          }
         ]
       },
       {
         id: 'c1-ch2',
         title: 'Chương 2: Góc & Đường thẳng song song (4 bài học)',
         lessons: [
-          { id: 'c1-l5', title: 'Buổi 5: Góc và đường thẳng song song (1)', duration: '21:15', isPreview: false },
-          { id: 'c1-l6', title: 'Buổi 6: Góc và đường thẳng song song (2)', duration: '18:50', isPreview: false },
+          {
+            id: 'c1-l5',
+            title: 'Buổi 5: Góc và đường thẳng song song (1)',
+            duration: '21:15',
+            isPreview: false,
+            videoUrl: 'https://www.youtube.com/embed/ZggS8THMXyU',
+            documentUrl: 'https://drive.google.com/file/d/1paKtZ4luIfQEmXIWfncR_MPXxULxE8UD/preview',
+            textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 5:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1paKtZ4luIfQEmXIWfncR_MPXxULxE8UD/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 5 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/12ZoKt6S4U7AiqzR0Btx66KoN2E7ISSum/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 5 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Lý thuyết hình học đầu tiên về góc kề bù, đối đỉnh và tia phân giác của một góc.</p>`
+          },
+          {
+            id: 'c1-l6',
+            title: 'Buổi 6: Góc và đường thẳng song song (2)',
+            duration: '18:50',
+            isPreview: false,
+            documentUrl: 'https://drive.google.com/file/d/1KMwvxoW-7a3qLhju7Di8T4NgT_2mn-a2/preview',
+            textContent: `<h4 class="font-bold text-slate-800 text-sm mb-2">Tài liệu & Bài tập Buổi 6:</h4>
+<div class="flex flex-wrap gap-2.5 mt-2 mb-4">
+  <a href="https://drive.google.com/file/d/1KMwvxoW-7a3qLhju7Di8T4NgT_2mn-a2/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+    Tài liệu Buổi 6 (PDF)
+  </a>
+  <a href="https://drive.google.com/file/d/1_iypn3KRPBmdCr2P2_d1AgYTe8tKFeOy/view?usp=sharing" target="_blank" class="inline-flex items-center justify-center px-3.5 py-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors border border-indigo-200 no-underline">
+    <svg class="h-3.5 w-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+    Bài tập Buổi 6 (PDF)
+  </a>
+</div>
+<h4 class="font-bold text-slate-800 text-sm mb-2">Tóm tắt nội dung học:</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Bài học về hai đường thẳng song song và các góc đồng vị, so le trong nâng cao.</p>`
+          },
           { id: 'c1-l7', title: 'Buổi 7: Luyện tập về đường thẳng song song (3)', duration: '20:45', isPreview: false },
           { id: 'c1-l8', title: 'Buổi 8: Góc và đường thẳng song song (4)', duration: '23:10', isPreview: false }
         ]
