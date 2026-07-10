@@ -1,15 +1,29 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { mockCourses } from '../../data/courses';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { formatPrice } from '../lib/utils';
 
 export default function LandingPage() {
-  const featuredCourses = mockCourses.slice(0, 2); // Show our 2 math courses
+  const [featuredCourses, setFeaturedCourses] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await fetch('/api/courses');
+        if (res.ok) {
+          const data = await res.json();
+          setFeaturedCourses(data.slice(0, 2));
+        }
+      } catch (err) {
+        console.error('Fetch landing page courses error:', err);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const valueProps = [
     {

@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { mockCourses } from '../../../../data/courses';
 import { useAuth } from '../../../context/auth-context';
 import { useCart } from '../../../context/cart-context';
 import { Button } from '../../../components/ui/button';
@@ -17,12 +16,59 @@ export default function CourseDetailPage() {
   const router = useRouter();
   const { user } = useAuth();
   const { addToCart, isInCart } = useCart();
+  const [course, setCourse] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'reviews'>('overview');
-  const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({
-    'c1-ch1': true, // Keep first chapter expanded by default
-  });
+  const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({});
   const [selectedLesson, setSelectedLesson] = useState<any>(null);
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
+
+  const slug = params?.slug as string;
+
+  // Fetch course details dynamically from Supabase API
+  useEffect(() => {
+    if (!slug) return;
+    const fetchCourse = async () => {
+      try {
+        const res = await fetch(`/api/courses?slug=${slug}`);
+        if (res.ok) {
+          const data = await res.json();
+          setCourse(data);
+          // Auto expand first chapter
+          if (data.chapters && data.chapters.length > 0) {
+            setExpandedChapters({ [data.chapters[0].id]: true });
+          }
+        }
+      } catch (err) {
+        console.error('Fetch course detail error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourse();
+  }, [slug]);
+
+  // Check enrollment status of logged-in student
+  const isEnrolled = useMemo(() => {
+    if (!user || user.role !== 'student' || !course) return false;
+    // For mock-up, let's also check localStorage student records
+    const storedUser = localStorage.getItem('auth_user');
+    if (storedUser) {
+      try {
+        const u = JSON.parse(storedUser);
+        // Student Hải (s1) has c1 and c3 enrolled initially
+        if (u.id === 's1' && (course.id === 'c1' || course.id === 'c3')) return true;
+        
+        // Also check if they just purchased in this session (we'll save purchases in local storage)
+        const purchasedList = localStorage.getItem(`purchased_${u.id}`);
+        if (purchasedList) {
+          const ids = JSON.parse(purchasedList) as string[];
+          if (ids.includes(course.id)) return true;
+        }
+      } catch (e) {}
+    }
+    return false;
+  }, [user, course]);
 
   const handleLessonClick = (lesson: any) => {
     if (isEnrolled || lesson.isPreview) {
@@ -33,34 +79,16 @@ export default function CourseDetailPage() {
     }
   };
 
-  const slug = params?.slug as string;
-
-  // Find course
-  const course = useMemo(() => {
-    return mockCourses.find((c) => c.slug === slug);
-  }, [slug]);
-
-  // Check enrollment status of logged-in student
-  const isEnrolled = useMemo(() => {
-    if (!user || user.role !== 'student') return false;
-    // For mock-up, let's also check localStorage student records
-    const storedUser = localStorage.getItem('auth_user');
-    if (storedUser) {
-      try {
-        const u = JSON.parse(storedUser);
-        // Student Hải (s1) has c1 and c3 enrolled initially
-        if (u.id === 's1' && (course?.id === 'c1' || course?.id === 'c3')) return true;
-        
-        // Also check if they just purchased in this session (we'll save purchases in local storage)
-        const purchasedList = localStorage.getItem(`purchased_${u.id}`);
-        if (purchasedList) {
-          const ids = JSON.parse(purchasedList) as string[];
-          if (course && ids.includes(course.id)) return true;
-        }
-      } catch (e) {}
-    }
-    return false;
-  }, [user, course]);
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center py-20">
+        <svg className="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+      </div>
+    );
+  }
 
   if (!course) {
     return (
@@ -233,7 +261,7 @@ export default function CourseDetailPage() {
                 </div>
 
                 <div className="space-y-3">
-                  {course.chapters.map((chapter) => {
+                  {course.chapters.map((chapter: any) => {
                     const isExpanded = expandedChapters[chapter.id];
                     return (
                       <div key={chapter.id} className="border border-slate-200 rounded-lg overflow-hidden">
@@ -259,7 +287,7 @@ export default function CourseDetailPage() {
                         {/* Chapter lessons list */}
                         {isExpanded && (
                           <div className="divide-y divide-slate-100">
-                            {chapter.lessons.map((lesson) => {
+                            {chapter.lessons.map((lesson: any) => {
                               const isAccessible = isEnrolled || lesson.isPreview;
                               return (
                                 <div
@@ -318,7 +346,7 @@ export default function CourseDetailPage() {
                 </div>
 
                 <div className="divide-y divide-slate-100">
-                  {course.reviews.map((rev) => (
+                  {course.reviews.map((rev: any) => (
                     <div key={rev.id} className="py-4 first:pt-0 last:pb-0 space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-xs text-slate-800">{rev.userName}</span>

@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { mockCourses } from '../../../data/courses';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
@@ -10,21 +9,41 @@ import { Input } from '../../components/ui/input';
 import { formatPrice } from '../../lib/utils';
 
 export default function CoursesPage() {
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLevel, setSelectedLevel] = useState('All');
   const [sortBy, setSortBy] = useState('popular');
   const [visibleCount, setVisibleCount] = useState(6);
 
+  // Fetch course listings from Supabase Database
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await fetch('/api/courses');
+        if (res.ok) {
+          const data = await res.json();
+          setCourses(data);
+        }
+      } catch (err) {
+        console.error('Fetch catalog courses error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
+
   // Derive categories list dynamically
   const categories = useMemo(() => {
-    const list = new Set(mockCourses.map((c) => c.category));
+    const list = new Set(courses.map((c) => c.category));
     return ['All', ...Array.from(list)];
-  }, []);
+  }, [courses]);
 
   // Filter & sort logic
   const filteredCourses = useMemo(() => {
-    let result = [...mockCourses];
+    let result = [...courses];
 
     // Search filter
     if (searchTerm.trim() !== '') {
@@ -57,7 +76,7 @@ export default function CoursesPage() {
     }
 
     return result;
-  }, [searchTerm, selectedCategory, selectedLevel, sortBy]);
+  }, [courses, searchTerm, selectedCategory, selectedLevel, sortBy]);
 
   const displayedCourses = filteredCourses.slice(0, visibleCount);
 
@@ -152,8 +171,15 @@ export default function CoursesPage() {
         )}
       </div>
 
-      {/* Empty State */}
-      {filteredCourses.length === 0 ? (
+      {/* Loading state, Empty State, or Grid */}
+      {loading ? (
+        <div className="flex justify-center items-center py-20 flex-1">
+          <svg className="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+        </div>
+      ) : filteredCourses.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-xl border border-dashed border-slate-300 max-w-xl mx-auto space-y-4">
           <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
