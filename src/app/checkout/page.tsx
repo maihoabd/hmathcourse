@@ -19,10 +19,10 @@ export default function CheckoutPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [promoCode, setPromoCode] = useState('');
-  const [discountAmount, setDiscountAmount] = useState(0);
-  const [promoError, setPromoError] = useState('');
-  const [promoSuccess, setPromoSuccess] = useState('');
+  
+  const discountAmount = 0;
+  
+  
 
   // Order state
   const [orderCode, setOrderCode] = useState<string | null>(null);
@@ -35,24 +35,11 @@ export default function CheckoutPage() {
     if (user) {
       setName(user.name);
       setEmail(user.email);
+      setPhone(user.phone || '');
     }
   }, [user]);
 
-  const handleApplyPromo = () => {
-    setPromoError('');
-    setPromoSuccess('');
-    
-    if (promoCode.trim().toUpperCase() === 'DISCOUNT10') {
-      setDiscountAmount(cartTotal * 0.1);
-      setPromoSuccess('Áp dụng mã giảm giá 10% thành công!');
-    } else if (promoCode.trim().toUpperCase() === 'FREE') {
-      setDiscountAmount(cartTotal);
-      setPromoSuccess('Áp dụng mã miễn phí 100% thành công!');
-    } else {
-      setPromoError('Mã giảm giá không hợp lệ hoặc đã hết hạn.');
-      setDiscountAmount(0);
-    }
-  };
+  
 
   const finalTotal = Math.max(0, cartTotal - discountAmount);
 
@@ -340,29 +327,6 @@ export default function CheckoutPage() {
                   </div>
                 ))}
               </div>
-
-              {/* Promo Code input */}
-              {!orderCode && (
-                <div className="pt-4 border-t border-slate-100 space-y-2">
-                  <label className="text-xs font-semibold text-slate-700">Mã giảm giá</label>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Ví dụ: DISCOUNT10"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                      className="h-9 text-xs"
-                    />
-                    <Button onClick={handleApplyPromo} size="sm" variant="outline" className="h-9">
-                      Áp dụng
-                    </Button>
-                  </div>
-                  {promoError && <p className="text-[10px] text-red-500 font-medium">{promoError}</p>}
-                  {promoSuccess && <p className="text-[10px] text-emerald-600 font-medium">{promoSuccess}</p>}
-                  <p className="text-[9px] text-slate-400 italic">
-                    * Nhập mã: <b>DISCOUNT10</b> (giảm 10%) hoặc <b>FREE</b> (giảm 100%) để thử nghiệm.
-                  </p>
-                </div>
-              )}
 
               {/* Total Summary */}
               <div className="pt-4 border-t border-slate-100 text-xs space-y-2">

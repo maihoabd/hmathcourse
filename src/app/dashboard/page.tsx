@@ -30,42 +30,59 @@ export default function StudentDashboardPage() {
   const [coursesMerged, setCoursesMerged] = useState<UserEnrolledMerge[]>([]);
   const [mounted, setMounted] = useState(false);
 
-    const [phone, setPhone] = useState('');
-  const [isEditingPhone, setIsEditingPhone] = useState(false);
-  const [savingPhone, setSavingPhone] = useState(false);
+    const [profileName, setProfileName] = useState(user?.name || '');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [updatingProfile, setUpdatingProfile] = useState(false);
 
-  // Sync phone state when user object loads
   useEffect(() => {
     if (user) {
-      setPhone(user.phone || '');
+      setProfileName(user.name);
     }
   }, [user]);
 
-  const handleSavePhone = async () => {
-    if (!phone) {
-      alert('Vui lòng nhập số điện thoại.');
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profileName.trim()) {
+      alert('Họ tên không được để trống.');
       return;
     }
-    setSavingPhone(true);
+    if (newPassword && newPassword.length < 6) {
+      alert('Mật khẩu mới phải có ít nhất 6 ký tự.');
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      alert('Mật khẩu nhập lại không trùng khớp.');
+      return;
+    }
+
+    setUpdatingProfile(true);
     try {
       const res = await fetch('/api/auth/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user?.id, phone }),
+        body: JSON.stringify({
+          userId: user?.id,
+          name: profileName.trim(),
+          password: newPassword || undefined,
+        }),
       });
+
       if (res.ok) {
         const updatedUser = await res.json();
         updateUserSession(updatedUser);
-        setIsEditingPhone(false);
-        alert('Cập nhật số điện thoại thành công.');
+        setNewPassword('');
+        setConfirmNewPassword('');
+        alert('Cập nhật thông tin thành công.');
       } else {
-        alert('Không thể lưu số điện thoại.');
+        const errData = await res.json();
+        alert('Lỗi: ' + (errData.error || 'Không thể cập nhật thông tin.'));
       }
-    } catch (e) {
-      console.error(e);
-      alert('Lỗi kết nối.');
+    } catch (err) {
+      console.error(err);
+      alert('Lỗi kết nối máy chủ.');
     } finally {
-      setSavingPhone(false);
+      setUpdatingProfile(false);
     }
   };
 
@@ -186,52 +203,75 @@ export default function StudentDashboardPage() {
                   {coursesMerged.filter((c) => c.progress === 100).length}
                 </span>
               </div>
-              <div className="py-2 border-b border-slate-100 space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-500">Số điện thoại:</span>
-                  {!isEditingPhone && (
-                    <button
-                      onClick={() => setIsEditingPhone(true)}
-                      className="text-[10px] text-indigo-600 hover:underline font-semibold bg-transparent border-0 cursor-pointer"
-                    >
-                      {user?.phone ? 'Sửa' : 'Thêm'}
-                    </button>
-                  )}
-                </div>
-                {isEditingPhone ? (
-                  <div className="flex gap-1 mt-1">
-                    <input
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="Nhập SĐT..."
-                      className="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded px-1.5 py-0.5 text-[10px] focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    />
-                    <button
-                      onClick={handleSavePhone}
-                      disabled={savingPhone}
-                      className="bg-indigo-650 hover:bg-indigo-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded cursor-pointer disabled:bg-slate-300"
-                    >
-                      Lưu
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPhone(user?.phone || '');
-                        setIsEditingPhone(false);
-                      }}
-                      className="bg-slate-200 hover:bg-slate-300 text-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded cursor-pointer"
-                    >
-                      Hủy
-                    </button>
-                  </div>
-                ) : (
-                  <p className="font-bold text-slate-900 text-right">{user?.phone || 'Chưa cập nhật'}</p>
-                )}
-              </div>
               <div className="flex justify-between items-center py-2">
-                <span className="text-slate-500">Loại tài khoản:</span>
-                <Badge variant="success" className="text-[10px] font-bold">STUDENT</Badge>
+                <span className="text-slate-500">Số điện thoại:</span>
+                <span className="font-bold text-slate-900">{user?.phone || 'Chưa cập nhật'}</span>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Personal Info Profile settings card */}
+          <Card className="border-slate-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-bold text-slate-800">Thông tin cá nhân</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <form onSubmit={handleUpdateProfile} className="space-y-3">
+                <div>
+                  <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Họ và Tên</label>
+                  <input
+                    type="text"
+                    value={profileName}
+                    onChange={(e) => setProfileName(e.target.value)}
+                    className="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded px-2.5 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Địa chỉ Email (Không được đổi)</label>
+                  <input
+                    type="email"
+                    value={user?.email || ''}
+                    disabled
+                    className="w-full bg-slate-100 text-slate-400 border border-slate-200 rounded px-2.5 py-1 text-xs cursor-not-allowed font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Số điện thoại (Không được đổi)</label>
+                  <input
+                    type="tel"
+                    value={user?.phone || 'Chưa cập nhật'}
+                    disabled
+                    className="w-full bg-slate-100 text-slate-400 border border-slate-200 rounded px-2.5 py-1 text-xs cursor-not-allowed font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Mật khẩu mới (Để trống nếu không đổi)</label>
+                  <input
+                    type="password"
+                    placeholder="Tối thiểu 6 ký tự"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded px-2.5 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium"
+                  />
+                </div>
+                {newPassword && (
+                  <div>
+                    <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Nhập lại mật khẩu mới</label>
+                    <input
+                      type="password"
+                      placeholder="Xác nhận mật khẩu mới"
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      className="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded px-2.5 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium"
+                      required
+                    />
+                  </div>
+                )}
+                <Button type="submit" size="sm" className="w-full bg-indigo-600 hover:bg-indigo-750 text-xs" loading={updatingProfile}>
+                  Cập nhật tài khoản
+                </Button>
+              </form>
             </CardContent>
           </Card>
         </div>

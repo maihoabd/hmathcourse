@@ -1,17 +1,25 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../../lib/db';
+import bcrypt from 'bcryptjs';
 
 export async function PUT(request: Request) {
   try {
-    const { userId, phone } = await request.json();
+    const { userId, name, password, phone } = await request.json();
 
     if (!userId) {
       return NextResponse.json({ error: 'Không tìm thấy thông tin tài khoản.' }, { status: 400 });
     }
 
+    const dataToUpdate: any = {};
+    if (name) dataToUpdate.name = name;
+    if (phone) dataToUpdate.phone = phone;
+    if (password) {
+      dataToUpdate.password = bcrypt.hashSync(password, 10);
+    }
+
     const updated = await db.user.update({
       where: { id: userId },
-      data: { phone },
+      data: dataToUpdate,
     });
 
     return NextResponse.json({
@@ -27,6 +35,6 @@ export async function PUT(request: Request) {
     });
   } catch (error) {
     console.error('Update Profile API Error:', error);
-    return NextResponse.json({ error: 'Lỗi cập nhật số điện thoại.' }, { status: 500 });
+    return NextResponse.json({ error: 'Lỗi cập nhật thông tin tài khoản.' }, { status: 500 });
   }
 }
