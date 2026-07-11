@@ -112,16 +112,16 @@ export default function StudentDashboardPage() {
           // Sync with local storage so that other pages (like course detail) update instantly
           localStorage.setItem(`purchased_${user.id}`, JSON.stringify(dbCourseIds));
 
-          // Map details from mockCourses registry
+          // Map details from live database course registry, with fallback to mockCourses
           const mergedList: UserEnrolledMerge[] = enrollments.map((e: any) => {
             const details = mockCourses.find((c: any) => c.id === e.courseId);
             return {
               id: e.courseId,
-              title: details?.title || 'Khóa học',
-              slug: details?.slug || '',
-              thumbnail: details?.thumbnail || '',
-              category: details?.category || '',
-              lessonsCount: details?.lessonsCount || 0,
+              title: e.course?.title || details?.title || 'Khóa học',
+              slug: e.course?.slug || details?.slug || '',
+              thumbnail: e.course?.thumbnail || details?.thumbnail || '',
+              category: e.course?.category || details?.category || '',
+              lessonsCount: e.course?.lessonsCount || details?.lessonsCount || 0,
               progress: e.progress,
               completedCount: e.completedLessons?.length || 0,
               lastAccessed: e.lastAccessed || new Date().toISOString(),

@@ -10,10 +10,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Thiếu thông tin người dùng (userId).' }, { status: 400 });
     }
 
-    // Retrieve enrollments from the database
+    // Retrieve enrollments from the database, including course details
     const enrollments = await db.enrollment.findMany({
       where: {
         userId: userId,
+      },
+      include: {
+        course: true,
       },
       orderBy: {
         lastAccessed: 'desc',
