@@ -4,12 +4,87 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/ui/table';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Badge } from '../../../components/ui/badge';
+import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 
 export default function AdminStudentsPage() {
   const [students, setStudents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Grant modal states
+  const [allCourses, setAllCourses] = useState<any[]>([]);
+  const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
+  const [isGrantModalOpen, setIsGrantModalOpen] = useState(false);
+  const [updatingEnrollment, setUpdatingEnrollment] = useState<string | null>(null);
+
+  // Load all courses on mount
+  useEffect(() => {
+    fetch('/api/courses')
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .then((data) => {
+        if (data) setAllCourses(data);
+      })
+      .catch((err) => console.error('Fetch catalog courses error:', err));
+  }, []);
+
+  const handleOpenGrantModal = (student: any) => {
+    setSelectedStudent(student);
+    setIsGrantModalOpen(true);
+  };
+
+  const handleToggleEnrollment = async (courseId: string, isCurrentlyEnrolled: boolean) => {
+    if (!selectedStudent || updatingEnrollment) return;
+
+    setUpdatingEnrollment(courseId);
+    try {
+      const method = isCurrentlyEnrolled ? 'DELETE' : 'POST';
+      const response = await fetch('/api/admin/enrollments', {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: selectedStudent.id, courseId }),
+      });
+
+      if (response.ok) {
+        // Update local list
+        let updatedEnrolled = [...selectedStudent.enrolledCourses];
+        if (isCurrentlyEnrolled) {
+          updatedEnrolled = updatedEnrolled.filter((e: any) => e.courseId !== courseId);
+        } else {
+          const cDetails = allCourses.find((c) => c.id === courseId);
+          updatedEnrolled.push({
+            courseId,
+            courseTitle: cDetails?.title || 'Khóa học',
+            progress: 0,
+          });
+        }
+
+        const updatedStudent = {
+          ...selectedStudent,
+          enrolledCourses: updatedEnrolled,
+        };
+
+        setSelectedStudent(updatedStudent);
+        
+        // Refresh local student record
+        setStudents((prev) =>
+          prev.map((s) => (s.id === selectedStudent.id ? updatedStudent : s))
+        );
+      } else {
+        const errorData = await response.json();
+        alert('Lỗi: ' + (errorData.error || 'Không thể cập nhật đăng ký khóa học.'));
+      }
+    } catch (err) {
+      console.error('Toggle enrollment error:', err);
+      alert('Lỗi kết nối mạng.');
+    } finally {
+      setUpdatingEnrollment(null);
+    }
+  };
   const [statusFilter, setStatusFilter] = useState('All');
 
   // Load from API on mount
@@ -180,7 +255,13 @@ export default function AdminStudentsPage() {
                           {stud.status === 'active' ? 'Hoạt động' : 'Tạm khóa'}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right space-x-3">
+                        <button
+                          onClick={() => handleOpenGrantModal(stud)}
+                          className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline bg-transparent"
+                        >
+                          🔑 Cấp khóa học
+                        </button>
                         <button
                           onClick={() => handleToggleStatus(stud.id, stud.status)}
                           className={"text-xs font-semibold hover:underline bg-transparent " + (stud.status === 'active' ? 'text-red-500 hover:text-red-700' : 'text-indigo-600 hover:text-indigo-850')}
@@ -196,6 +277,64 @@ export default function AdminStudentsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Grant Course Modal Box */}
+      {isGrantModalOpen && selectedStudent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white max-w-md w-full rounded-2xl p-6 space-y-5 border border-slate-200 shadow-2xl animate-slide-up">
+            
+            <div className="space-y-1">
+              <h2 className="text-lg font-bold text-slate-900">Cấp quyền khóa học</h2>
+              <p className="text-xs text-slate-500 leading-normal">
+                Học viên: <span className="font-bold text-slate-800">{selectedStudent.name}</span> ({selectedStudent.email})
+              </p>
+            </div>
+
+            <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden bg-slate-50/20">
+              {allCourses.map((course) => {
+                const isEnrolled = selectedStudent.enrolledCourses.some((e: any) => e.courseId === course.id);
+                const isUpdating = updatingEnrollment === course.id;
+
+                return (
+                  <div key={course.id} className="flex items-center justify-between p-4 bg-white first:pt-4">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={course.thumbnail}
+                        alt={course.title}
+                        className="h-9 w-12 rounded object-cover bg-slate-100"
+                      />
+                      <div className="text-left">
+                        <p className="font-bold text-slate-850 text-xs line-clamp-1">{course.title}</p>
+                        <p className="text-[10px] text-slate-400 font-semibold">{course.category}</p>
+                      </div>
+                    </div>
+
+                    <div className="shrink-0 flex items-center gap-2">
+                      {isUpdating ? (
+                        <div className="h-4 w-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <input
+                          type="checkbox"
+                          checked={isEnrolled}
+                          onChange={() => handleToggleEnrollment(course.id, isEnrolled)}
+                          className="h-4.5 w-4.5 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer"
+                        />
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="pt-2">
+              <Button onClick={() => setIsGrantModalOpen(false)} className="w-full text-xs">
+                Đóng hộp thoại
+              </Button>
+            </div>
+            
+          </div>
+        </div>
+      )}
     </div>
   );
 }
