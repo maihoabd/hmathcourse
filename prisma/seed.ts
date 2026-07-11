@@ -25,6 +25,8 @@ async function main() {
       password: adminPasswordHash,
       role: 'admin',
       status: 'active',
+      phone: '0987654321',
+      emailVerified: true,
     },
   });
 
@@ -37,22 +39,24 @@ async function main() {
       password: studentPasswordHash,
       role: 'student',
       status: 'active',
+      phone: '0912345678',
+      emailVerified: true,
     },
   });
 
   // 3. Create Other Mock Students
   const otherStudents = [
-    { id: 's2', name: 'Trần Thị Mai', email: 'mai.tran@gmail.com', status: 'active' },
-    { id: 's3', name: 'Lê Hoàng Long', email: 'long.le@yahoo.com', status: 'active' },
-    { id: 's4', name: 'Phạm Thảo Vy', email: 'vy.pham@outlook.com', status: 'active' },
-    { id: 's5', name: 'Đặng Tuấn Anh', email: 'tuananh.dang@gmail.com', status: 'active' },
-    { id: 's6', name: 'Vũ Quốc Bảo', email: 'bao.vu@hotmail.com', status: 'active' },
-    { id: 's7', name: 'Hoàng Kim Chi', email: 'chi.hoang@gmail.com', status: 'active' },
-    { id: 's8', name: 'Đỗ Hùng Dũng', email: 'dung.do@gmail.com', status: 'active' },
-    { id: 's9', name: 'Phan Huy Hoàng', email: 'hoang.phan@gmail.com', status: 'active' },
-    { id: 's10', name: 'Bùi Tiến Dũng', email: 'dung.bui@yahoo.com', status: 'suspended' },
-    { id: 's11', name: 'Lê Hữu Nghĩa', email: 'nghia.le@gmail.com', status: 'active' },
-    { id: 's12', name: 'Nguyễn Bích Ngọc', email: 'ngoc.nguyen@gmail.com', status: 'active' },
+    { id: 's2', name: 'Trần Thị Mai', email: 'mai.tran@gmail.com', status: 'active', phone: '0922334455' },
+    { id: 's3', name: 'Lê Hoàng Long', email: 'long.le@yahoo.com', status: 'active', phone: '0933445566' },
+    { id: 's4', name: 'Phạm Thảo Vy', email: 'vy.pham@outlook.com', status: 'active', phone: '0944556677' },
+    { id: 's5', name: 'Đặng Tuấn Anh', email: 'tuananh.dang@gmail.com', status: 'active', phone: '0955667788' },
+    { id: 's6', name: 'Vũ Quốc Bảo', email: 'bao.vu@hotmail.com', status: 'active', phone: '0966778899' },
+    { id: 's7', name: 'Hoàng Kim Chi', email: 'chi.hoang@gmail.com', status: 'active', phone: '0977889900' },
+    { id: 's8', name: 'Đỗ Hùng Dũng', email: 'dung.do@gmail.com', status: 'active', phone: '0988990011' },
+    { id: 's9', name: 'Phan Huy Hoàng', email: 'hoang.phan@gmail.com', status: 'active', phone: '0999001122' },
+    { id: 's10', name: 'Bùi Tiến Dũng', email: 'dung.bui@yahoo.com', status: 'suspended', phone: '0900112233' },
+    { id: 's11', name: 'Lê Hữu Nghĩa', email: 'nghia.le@gmail.com', status: 'active', phone: '0911223344' },
+    { id: 's12', name: 'Nguyễn Bích Ngọc', email: 'ngoc.nguyen@gmail.com', status: 'active', phone: '0922334455' },
   ];
 
   for (const student of otherStudents) {
@@ -64,6 +68,8 @@ async function main() {
         password: studentPasswordHash,
         role: 'student',
         status: student.status,
+        phone: student.phone,
+        emailVerified: true,
       },
     });
   }

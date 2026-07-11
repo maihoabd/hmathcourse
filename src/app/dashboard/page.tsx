@@ -25,10 +25,49 @@ interface UserEnrolledMerge {
 }
 
 export default function StudentDashboardPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, updateUserSession } = useAuth();
   const router = useRouter();
   const [coursesMerged, setCoursesMerged] = useState<UserEnrolledMerge[]>([]);
   const [mounted, setMounted] = useState(false);
+
+    const [phone, setPhone] = useState('');
+  const [isEditingPhone, setIsEditingPhone] = useState(false);
+  const [savingPhone, setSavingPhone] = useState(false);
+
+  // Sync phone state when user object loads
+  useEffect(() => {
+    if (user) {
+      setPhone(user.phone || '');
+    }
+  }, [user]);
+
+  const handleSavePhone = async () => {
+    if (!phone) {
+      alert('Vui lòng nhập số điện thoại.');
+      return;
+    }
+    setSavingPhone(true);
+    try {
+      const res = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user?.id, phone }),
+      });
+      if (res.ok) {
+        const updatedUser = await res.json();
+        updateUserSession(updatedUser);
+        setIsEditingPhone(false);
+        alert('Cập nhật số điện thoại thành công.');
+      } else {
+        alert('Không thể lưu số điện thoại.');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Lỗi kết nối.');
+    } finally {
+      setSavingPhone(false);
+    }
+  };
 
   // Guard routing
   useEffect(() => {
@@ -146,6 +185,48 @@ export default function StudentDashboardPage() {
                 <span className="font-bold text-slate-900">
                   {coursesMerged.filter((c) => c.progress === 100).length}
                 </span>
+              </div>
+              <div className="py-2 border-b border-slate-100 space-y-1">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-500">Số điện thoại:</span>
+                  {!isEditingPhone && (
+                    <button
+                      onClick={() => setIsEditingPhone(true)}
+                      className="text-[10px] text-indigo-600 hover:underline font-semibold bg-transparent border-0 cursor-pointer"
+                    >
+                      {user?.phone ? 'Sửa' : 'Thêm'}
+                    </button>
+                  )}
+                </div>
+                {isEditingPhone ? (
+                  <div className="flex gap-1 mt-1">
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Nhập SĐT..."
+                      className="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded px-1.5 py-0.5 text-[10px] focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                    <button
+                      onClick={handleSavePhone}
+                      disabled={savingPhone}
+                      className="bg-indigo-650 hover:bg-indigo-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded cursor-pointer disabled:bg-slate-300"
+                    >
+                      Lưu
+                    </button>
+                    <button
+                      onClick={() => {
+                        setPhone(user?.phone || '');
+                        setIsEditingPhone(false);
+                      }}
+                      className="bg-slate-200 hover:bg-slate-300 text-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded cursor-pointer"
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                ) : (
+                  <p className="font-bold text-slate-900 text-right">{user?.phone || 'Chưa cập nhật'}</p>
+                )}
               </div>
               <div className="flex justify-between items-center py-2">
                 <span className="text-slate-500">Loại tài khoản:</span>

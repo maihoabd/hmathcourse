@@ -14,6 +14,7 @@ export default function RegisterPage() {
   
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -23,7 +24,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword || !phone) {
       setError('Vui lòng điền đầy đủ tất cả thông tin.');
       return;
     }
@@ -39,11 +40,15 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-    const success = await register(name, email, password);
+    const result = await register(name, email, password, phone);
     setLoading(false);
 
-    if (!success) {
-      setError('Có lỗi xảy ra trong quá trình đăng ký.');
+    if (result.success) {
+      if (result.unverified) {
+        router.push('/verify?email=' + encodeURIComponent(email));
+      }
+    } else {
+      setError('Đăng ký thất bại. Địa chỉ email có thể đã được sử dụng.');
     }
   };
 
@@ -53,7 +58,7 @@ export default function RegisterPage() {
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold text-slate-900">Đăng ký thành viên</CardTitle>
           <CardDescription className="text-xs text-slate-500">
-            Tạo tài khoản học tập miễn phí chỉ trong 30 giây.
+            Tạo tài khoản học tập trên HMath chỉ trong 30 giây.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-0">
@@ -64,7 +69,7 @@ export default function RegisterPage() {
               </div>
             )}
             <Input
-              label="Họ và Tên"
+              label="Họ và Tên (bắt buộc)"
               type="text"
               placeholder="Nguyễn Văn A"
               value={name}
@@ -73,7 +78,16 @@ export default function RegisterPage() {
               required
             />
             <Input
-              label="Địa chỉ Email"
+              label="Số điện thoại (bắt buộc)"
+              type="tel"
+              placeholder="Ví dụ: 0987654321"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              disabled={loading}
+              required
+            />
+            <Input
+              label="Địa chỉ Email (bắt buộc)"
               type="email"
               placeholder="ten@example.com"
               value={email}

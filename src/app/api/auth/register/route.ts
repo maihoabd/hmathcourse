@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../../lib/db';
 import bcrypt from 'bcryptjs';
+import { sendVerificationEmail } from '../../../../lib/mail';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password } = await request.json();
+    const { name, email, password, phone } = await request.json();
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: 'Vui lòng cung cấp đầy đủ thông tin.' }, { status: 400 });
@@ -21,6 +22,9 @@ export async function POST(request: Request) {
     // Encrypt the password using bcrypt
     const passwordHash = bcrypt.hashSync(password, 10);
 
+    // Generate 6-digit code
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
     const user = await db.user.create({
       data: {
         name,
@@ -28,15 +32,20 @@ export async function POST(request: Request) {
         password: passwordHash,
         role: 'student',
         status: 'active',
+        phone: phone || null,
+        emailVerified: false,
+        verificationCode: verificationCode,
       },
     });
 
+    // Send verification email
+    await sendVerificationEmail(email, name, verificationCode);
+
     return NextResponse.json({
-      id: user.id,
-      name: user.name,
+      success: true,
       email: user.email,
-      role: user.role,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=60',
+      unverified: true,
+      message: 'Mã kích hoạt đã được gửi tới email của bạn.'
     });
   } catch (error) {
     console.error('Register API error:', error);

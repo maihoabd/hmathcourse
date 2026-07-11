@@ -41,26 +41,32 @@ function LoginForm() {
     }
 
     setLoading(true);
-    const success = await login(email, password);
+    const result = await login(email, password);
     setLoading(false);
 
-    if (!success) {
-      setError('Email hoặc mật khẩu không chính xác.');
+    if (!result.success) {
+      if (result.unverified) {
+        router.push('/verify?email=' + encodeURIComponent(email));
+      } else {
+        setError('Email hoặc mật khẩu không chính xác.');
+      }
     }
   };
 
   const handleQuickLogin = async (role: 'student' | 'admin') => {
-    setEmail(role === 'student' ? 'student@lms.com' : 'admin@lms.com');
-    setPassword(role === 'student' ? 'student123' : 'admin123');
+    const targetEmail = role === 'student' ? 'student@lms.com' : 'admin@lms.com';
+    const targetPass = role === 'student' ? 'student123' : 'admin123';
+    setEmail(targetEmail);
+    setPassword(targetPass);
     setError('');
     
     setLoading(true);
-    if (role === 'student') {
-      await login('student@lms.com', 'student123');
-    } else {
-      await login('admin@lms.com', 'admin123');
-    }
+    const result = await login(targetEmail, targetPass);
     setLoading(false);
+
+    if (!result.success && result.unverified) {
+      router.push('/verify?email=' + encodeURIComponent(targetEmail));
+    }
   };
 
   return (
@@ -101,7 +107,37 @@ function LoginForm() {
           </Button>
         </form>
 
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-slate-200" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-slate-400 font-semibold">Tài khoản Demo</span>
+          </div>
+        </div>
 
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => handleQuickLogin('student')}
+            disabled={loading}
+            className="text-[11px]"
+          >
+            Học viên Demo
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => handleQuickLogin('admin')}
+            disabled={loading}
+            className="text-[11px]"
+          >
+            Quản trị Demo
+          </Button>
+        </div>
       </CardContent>
       <CardFooter className="px-6 py-4 border-t border-slate-100 flex items-center justify-center bg-slate-50/50 text-xs">
         <span className="text-slate-500 mr-1.5">Bạn chưa có tài khoản?</span>

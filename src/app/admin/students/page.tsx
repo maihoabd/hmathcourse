@@ -1,49 +1,58 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { mockStudents } from '../../../../data/students';
-import { mockCourses } from '../../../../data/courses';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/ui/table';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Badge } from '../../../components/ui/badge';
 import { Input } from '../../../components/ui/input';
-import { Button } from '../../../components/ui/button';
 
 export default function AdminStudentsPage() {
-  const [students, setStudents] = useState(mockStudents);
+  const [students, setStudents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
-  // Load from local storage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem('mock_admin_students');
-    if (stored) {
-      try {
-        setStudents(JSON.parse(stored));
-      } catch (e) {
-        setStudents(mockStudents);
+  // Load from API on mount
+  const fetchStudents = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin/students');
+      if (res.ok) {
+        const data = await res.json();
+        setStudents(data);
       }
-    } else {
-      localStorage.setItem('mock_admin_students', JSON.stringify(mockStudents));
+    } catch (err) {
+      console.error('Fetch admin students error:', err);
+    } finally {
+      setLoading(false);
     }
-  }, []);
-
-  const saveStudents = (newList: typeof mockStudents) => {
-    setStudents(newList);
-    localStorage.setItem('mock_admin_students', JSON.stringify(newList));
   };
 
-  const handleToggleStatus = (studentId: string) => {
-    const updated = students.map((s) => {
-      if (s.id === studentId) {
-        return {
-          ...s,
-          status: s.status === 'active' ? ('suspended' as const) : ('active' as const)
-        };
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const handleToggleStatus = async (studentId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
+    try {
+      const response = await fetch('/api/admin/students', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: studentId, status: newStatus }),
+      });
+
+      if (response.ok) {
+        await fetchStudents(); // Refresh list
+      } else {
+        const errorData = await response.json();
+        alert('Lỗi: ' + (errorData.error || 'Không thể cập nhật trạng thái học viên.'));
       }
-      return s;
-    });
-    saveStudents(updated);
+    } catch (err) {
+      console.error('Toggle student status error:', err);
+      alert('Lỗi kết nối mạng.');
+    }
   };
 
   // Filter students
@@ -51,7 +60,8 @@ export default function AdminStudentsPage() {
     return students.filter((s) => {
       const matchesSearch =
         s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        s.email.toLowerCase().includes(searchTerm.toLowerCase());
+        s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (s.phone && s.phone.includes(searchTerm));
       
       const matchesStatus =
         statusFilter === 'All' || s.status === statusFilter;
@@ -61,13 +71,12 @@ export default function AdminStudentsPage() {
   }, [students, searchTerm, statusFilter]);
 
   // Helper to map course names
-  const getCourseNames = (enrolledList: typeof mockStudents[0]['enrolledCourses']) => {
-    if (enrolledList.length === 0) return 'Chưa đăng ký';
+  const getCourseNames = (enrolledList: any[]) => {
+    if (!enrolledList || enrolledList.length === 0) return 'Chưa đăng ký';
     
     return enrolledList
       .map((e) => {
-        const course = mockCourses.find((c) => c.id === e.courseId);
-        return course ? `${course.title} (${e.progress}%)` : `Khóa học ${e.courseId} (${e.progress}%)`;
+        return e.courseTitle + ' (' + e.progress + '%)';
       })
       .join(', ');
   };
@@ -84,7 +93,7 @@ export default function AdminStudentsPage() {
       <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
         <div className="sm:col-span-2">
           <Input
-            placeholder="Tìm học viên theo tên hoặc địa chỉ email..."
+            placeholder="Tìm học viên theo tên, email hoặc số điện thoại..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="bg-slate-50"
@@ -95,7 +104,7 @@ export default function AdminStudentsPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="flex h-10 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex h-10 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-750 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="All">Tất cả trạng thái</option>
             <option value="active">Hoạt động (Active)</option>
@@ -107,67 +116,84 @@ export default function AdminStudentsPage() {
       {/* Students list Table inside Card */}
       <Card className="border-slate-200">
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Học viên</TableHead>
-                <TableHead>Ngày đăng ký</TableHead>
-                <TableHead>Khóa học tham gia & Tiến trình</TableHead>
-                <TableHead className="text-center">Trạng thái</TableHead>
-                <TableHead className="text-right">Hành động</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredStudents.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <svg className="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-10 text-slate-400">
-                    Không tìm thấy học viên nào phù hợp.
-                  </TableCell>
+                  <TableHead>Học viên</TableHead>
+                  <TableHead>Số điện thoại</TableHead>
+                  <TableHead>Ngày đăng ký</TableHead>
+                  <TableHead>Khóa học tham gia & Tiến trình</TableHead>
+                  <TableHead className="text-center">Trạng thái</TableHead>
+                  <TableHead className="text-right">Hành động</TableHead>
                 </TableRow>
-              ) : (
-                filteredStudents.map((stud) => (
-                  <TableRow key={stud.id}>
-                    <TableCell className="max-w-xs truncate">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={stud.avatar}
-                          alt={stud.name}
-                          className="h-8 w-8 rounded-full object-cover border border-slate-200 shrink-0"
-                        />
-                        <div className="min-w-0">
-                          <p className="font-bold text-xs truncate text-slate-900">{stud.name}</p>
-                          <p className="text-[10px] text-slate-400">{stud.email}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-xs">
-                      {new Date(stud.registeredAt).toLocaleDateString('vi-VN')}
-                    </TableCell>
-                    <TableCell className="text-xs max-w-sm">
-                      <p className="line-clamp-2 text-slate-600 font-medium">
-                        {getCourseNames(stud.enrolledCourses)}
-                      </p>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant={stud.status === 'active' ? 'success' : 'danger'} className="text-[9px] px-2 py-0">
-                        {stud.status === 'active' ? 'Hoạt động' : 'Tạm khóa'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <button
-                        onClick={() => handleToggleStatus(stud.id)}
-                        className={`text-xs font-semibold hover:underline bg-transparent ${
-                          stud.status === 'active' ? 'text-red-500 hover:text-red-750' : 'text-indigo-600 hover:text-indigo-850'
-                        }`}
-                      >
-                        {stud.status === 'active' ? 'Khóa' : 'Kích hoạt'}
-                      </button>
+              </TableHeader>
+              <TableBody>
+                {filteredStudents.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center py-10 text-slate-400">
+                      Không tìm thấy học viên nào phù hợp.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  filteredStudents.map((stud) => (
+                    <TableRow key={stud.id}>
+                      <TableCell className="max-w-xs truncate">
+                        <div className="flex items-center gap-3">
+                          {stud.avatar ? (
+                            <img
+                              src={stud.avatar}
+                              alt={stud.name}
+                              className="h-8 w-8 rounded-full object-cover border border-slate-200 shrink-0"
+                            />
+                          ) : (
+                            <div className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-200 shrink-0">
+                              {stud.name ? stud.name.charAt(0).toUpperCase() : 'H'}
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <p className="font-bold text-xs truncate text-slate-900">{stud.name}</p>
+                            <p className="text-[10px] text-slate-450">{stud.email}</p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-xs font-medium text-slate-700">
+                        {stud.phone || 'Chưa cập nhật'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {new Date(stud.registeredAt).toLocaleDateString('vi-VN')}
+                      </TableCell>
+                      <TableCell className="text-xs max-w-sm">
+                        <p className="line-clamp-2 text-slate-600 font-medium">
+                          {getCourseNames(stud.enrolledCourses)}
+                        </p>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant={stud.status === 'active' ? 'success' : 'danger'} className="text-[9px] px-2 py-0 border-0">
+                          {stud.status === 'active' ? 'Hoạt động' : 'Tạm khóa'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <button
+                          onClick={() => handleToggleStatus(stud.id, stud.status)}
+                          className={"text-xs font-semibold hover:underline bg-transparent " + (stud.status === 'active' ? 'text-red-500 hover:text-red-700' : 'text-indigo-600 hover:text-indigo-850')}
+                        >
+                          {stud.status === 'active' ? 'Khóa' : 'Kích hoạt'}
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>
