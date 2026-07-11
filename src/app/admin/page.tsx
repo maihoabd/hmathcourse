@@ -9,6 +9,7 @@ import { formatPrice } from '../../lib/utils';
 export default function AdminOverviewPage() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [hoveredPoint, setHoveredPoint] = useState<{ idx: number; cx: number; cy: number; name: string; value: number } | null>(null);
 
   // Fetch real-time overview statistics from Database
   useEffect(() => {
@@ -131,30 +132,94 @@ export default function AdminOverviewPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Sales Chart (Left 2 Cols) */}
-        <Card className="lg:col-span-2 border-slate-200">
-          <CardHeader>
-            <CardTitle className="text-base font-bold text-slate-900">Biểu đồ doanh thu năm 2026</CardTitle>
+        <Card className="lg:col-span-2 border-slate-200 shadow-sm rounded-2xl overflow-hidden bg-white">
+          <CardHeader className="pb-2 border-b border-slate-150 bg-slate-50/20">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <CardTitle className="text-sm font-bold text-slate-800">Biểu đồ phân tích doanh thu (2026)</CardTitle>
+                <p className="text-[10px] text-slate-400">Doanh thu tích lũy trực tiếp qua cổng thanh toán tự động</p>
+              </div>
+              <div className="flex items-center gap-1.5 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                <button className="px-2 py-1 text-[9px] font-bold rounded-md text-slate-500 hover:text-slate-700 transition-colors">Tuần</button>
+                <button className="px-2 py-1 text-[9px] font-bold rounded-md bg-white text-indigo-600 shadow-xs transition-colors">Tháng</button>
+                <button className="px-2 py-1 text-[9px] font-bold rounded-md text-slate-500 hover:text-slate-700 transition-colors">Quý</button>
+              </div>
+            </div>
           </CardHeader>
-          <CardContent className="p-6 pt-0">
-            {/* Custom SVG Line Area Chart for 100% build compatibility and beauty */}
-            <div className="w-full h-64 flex flex-col justify-between">
-              <div className="relative flex-1 w-full bg-slate-50 rounded-xl border border-slate-100 p-4">
-                {/* SVG Drawing */}
-                <svg className="w-full h-full" viewBox="0 0 700 200" preserveAspectRatio="none">
-                  {/* Grid Lines */}
-                  <line x1="0" y1="50" x2="700" y2="50" stroke="#f1f5f9" strokeWidth="1" />
-                  <line x1="0" y1="100" x2="700" y2="100" stroke="#f1f5f9" strokeWidth="1" />
-                  <line x1="0" y1="150" x2="700" y2="150" stroke="#f1f5f9" strokeWidth="1" />
+          
+          {/* Revenue Insights Summary */}
+          <div className="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100 bg-slate-50/5 text-center">
+            <div className="p-3">
+              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Cao điểm (Th 7)</p>
+              <p className="text-xs font-extrabold text-slate-850 pt-0.5">
+                {formatPrice(Math.max(...salesChartData.map((d: any) => d.value)))}
+              </p>
+            </div>
+            <div className="p-3">
+              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Trung bình tháng</p>
+              <p className="text-xs font-extrabold text-indigo-650 pt-0.5">
+                {formatPrice(Math.round(salesChartData.reduce((sum: number, d: any) => sum + d.value, 0) / salesChartData.length))}
+              </p>
+            </div>
+            <div className="p-3">
+              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Phương thức</p>
+              <p className="text-[10px] font-bold text-emerald-600 pt-1 flex items-center justify-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                PayOS / VietQR
+              </p>
+            </div>
+          </div>
+
+          <CardContent className="p-6">
+            <div className="w-full flex flex-col justify-between">
+              <div className="relative w-full bg-slate-50/60 rounded-xl border border-slate-150 p-4 min-h-[220px]">
+                
+                {/* Custom Tooltip Overlay */}
+                {hoveredPoint && (
+                  <div
+                    className="absolute bg-slate-900 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shadow-xl border border-slate-850 transition-all duration-150 pointer-events-none z-10 flex flex-col items-center gap-0.5"
+                    style={{
+                      left: `${(hoveredPoint.cx / 700) * 100}%`,
+                      top: `${(hoveredPoint.cy / 200) * 100 - 15}%`,
+                      transform: 'translate(-50%, -100%)',
+                    }}
+                  >
+                    <span className="text-slate-400 font-normal text-[9px]">{hoveredPoint.name}</span>
+                    <span>{formatPrice(hoveredPoint.value)}</span>
+                    <div className="absolute w-2 h-2 bg-slate-900 rotate-45 bottom-[-4px] left-1/2 -translate-x-1/2 border-r border-b border-slate-850"></div>
+                  </div>
+                )}
+
+                {/* SVG Drawing Canvas */}
+                <svg className="w-full h-44 overflow-visible" viewBox="0 0 700 200" preserveAspectRatio="none">
+                  {/* Grid Horizontal Lines */}
+                  <line x1="0" y1="50" x2="700" y2="50" stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="1" />
+                  <line x1="0" y1="100" x2="700" y2="100" stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="1" />
+                  <line x1="0" y1="150" x2="700" y2="150" stroke="#e2e8f0" strokeDasharray="3 3" strokeWidth="1" />
+
+                  {/* Vertical Hover Guideline */}
+                  {hoveredPoint && (
+                    <line
+                      x1={hoveredPoint.cx}
+                      y1="0"
+                      x2={hoveredPoint.cx}
+                      y2="200"
+                      stroke="#818cf8"
+                      strokeWidth="1.5"
+                      strokeDasharray="4 4"
+                      className="transition-all"
+                    />
+                  )}
 
                   {/* Gradient Area Definition */}
                   <defs>
                     <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.3" />
+                      <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.25" />
                       <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.0" />
                     </linearGradient>
                   </defs>
 
-                  {/* Dynamic Path Calculation */}
+                  {/* Area fill */}
                   <path
                     d={`
                       M 50,200
@@ -168,9 +233,10 @@ export default function AdminOverviewPage() {
                       L 650,200 Z
                     `}
                     fill="url(#chartGradient)"
+                    className="transition-all duration-300"
                   />
 
-                  {/* Main Line Stroke */}
+                  {/* Main Line stroke */}
                   <path
                     d={`
                       M 50,${180 - (salesChartData[0].value / maxChartValue) * 140}
@@ -185,20 +251,38 @@ export default function AdminOverviewPage() {
                     stroke="#4f46e5"
                     strokeWidth="3.5"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-all duration-300"
                   />
 
                   {/* Data Points */}
                   {salesChartData.map((d: any, idx: number) => {
                     const cx = 50 + idx * 100;
                     const cy = 180 - (d.value / maxChartValue) * 140;
+                    const isHovered = hoveredPoint?.idx === idx;
+
                     return (
                       <g key={idx}>
+                        {/* Outer Glow Circle on hover */}
+                        {isHovered && (
+                          <circle
+                            cx={cx}
+                            cy={cy}
+                            r="10"
+                            className="fill-indigo-500/20 stroke-none animate-ping"
+                          />
+                        )}
                         <circle
                           cx={cx}
                           cy={cy}
-                          r="5"
-                          className="fill-indigo-600 stroke-white cursor-pointer hover:r-7 transition-all"
-                          strokeWidth="2"
+                          r={isHovered ? "6" : "4.5"}
+                          onMouseEnter={() => setHoveredPoint({ idx, cx, cy, name: d.name, value: d.value })}
+                          onMouseLeave={() => setHoveredPoint(null)}
+                          className={`cursor-pointer transition-all duration-150 ${
+                            isHovered 
+                              ? 'fill-white stroke-indigo-600 stroke-[3]' 
+                              : 'fill-indigo-600 stroke-white stroke-[2]'
+                          }`}
                         />
                       </g>
                     );
@@ -207,9 +291,11 @@ export default function AdminOverviewPage() {
               </div>
 
               {/* X Axis labels */}
-              <div className="flex justify-between items-center px-8 pt-2 text-[11px] font-bold text-slate-400">
+              <div className="flex justify-between items-center px-6 pt-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 {salesChartData.map((d: any, idx: number) => (
-                  <span key={idx}>{d.name}</span>
+                  <span key={idx} className={hoveredPoint?.idx === idx ? "text-indigo-600 font-extrabold" : ""}>
+                    {d.name}
+                  </span>
                 ))}
               </div>
             </div>
