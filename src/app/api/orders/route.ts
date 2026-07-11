@@ -41,8 +41,11 @@ export async function POST(request: Request) {
           orderCode: numericCode,
           amount: amount,
           description: `HMATH ${numericCode}`,
-          cancelUrl: `${origin}/checkout?status=cancel&code=${orderCode}`,
-          returnUrl: `${origin}/checkout?status=success&code=${orderCode}`,
+          // Không tự gắn query params (status/code) ở đây nữa.
+          // PayOS sẽ TỰ ĐỘNG gắn ?code=00&id=...&cancel=...&status=PAID/CANCELLED&orderCode=<numericCode>
+          // khi redirect về. Nếu tự thêm status/code trước, dễ gây xung đột / URL bị lỗi.
+          cancelUrl: `${origin}/checkout`,
+          returnUrl: `${origin}/checkout`,
         };
 
         const paymentLink = await payOS.paymentRequests.create(paymentData);

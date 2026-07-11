@@ -21,8 +21,6 @@ export default function CheckoutPage() {
   const [phone, setPhone] = useState('');
   
   const discountAmount = 0;
-  
-  
 
   // Order state
   const [orderCode, setOrderCode] = useState<string | null>(null);
@@ -38,8 +36,6 @@ export default function CheckoutPage() {
       setPhone(user.phone || '');
     }
   }, [user]);
-
-  
 
   const finalTotal = Math.max(0, cartTotal - discountAmount);
 
@@ -68,32 +64,26 @@ export default function CheckoutPage() {
     return () => clearInterval(interval);
   }, [orderCode, showSuccessModal]);
 
-  // Handle redirect callback from PayOS
+  // Handle redirect callback from PayOS.
+  // returnUrl KHÔNG còn tự gắn status/code nữa (tránh xung đột), nên ở đây
+  // ta chỉ đọc đúng các params mà PayOS tự thêm vào khi redirect:
+  // ?code=00&id=...&cancel=false&status=PAID&orderCode=<numericCode>
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      const status = params.get('status');
-      const code = params.get('code');
-      const payosOrderCode = params.get('orderCode');
-      
-      let finalOrderCode = '';
-      let isSuccess = false;
+      const status = params.get('status'); // 'PAID' | 'CANCELLED' | ...
+      const payosCode = params.get('code'); // '00' = thành công theo PayOS
+      const payosOrderCode = params.get('orderCode'); // mã số (numeric) của đơn hàng
 
-      if (status === 'success' && code && code.startsWith('HM')) {
-        finalOrderCode = code;
-        isSuccess = true;
-      } else if (status === 'PAID' && payosOrderCode) {
-        finalOrderCode = `HM${payosOrderCode}`;
-        isSuccess = true;
-      } else if (code === '00' && payosOrderCode) {
-        finalOrderCode = `HM${payosOrderCode}`;
-        isSuccess = true;
-      }
+      const isSuccess =
+        payosOrderCode != null &&
+        (status === 'PAID' || payosCode === '00');
 
-      if (isSuccess && finalOrderCode) {
+      if (isSuccess && payosOrderCode) {
+        const finalOrderCode = `HM${payosOrderCode}`;
         setOrderCode(finalOrderCode);
-        // Do not set showSuccessModal to true immediately.
-        // Let the polling effect check and sync database first!
+        // Không mở Modal ngay. Để polling effect bên dưới tự kiểm tra
+        // và đồng bộ database trước khi báo thành công cho học viên.
       }
     }
   }, []);
@@ -143,8 +133,6 @@ export default function CheckoutPage() {
       setIsSubmitting(false);
     }
   };
-
-  
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
