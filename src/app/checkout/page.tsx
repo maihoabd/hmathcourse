@@ -47,21 +47,24 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (!orderCode || showSuccessModal) return;
 
-    const interval = setInterval(async () => {
+    const checkStatus = async () => {
       try {
         const res = await fetch(`/api/orders/status?code=${orderCode}`);
         if (res.ok) {
           const data = await res.json();
           if (data.status === 'completed') {
-            clearInterval(interval);
             setShowSuccessModal(true);
           }
         }
       } catch (err) {
         console.error('Polling error:', err);
       }
-    }, 3000);
+    };
 
+    // Trigger check status immediately
+    checkStatus();
+
+    const interval = setInterval(checkStatus, 3000);
     return () => clearInterval(interval);
   }, [orderCode, showSuccessModal]);
 
@@ -71,9 +74,26 @@ export default function CheckoutPage() {
       const params = new URLSearchParams(window.location.search);
       const status = params.get('status');
       const code = params.get('code');
-      if (status === 'success' && code) {
-        setOrderCode(code);
-        setShowSuccessModal(true);
+      const payosOrderCode = params.get('orderCode');
+      
+      let finalOrderCode = '';
+      let isSuccess = false;
+
+      if (status === 'success' && code && code.startsWith('HM')) {
+        finalOrderCode = code;
+        isSuccess = true;
+      } else if (status === 'PAID' && payosOrderCode) {
+        finalOrderCode = `HM${payosOrderCode}`;
+        isSuccess = true;
+      } else if (code === '00' && payosOrderCode) {
+        finalOrderCode = `HM${payosOrderCode}`;
+        isSuccess = true;
+      }
+
+      if (isSuccess && finalOrderCode) {
+        setOrderCode(finalOrderCode);
+        // Do not set showSuccessModal to true immediately.
+        // Let the polling effect check and sync database first!
       }
     }
   }, []);
@@ -219,7 +239,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="text-xs space-y-1">
                       <p className="font-bold text-slate-800">Chuyển khoản Ngân hàng qua mã VietQR tự động</p>
-                      <p className="text-slate-500">Hệ thống của chúng tôi sẽ tự động phát hiện chuyển khoản qua Casso/Sepay và kích hoạt khóa học ngay lập tức.</p>
+                      <p className="text-slate-500">Hệ thống của chúng tôi sẽ tự động phát hiện chuyển khoản và kích hoạt khóa học ngay lập tức.</p>
                     </div>
                   </div>
 
