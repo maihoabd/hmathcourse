@@ -27,7 +27,7 @@ export default function CheckoutPage() {
   // Order state
   const [orderCode, setOrderCode] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSimulating, setIsSimulating] = useState(false);
+  
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Pre-fill profile info if logged in
@@ -137,28 +137,7 @@ export default function CheckoutPage() {
     }
   };
 
-  const handleSimulatePayment = async () => {
-    if (!orderCode) return;
-    setIsSimulating(true);
-
-    try {
-      const response = await fetch('/api/payment/simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: orderCode }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert(errorData.error || 'Lỗi giả lập thanh toán.');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Kết nối máy chủ thất bại.');
-    } finally {
-      setIsSimulating(false);
-    }
-  };
+  
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
@@ -318,28 +297,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  {/* Casso / Sepay Simulator Box */}
-                  <div className="p-4 rounded-xl border border-dashed border-amber-200 bg-amber-50/20 space-y-2">
-                    <p className="text-xs font-bold text-amber-800 flex items-center gap-1.5">
-                      <svg className="h-4 w-4 text-amber-600 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      Casso / Sepay Sandbox Simulator (Thử nghiệm nhanh)
-                    </p>
-                    <p className="text-[10px] text-slate-500 leading-relaxed">
-                      Để kiểm tra nhanh tính năng tự động kích hoạt mà không cần chuyển khoản ngân hàng thật, bạn hãy bấm nút dưới đây. Nó sẽ giả lập webhook từ Casso/Sepay gửi đến máy chủ để kích hoạt ngay khóa học.
-                    </p>
-                    <Button 
-                      type="button" 
-                      onClick={handleSimulatePayment} 
-                      variant="outline" 
-                      className="h-8 text-[11px] border-amber-300 hover:bg-amber-100 hover:text-amber-900 bg-white"
-                      loading={isSimulating}
-                    >
-                      Bấm để giả lập thanh toán thành công
-                    </Button>
-                  </div>
+                  
                 </div>
               )}
 
