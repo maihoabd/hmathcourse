@@ -58,14 +58,14 @@ export default function LandingPage() {
   const testimonials = [
     {
       name: 'Cô Nguyễn Bích Thủy',
-      role: 'Phụ huynh bé Hoàng Lâm (Lớp 8)',
-      comment: 'Bé nhà mình học Toán lớp 8 của HMath đã hiểu sâu bài hơn rất nhiều, kết quả thi giữa kỳ vừa rồi đạt 9.5 điểm. Rất cảm ơn giáo viên HMath.',
+      role: 'Phụ huynh bé Hoàng Lâm (Lớp 7)',
+      comment: 'Bé nhà mình học Toán lớp 7 của HMath đã hiểu sâu bài hơn rất nhiều, kết quả thi giữa kỳ vừa rồi đạt 9.5 điểm. Rất cảm ơn giáo viên HMath.',
       avatar: '/images/vietnamese_mom_avatar.jpg'
     },
     {
       name: 'Gia Bảo',
       role: 'Học sinh lớp 7 trường THCS Giảng Võ',
-      comment: 'Các chuyên đề số hữu tỉ nâng cao và tam giác bằng nhau của thầy rất dễ nhớ. Video học thử mở trực tiếp coi bài giảng rất mượt.',
+      comment: 'Các chuyên đề số hữu tỉ nâng cao và tam giác bằng nhau của thầy rất dễ nhớ.',
       avatar: '/images/vietnamese_student_avatar.jpg'
     }
   ];
