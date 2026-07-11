@@ -23,7 +23,12 @@ export default function StudentClassroomPage() {
   
   const [activeLesson, setActiveLesson] = useState<any>(null);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<'documents' | 'summary'>('documents');
+  // Helper to parse multiple document URLs from activeLesson.documentUrl
+  const documentUrls = useMemo(() => {
+    if (!activeLesson?.documentUrl) return [];
+    // Extract all valid http/https URLs from the string
+    return activeLesson.documentUrl.match(/https?:\/\/[^\s,;\|\n\r]+/g) || [activeLesson.documentUrl];
+  }, [activeLesson]);
   const [updatingProgress, setUpdatingProgress] = useState(false);
   const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({});
 
@@ -273,80 +278,43 @@ export default function StudentClassroomPage() {
                 )}
               </div>
 
-              {/* Learning Tab Controller */}
-              <div className="space-y-4">
-                <div className="border-b border-slate-200 flex gap-2">
-                  <button
-                    onClick={() => setActiveTab('documents')}
-                    className={cn(
-                      "px-4 py-2.5 text-xs font-bold border-b-2 -mb-[2px] transition-colors",
-                      activeTab === 'documents'
-                        ? "border-indigo-600 text-indigo-600 font-extrabold"
-                        : "border-transparent text-slate-400 hover:text-slate-650"
-                    )}
-                  >
-                    📂 Tài liệu học tập
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('summary')}
-                    className={cn(
-                      "px-4 py-2.5 text-xs font-bold border-b-2 -mb-[2px] transition-colors",
-                      activeTab === 'summary'
-                        ? "border-indigo-600 text-indigo-600 font-extrabold"
-                        : "border-transparent text-slate-400 hover:text-slate-650"
-                    )}
-                  >
-                    📝 Lý thuyết & Tóm tắt
-                  </button>
-                </div>
-
-                {/* Tab contents panel */}
-                <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs min-h-[180px]">
-                  
-                  {activeTab === 'documents' && (
-                    <div className="space-y-4">
-                      <h3 className="font-bold text-xs text-slate-800">Tải về hoặc xem tài liệu trực tiếp:</h3>
-                      {activeLesson.documentUrl ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <a
-                            href={activeLesson.documentUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-between p-3.5 rounded-lg border border-indigo-100 bg-indigo-50/10 hover:bg-indigo-50/30 transition-colors group"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="p-2 bg-indigo-500 rounded text-white group-hover:scale-105 transition-transform text-sm font-bold">
-                                PDF
-                              </div>
-                              <div className="text-left">
-                                <p className="font-bold text-slate-800 text-xs">Tài liệu & Bài tập tự luyện</p>
-                                <p className="text-[10px] text-slate-400 leading-normal">Xem tài liệu đi kèm với bài giảng</p>
-                              </div>
+                            {/* Document files list directly */}
+              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                    <span className="text-base">📂</span>
+                    <h3 className="font-bold text-xs text-slate-800">Tài liệu học tập đi kèm bài giảng</h3>
+                  </div>
+                  {documentUrls.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {documentUrls.map((url: string, index: number) => (
+                        <a
+                          key={url + index}
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-between p-3.5 rounded-lg border border-indigo-100 bg-indigo-50/10 hover:bg-indigo-50/30 transition-colors group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-indigo-500 rounded text-white group-hover:scale-105 transition-transform text-sm font-bold">
+                              PDF
                             </div>
-                            <svg className="h-4 w-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                          </a>
-                        </div>
-                      ) : (
-                        <p className="text-slate-450 italic text-xs">Không có tài liệu PDF đi kèm cho bài học này.</p>
-                      )}
+                            <div className="text-left">
+                              <p className="font-bold text-slate-800 text-xs">
+                                Tài liệu học tập {documentUrls.length > 1 ? index + 1 : ''}
+                              </p>
+                              <p className="text-[10px] text-slate-400 leading-normal">Xem hoặc tải về tài liệu bài học</p>
+                            </div>
+                          </div>
+                          <svg className="h-4 w-4 text-indigo-550" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                          </svg>
+                        </a>
+                      ))}
                     </div>
+                  ) : (
+                    <p className="text-slate-400 italic text-xs">Không có tài liệu PDF đi kèm cho bài học này.</p>
                   )}
-
-                  {activeTab === 'summary' && (
-                    <div className="space-y-3">
-                      <h3 className="font-bold text-xs text-slate-800">Tóm tắt nội dung lý thuyết chính:</h3>
-                      {activeLesson.textContent ? (
-                        <p className="text-xs leading-relaxed text-slate-655 whitespace-pre-line bg-slate-50/50 p-4 rounded-xl border border-slate-150">
-                          {activeLesson.textContent}
-                        </p>
-                      ) : (
-                        <p className="text-slate-450 italic text-xs">Nội dung tóm tắt bài giảng đang được giáo viên cập nhật.</p>
-                      )}
-                    </div>
-                  )}
-
                 </div>
               </div>
 
