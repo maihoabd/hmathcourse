@@ -16,8 +16,8 @@ Lộ trình học bài bản gồm 30 buổi học chất lượng cao bám sát
 • Chương 5: Đa thức một biến, hình học & xác suất (Buổi 21 - 30)
 
 Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bản chất, tài liệu học tập tóm tắt lý thuyết, bài tập về nhà chọn lọc cùng hướng dẫn giải PDF chi tiết để tự kiểm tra kết quả. Khóa học là bệ phóng giúp các em tự tin bứt phá điểm số 9, 10 trong các bài thi định kỳ.`,
-    price: 590000,
-    originalPrice: 990000,
+    price: 490000,
+    originalPrice: 1200000,
     thumbnail: '/images/math_7_thumbnail.jpg',
     category: 'Toán lớp 7',
     level: 'Advanced',
@@ -451,7 +451,7 @@ Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bả
     description: `Khóa học được xây dựng nhằm giúp các em học sinh lớp 8 nắm chắc kiến thức căn bản môn Toán. Chương trình bám sát bộ sách giáo khoa Kết Nối Tri Thức Với Cuộc Sống. Hệ thống liên tục cập nhật các bài giảng chất lượng cao kết hợp tài liệu tóm tắt và bài tập rèn luyện để học sinh học tập tự tin và hiệu quả.`,
     price: 490000,
     originalPrice: 850000,
-    thumbnail: 'https://images.unsplash.com/photo-1453733190148-c44698c26588?w=800&auto=format&fit=crop&q=60',
+    thumbnail: '/images/math_8_thumbnail.jpg',
     category: 'Toán lớp 8',
     level: 'Beginner',
     lessonsCount: 30,

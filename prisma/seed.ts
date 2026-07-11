@@ -92,8 +92,8 @@ Lộ trình học bài bản gồm 30 buổi học chất lượng cao bám sát
 • Chương 5: Đa thức một biến, hình học & xác suất (Buổi 21 - 30)
 
 Mỗi buổi học đi kèm video bài giảng chi tiết giải thích rõ bản chất, tài liệu học tập tóm tắt lý thuyết, bài tập về nhà chọn lọc cùng hướng dẫn giải PDF chi tiết để tự kiểm tra kết quả. Khóa học là bệ phóng giúp các em tự tin bứt phá điểm số 9, 10 trong các bài thi định kỳ.`,
-      price: 590000,
-      originalPrice: 990000,
+      price: 490000,
+      originalPrice: 1200000,
       thumbnail: '/images/math_7_thumbnail.jpg',
       category: 'Toán lớp 7',
       level: 'Advanced',
