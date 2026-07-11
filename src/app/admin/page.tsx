@@ -10,12 +10,13 @@ export default function AdminOverviewPage() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [hoveredPoint, setHoveredPoint] = useState<{ idx: number; cx: number; cy: number; name: string; value: number } | null>(null);
+  const [range, setRange] = useState<'day' | 'month' | 'quarter'>('month');
 
   // Fetch real-time overview statistics from Database
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch('/api/admin/stats');
+        const res = await fetch(`/api/admin/stats?range=${range}`);
         if (res.ok) {
           const data = await res.json();
           setStats(data);
@@ -27,7 +28,7 @@ export default function AdminOverviewPage() {
       }
     };
     fetchStats();
-  }, []);
+  }, [range]);
 
   if (loading || !stats) {
     return (
@@ -41,7 +42,17 @@ export default function AdminOverviewPage() {
   }
 
   const { salesChartData, recentOrders } = stats;
-  const maxChartValue = Math.max(...salesChartData.map((d: any) => d.value), 1000000);
+  const maxChartValue = Math.max(...salesChartData.map((d: any) => d.value), 100000);
+
+  // Dynamic point coordinates plot calculations
+  const points = salesChartData.map((d: any, idx: number) => {
+    const cx = 50 + idx * (600 / (salesChartData.length - 1 || 1));
+    const cy = 180 - (d.value / maxChartValue) * 140;
+    return { cx, cy, name: d.name, value: d.value };
+  });
+
+  const linePath = points.map((p: any, idx: number) => `${idx === 0 ? 'M' : 'L'} ${p.cx},${p.cy}`).join(' ');
+  const areaPath = points.length > 0 ? `${linePath} L ${points[points.length - 1].cx},200 L ${points[0].cx},200 Z` : '';
 
   return (
     <div className="space-y-8">
@@ -140,9 +151,24 @@ export default function AdminOverviewPage() {
                 <p className="text-[10px] text-slate-400">Doanh thu tích lũy trực tiếp qua cổng thanh toán tự động</p>
               </div>
               <div className="flex items-center gap-1.5 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                <button className="px-2 py-1 text-[9px] font-bold rounded-md text-slate-500 hover:text-slate-700 transition-colors">Tuần</button>
-                <button className="px-2 py-1 text-[9px] font-bold rounded-md bg-white text-indigo-600 shadow-xs transition-colors">Tháng</button>
-                <button className="px-2 py-1 text-[9px] font-bold rounded-md text-slate-500 hover:text-slate-700 transition-colors">Quý</button>
+                <button 
+                  onClick={() => setRange('day')}
+                  className={"px-2 py-1 text-[9px] font-bold rounded-md transition-colors " + (range === 'day' ? "bg-white text-indigo-600 shadow-xs" : "text-slate-500 hover:text-slate-700")}
+                >
+                  Ngày (7 ngày)
+                </button>
+                <button 
+                  onClick={() => setRange('month')}
+                  className={"px-2 py-1 text-[9px] font-bold rounded-md transition-colors " + (range === 'month' ? "bg-white text-indigo-600 shadow-xs" : "text-slate-500 hover:text-slate-700")}
+                >
+                  Tháng
+                </button>
+                <button 
+                  onClick={() => setRange('quarter')}
+                  className={"px-2 py-1 text-[9px] font-bold rounded-md transition-colors " + (range === 'quarter' ? "bg-white text-indigo-600 shadow-xs" : "text-slate-500 hover:text-slate-700")}
+                >
+                  Quý
+                </button>
               </div>
             </div>
           </CardHeader>
@@ -150,15 +176,19 @@ export default function AdminOverviewPage() {
           {/* Revenue Insights Summary */}
           <div className="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100 bg-slate-50/5 text-center">
             <div className="p-3">
-              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Cao điểm (Th 7)</p>
+              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">
+                {range === 'day' ? 'Cao nhất (Ngày)' : range === 'quarter' ? 'Cao nhất (Quý)' : 'Cao nhất (Tháng)'}
+              </p>
               <p className="text-xs font-extrabold text-slate-850 pt-0.5">
-                {formatPrice(Math.max(...salesChartData.map((d: any) => d.value)))}
+                {formatPrice(Math.max(...salesChartData.map((d: any) => d.value), 0))}
               </p>
             </div>
             <div className="p-3">
-              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Trung bình tháng</p>
+              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">
+                {range === 'day' ? 'Trung bình ngày' : range === 'quarter' ? 'Trung bình quý' : 'Trung bình tháng'}
+              </p>
               <p className="text-xs font-extrabold text-indigo-650 pt-0.5">
-                {formatPrice(Math.round(salesChartData.reduce((sum: number, d: any) => sum + d.value, 0) / salesChartData.length))}
+                {formatPrice(salesChartData.length > 0 ? Math.round(salesChartData.reduce((sum: number, d: any) => sum + d.value, 0) / salesChartData.length) : 0)}
               </p>
             </div>
             <div className="p-3">
@@ -219,46 +249,30 @@ export default function AdminOverviewPage() {
                     </linearGradient>
                   </defs>
 
-                  {/* Area fill */}
-                  <path
-                    d={`
-                      M 50,200
-                      L 50,${180 - (salesChartData[0].value / maxChartValue) * 140}
-                      L 150,${180 - (salesChartData[1].value / maxChartValue) * 140}
-                      L 250,${180 - (salesChartData[2].value / maxChartValue) * 140}
-                      L 350,${180 - (salesChartData[3].value / maxChartValue) * 140}
-                      L 450,${180 - (salesChartData[4].value / maxChartValue) * 140}
-                      L 550,${180 - (salesChartData[5].value / maxChartValue) * 140}
-                      L 650,${180 - (salesChartData[6].value / maxChartValue) * 140}
-                      L 650,200 Z
-                    `}
-                    fill="url(#chartGradient)"
-                    className="transition-all duration-300"
-                  />
+                  {/* Dynamic Area fill */}
+                  {areaPath && (
+                    <path
+                      d={areaPath}
+                      fill="url(#chartGradient)"
+                      className="transition-all duration-300"
+                    />
+                  )}
 
-                  {/* Main Line stroke */}
-                  <path
-                    d={`
-                      M 50,${180 - (salesChartData[0].value / maxChartValue) * 140}
-                      L 150,${180 - (salesChartData[1].value / maxChartValue) * 140}
-                      L 250,${180 - (salesChartData[2].value / maxChartValue) * 140}
-                      L 350,${180 - (salesChartData[3].value / maxChartValue) * 140}
-                      L 450,${180 - (salesChartData[4].value / maxChartValue) * 140}
-                      L 550,${180 - (salesChartData[5].value / maxChartValue) * 140}
-                      L 650,${180 - (salesChartData[6].value / maxChartValue) * 140}
-                    `}
-                    fill="none"
-                    stroke="#4f46e5"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-all duration-300"
-                  />
+                  {/* Dynamic Main Line stroke */}
+                  {linePath && (
+                    <path
+                      d={linePath}
+                      fill="none"
+                      stroke="#4f46e5"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-all duration-300"
+                    />
+                  )}
 
                   {/* Data Points */}
-                  {salesChartData.map((d: any, idx: number) => {
-                    const cx = 50 + idx * 100;
-                    const cy = 180 - (d.value / maxChartValue) * 140;
+                  {points.map((p: any, idx: number) => {
                     const isHovered = hoveredPoint?.idx === idx;
 
                     return (
@@ -266,17 +280,17 @@ export default function AdminOverviewPage() {
                         {/* Outer Glow Circle on hover */}
                         {isHovered && (
                           <circle
-                            cx={cx}
-                            cy={cy}
+                            cx={p.cx}
+                            cy={p.cy}
                             r="10"
                             className="fill-indigo-500/20 stroke-none animate-ping"
                           />
                         )}
                         <circle
-                          cx={cx}
-                          cy={cy}
+                          cx={p.cx}
+                          cy={p.cy}
                           r={isHovered ? "6" : "4.5"}
-                          onMouseEnter={() => setHoveredPoint({ idx, cx, cy, name: d.name, value: d.value })}
+                          onMouseEnter={() => setHoveredPoint({ idx, cx: p.cx, cy: p.cy, name: p.name, value: p.value })}
                           onMouseLeave={() => setHoveredPoint(null)}
                           className={`cursor-pointer transition-all duration-150 ${
                             isHovered 
@@ -292,9 +306,9 @@ export default function AdminOverviewPage() {
 
               {/* X Axis labels */}
               <div className="flex justify-between items-center px-6 pt-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                {salesChartData.map((d: any, idx: number) => (
+                {points.map((p: any, idx: number) => (
                   <span key={idx} className={hoveredPoint?.idx === idx ? "text-indigo-600 font-extrabold" : ""}>
-                    {d.name}
+                    {p.name}
                   </span>
                 ))}
               </div>
