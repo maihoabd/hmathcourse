@@ -338,7 +338,7 @@ export default function StudentDashboardPage() {
                       <span className="text-[10px] text-slate-400">
                         Truy cập cuối: {new Date(item.lastAccessed).toLocaleDateString('vi-VN')}
                       </span>
-                      <Link href={`/courses/${item.slug}`}>
+                      <Link href={`/courses/${item.slug}/learn`}>
                         <Button size="sm" variant={item.progress === 100 ? 'outline' : 'primary'}>
                           {item.progress === 0 ? 'Bắt đầu học' : 'Học tiếp'}
                         </Button>

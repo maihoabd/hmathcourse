@@ -8,6 +8,7 @@ import { useCart } from '../../../context/cart-context';
 import { Button } from '../../../components/ui/button';
 import { Card, CardHeader, CardContent } from '../../../components/ui/card';
 import { Badge } from '../../../components/ui/badge';
+import { Progress } from '../../../components/ui/progress';
 import { formatPrice, cn } from '../../../lib/utils';
 import { Dialog } from '../../../components/ui/dialog';
 
@@ -17,6 +18,7 @@ export default function CourseDetailPage() {
   const { user } = useAuth();
   const { addToCart, isInCart } = useCart();
   const [course, setCourse] = useState<any>(null);
+  const [enrollment, setEnrollment] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'curriculum' | 'reviews'>('overview');
   const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({});
@@ -24,6 +26,25 @@ export default function CourseDetailPage() {
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false);
 
   const slug = params?.slug as string;
+
+  // Fetch live enrollment info if logged in
+  useEffect(() => {
+    if (user && course) {
+      fetch(`/api/enrollments?userId=${user.id}`)
+        .then((res) => {
+          if (res.ok) return res.json();
+        })
+        .then((data) => {
+          if (data && Array.isArray(data)) {
+            const matched = data.find((e: any) => e.courseId === course.id);
+            if (matched) {
+              setEnrollment(matched);
+            }
+          }
+        })
+        .catch((err) => console.error('Fetch enrollment details error:', err));
+    }
+  }, [user, course]);
 
   // Fetch course details dynamically from Supabase API
   useEffect(() => {
@@ -55,28 +76,8 @@ export default function CourseDetailPage() {
     // Admins bypass enrollment and have full access to all courses
     if (user.role === 'admin') return true;
 
-    if (user.role !== 'student') return false;
-
-    if (typeof window !== 'undefined') {
-      // For mock-up, let's also check localStorage student records
-      const storedUser = localStorage.getItem('auth_user');
-      if (storedUser) {
-        try {
-          const u = JSON.parse(storedUser);
-          // Student Hải (s1) has c1 and c3 enrolled initially
-          if (u.id === 's1' && (course.id === 'c1' || course.id === 'c3')) return true;
-          
-          // Also check if they just purchased in this session (we'll save purchases in local storage)
-          const purchasedList = localStorage.getItem(`purchased_${u.id}`);
-          if (purchasedList) {
-            const ids = JSON.parse(purchasedList) as string[];
-            if (ids.includes(course.id)) return true;
-          }
-        } catch (e) {}
-      }
-    }
-    return false;
-  }, [user, course]);
+    return enrollment !== null;
+  }, [user, course, enrollment]);
 
   const handleLessonClick = (lesson: any) => {
     if (isEnrolled || lesson.isPreview) {
@@ -389,34 +390,50 @@ export default function CourseDetailPage() {
               />
             </div>
             <CardContent className="p-6 space-y-5">
-              <div className="space-y-1">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-extrabold text-slate-900">{formatPrice(course.price)}</span>
-                  {course.originalPrice && (
-                    <span className="text-sm text-slate-400 line-through font-medium">{formatPrice(course.originalPrice)}</span>
-                  )}
-                </div>
-                {course.originalPrice && (
-                  <p className="text-xs font-semibold text-emerald-600">
-                    Tiết kiệm {Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100)}%
-                  </p>
-                )}
-              </div>
-
-              {/* Action Button: Enroll, Go to Classroom, or Cart action */}
               {isEnrolled ? (
-                <Link href="/dashboard" className="block w-full">
-                  <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-md">
-                    Vào lớp học ngay
-                  </Button>
-                </Link>
+                <div className="space-y-4">
+                  <div className="p-4 rounded-xl border border-emerald-100 bg-emerald-50/10 text-center space-y-2">
+                    <div className="h-8 w-8 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto text-sm font-bold shadow-xs">
+                      ✓
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-800 text-xs">Bạn đã đăng ký khóa học này</p>
+                      {enrollment && (
+                        <p className="text-[10px] text-slate-500 font-medium pt-0.5">Tiến độ hiện tại: {enrollment.progress}%</p>
+                      )}
+                    </div>
+                  </div>
+                  {enrollment && (
+                    <Progress value={enrollment.progress} className="h-1.5" />
+                  )}
+                  <Link href={`/courses/${course.slug}/learn`} className="block w-full">
+                    <Button className="w-full bg-indigo-600 hover:bg-indigo-750 text-white shadow-md text-xs py-2">
+                      {enrollment && enrollment.progress > 0 ? 'Tiếp tục học tập' : 'Vào lớp học ngay'}
+                    </Button>
+                  </Link>
+                </div>
               ) : (
-                <Button
-                  onClick={handleEnrollClick}
-                  className="w-full shadow-lg shadow-indigo-500/20"
-                >
-                  {isInCart(course.id) ? 'Thanh toán ngay' : 'Đăng ký học ngay'}
-                </Button>
+                <>
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-2xl font-extrabold text-slate-900">{formatPrice(course.price)}</span>
+                      {course.originalPrice && (
+                        <span className="text-sm text-slate-400 line-through font-medium">{formatPrice(course.originalPrice)}</span>
+                      )}
+                    </div>
+                    {course.originalPrice && (
+                      <p className="text-xs font-semibold text-emerald-600">
+                        Tiết kiệm {Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100)}%
+                      </p>
+                    )}
+                  </div>
+                  <Button
+                    onClick={handleEnrollClick}
+                    className="w-full shadow-lg shadow-indigo-500/20"
+                  >
+                    {isInCart(course.id) ? 'Thanh toán ngay' : 'Đăng ký học ngay'}
+                  </Button>
+                </>
               )}
 
               {/* Highlights List */}
