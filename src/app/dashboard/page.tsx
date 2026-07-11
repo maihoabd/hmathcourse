@@ -187,89 +187,103 @@ export default function StudentDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
         {/* Profile Card column */}
-        <div className="lg:col-span-1 space-y-6">
-          <Card className="border-slate-200">
-            <CardHeader className="text-center pb-4">
-              <CardTitle className="text-base">Thông tin học tập</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-xs">
-              <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                <span className="text-slate-500">Khóa học đã đăng ký:</span>
-                <span className="font-bold text-slate-900">{coursesMerged.length}</span>
+        <div className="lg:col-span-1">
+          <Card className="border-slate-200 shadow-sm rounded-2xl overflow-hidden bg-white sticky top-24">
+            {/* Upper Section: Profile Summary */}
+            <div className="p-6 text-center border-b border-slate-100 space-y-3 bg-slate-50/40">
+              {user.avatar && !user.avatar.includes('unsplash.com') ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="h-20 w-20 rounded-full object-cover border-4 border-white shadow-md mx-auto"
+                />
+              ) : (
+                <div className="h-20 w-20 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-extrabold text-2xl border-4 border-white shadow-md mx-auto">
+                  {user.name ? user.name.charAt(0).toUpperCase() : 'H'}
+                </div>
+              )}
+              <div className="space-y-1">
+                <h3 className="font-extrabold text-base text-slate-800 line-clamp-1">{user.name}</h3>
+                <div className="flex justify-center">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-indigo-50 text-indigo-700 uppercase tracking-wider">
+                    Học viên
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                <span className="text-slate-500">Khóa học hoàn thành:</span>
-                <span className="font-bold text-slate-900">
-                  {coursesMerged.filter((c) => c.progress === 100).length}
-                </span>
+              
+              {/* Email & Phone metadata info card */}
+              <div className="pt-2 text-[11px] text-slate-500 space-y-1.5 text-left bg-white p-3 rounded-xl border border-slate-150 shadow-2xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-400">✉</span>
+                  <span className="truncate font-medium">{user?.email}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-400">📞</span>
+                  <span className="font-semibold text-slate-700">{user?.phone || 'Chưa cập nhật'}</span>
+                </div>
               </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-slate-500">Số điện thoại:</span>
-                <span className="font-bold text-slate-900">{user?.phone || 'Chưa cập nhật'}</span>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Personal Info Profile settings card */}
-          <Card className="border-slate-200">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-bold text-slate-800">Thông tin cá nhân</CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 pt-0">
-              <form onSubmit={handleUpdateProfile} className="space-y-3">
-                <div>
-                  <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Họ và Tên</label>
+            {/* Middle Section: Learning Statistics */}
+            <div className="grid grid-cols-2 divide-x divide-slate-100 border-b border-slate-100 bg-slate-50/20">
+              <div className="p-4 text-center">
+                <p className="text-xl font-extrabold text-indigo-650">{coursesMerged.length}</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider pt-0.5">Khóa học</p>
+              </div>
+              <div className="p-4 text-center">
+                <p className="text-xl font-extrabold text-emerald-600">
+                  {coursesMerged.filter((c) => c.progress === 100).length}
+                </p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider pt-0.5">Hoàn thành</p>
+              </div>
+            </div>
+
+            {/* Lower Section: Settings Form */}
+            <CardContent className="p-5 space-y-4">
+              <div className="space-y-1">
+                <h4 className="text-xs font-bold text-slate-800">Thiết lập tài khoản</h4>
+                <p className="text-[10px] text-slate-400">Cập nhật họ tên và mật khẩu đăng nhập của bạn.</p>
+              </div>
+              
+              <form onSubmit={handleUpdateProfile} className="space-y-3.5">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-500 block">Họ và Tên</label>
                   <input
                     type="text"
                     value={profileName}
                     onChange={(e) => setProfileName(e.target.value)}
-                    className="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded px-2.5 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium"
+                    className="w-full bg-slate-50/50 text-slate-900 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium transition-all focus:bg-white"
                     required
                   />
                 </div>
-                <div>
-                  <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Địa chỉ Email (Không được đổi)</label>
-                  <input
-                    type="email"
-                    value={user?.email || ''}
-                    disabled
-                    className="w-full bg-slate-100 text-slate-400 border border-slate-200 rounded px-2.5 py-1 text-xs cursor-not-allowed font-medium"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Số điện thoại (Không được đổi)</label>
-                  <input
-                    type="tel"
-                    value={user?.phone || 'Chưa cập nhật'}
-                    disabled
-                    className="w-full bg-slate-100 text-slate-400 border border-slate-200 rounded px-2.5 py-1 text-xs cursor-not-allowed font-medium"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Mật khẩu mới (Để trống nếu không đổi)</label>
+                
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-500 block">Mật khẩu mới (Để trống nếu không đổi)</label>
                   <input
                     type="password"
                     placeholder="Tối thiểu 6 ký tự"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded px-2.5 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium"
+                    className="w-full bg-slate-50/50 text-slate-900 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium transition-all focus:bg-white"
                   />
                 </div>
+                
                 {newPassword && (
-                  <div>
-                    <label className="text-[10px] font-semibold text-slate-500 block mb-0.5">Nhập lại mật khẩu mới</label>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-slate-500 block">Nhập lại mật khẩu mới</label>
                     <input
                       type="password"
                       placeholder="Xác nhận mật khẩu mới"
                       value={confirmNewPassword}
                       onChange={(e) => setConfirmNewPassword(e.target.value)}
-                      className="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded px-2.5 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium"
+                      className="w-full bg-slate-50/50 text-slate-900 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium transition-all focus:bg-white"
                       required
                     />
                   </div>
                 )}
-                <Button type="submit" size="sm" className="w-full bg-indigo-600 hover:bg-indigo-750 text-xs" loading={updatingProfile}>
-                  Cập nhật tài khoản
+                
+                <Button type="submit" size="sm" className="w-full bg-indigo-600 hover:bg-indigo-750 text-xs py-2 shadow-sm rounded-lg" loading={updatingProfile}>
+                  Lưu thay đổi
                 </Button>
               </form>
             </CardContent>
