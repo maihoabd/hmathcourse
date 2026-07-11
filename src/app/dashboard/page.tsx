@@ -34,6 +34,7 @@ export default function StudentDashboardPage() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [updatingProfile, setUpdatingProfile] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -73,6 +74,7 @@ export default function StudentDashboardPage() {
         updateUserSession(updatedUser);
         setNewPassword('');
         setConfirmNewPassword('');
+        setIsEditing(false);
         alert('Cập nhật thông tin thành công.');
       } else {
         const errData = await res.json();
@@ -242,50 +244,92 @@ export default function StudentDashboardPage() {
             <CardContent className="p-5 space-y-4">
               <div className="space-y-1">
                 <h4 className="text-xs font-bold text-slate-800">Thiết lập tài khoản</h4>
-                <p className="text-[10px] text-slate-400">Cập nhật họ tên và mật khẩu đăng nhập của bạn.</p>
+                <p className="text-[10px] text-slate-400">Xem hoặc thay đổi họ tên và mật khẩu đăng nhập của bạn.</p>
               </div>
-              
-              <form onSubmit={handleUpdateProfile} className="space-y-3.5">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-semibold text-slate-500 block">Họ và Tên</label>
-                  <input
-                    type="text"
-                    value={profileName}
-                    onChange={(e) => setProfileName(e.target.value)}
-                    className="w-full bg-slate-50/50 text-slate-900 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium transition-all focus:bg-white"
-                    required
-                  />
+
+              {!isEditing ? (
+                <div className="space-y-4 pt-1">
+                  <div className="space-y-1 bg-slate-50/50 p-3 rounded-xl border border-slate-150">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Họ và Tên</label>
+                    <p className="text-xs font-bold text-slate-800">{user.name}</p>
+                  </div>
+                  <div className="space-y-1 bg-slate-50/50 p-3 rounded-xl border border-slate-150">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Mật khẩu</label>
+                    <p className="text-xs font-medium text-slate-500">••••••••</p>
+                  </div>
+                  <Button 
+                    onClick={() => {
+                      setProfileName(user.name);
+                      setNewPassword('');
+                      setConfirmNewPassword('');
+                      setIsEditing(true);
+                    }}
+                    size="sm" 
+                    variant="outline"
+                    className="w-full text-xs py-1.5 border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg font-bold"
+                  >
+                    Chỉnh sửa thông tin
+                  </Button>
                 </div>
-                
-                <div className="space-y-1">
-                  <label className="text-[10px] font-semibold text-slate-500 block">Mật khẩu mới (Để trống nếu không đổi)</label>
-                  <input
-                    type="password"
-                    placeholder="Tối thiểu 6 ký tự"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full bg-slate-50/50 text-slate-900 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium transition-all focus:bg-white"
-                  />
-                </div>
-                
-                {newPassword && (
+              ) : (
+                <form onSubmit={handleUpdateProfile} className="space-y-3.5 pt-1">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-semibold text-slate-500 block">Nhập lại mật khẩu mới</label>
+                    <label className="text-[10px] font-semibold text-slate-500 block">Họ và Tên</label>
                     <input
-                      type="password"
-                      placeholder="Xác nhận mật khẩu mới"
-                      value={confirmNewPassword}
-                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      type="text"
+                      value={profileName}
+                      onChange={(e) => setProfileName(e.target.value)}
                       className="w-full bg-slate-50/50 text-slate-900 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium transition-all focus:bg-white"
                       required
                     />
                   </div>
-                )}
-                
-                <Button type="submit" size="sm" className="w-full bg-indigo-600 hover:bg-indigo-750 text-xs py-2 shadow-sm rounded-lg" loading={updatingProfile}>
-                  Lưu thay đổi
-                </Button>
-              </form>
+                  
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-slate-500 block">Mật khẩu mới (Để trống nếu không đổi)</label>
+                    <input
+                      type="password"
+                      placeholder="Tối thiểu 6 ký tự"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="w-full bg-slate-50/50 text-slate-900 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium transition-all focus:bg-white"
+                    />
+                  </div>
+                  
+                  {newPassword && (
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-semibold text-slate-500 block">Nhập lại mật khẩu mới</label>
+                      <input
+                        type="password"
+                        placeholder="Xác nhận mật khẩu mới"
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        className="w-full bg-slate-50/50 text-slate-900 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium transition-all focus:bg-white"
+                        required
+                      />
+                    </div>
+                  )}
+                  
+                  <div className="flex gap-2">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setIsEditing(false)}
+                      className="flex-1 text-xs py-2 rounded-lg border-slate-200 text-slate-500 hover:bg-slate-50 font-bold"
+                    >
+                      Hủy
+                    </Button>
+                    <Button 
+                      type="submit" 
+                      size="sm" 
+                      className="flex-1 bg-indigo-600 hover:bg-indigo-750 text-xs py-2 shadow-sm rounded-lg" 
+                      loading={updatingProfile}
+                    >
+                      Lưu thay đổi
+                    </Button>
+                  </div>
+                </form>
+              )}
             </CardContent>
           </Card>
         </div>
