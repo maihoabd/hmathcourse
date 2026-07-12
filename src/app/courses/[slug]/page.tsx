@@ -80,6 +80,12 @@ export default function CourseDetailPage() {
   }, [user, course, enrollment]);
 
   const handleLessonClick = (lesson: any) => {
+    if (!user) {
+      if (confirm('Vui lòng đăng ký tài khoản miễn phí để xem video học thử.')) {
+        router.push(`/register?redirect=${encodeURIComponent(window.location.pathname)}`);
+      }
+      return;
+    }
     if (isEnrolled) {
       router.push(`/courses/${course.slug}/learn?lessonId=${lesson.id}`);
     } else if (lesson.isPreview) {
@@ -526,30 +532,6 @@ export default function CourseDetailPage() {
               </div>
             )}
 
-            {/* Slide / HTML5 Document Viewer */}
-            {selectedLesson.documentUrl && (
-              <div className="space-y-2">
-                <h4 className="font-bold text-slate-800 text-sm">Tài liệu đính kèm (Slide / PDF):</h4>
-                <div className="w-full h-[500px] rounded-xl border border-slate-200 overflow-hidden bg-slate-50">
-                  <iframe
-                    src={selectedLesson.documentUrl}
-                    title="Tài liệu bài học"
-                    className="w-full h-full"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Text Notes Content */}
-            {selectedLesson.textContent && (
-              <div className="pt-4 border-t border-slate-150 space-y-2">
-                <h4 className="font-bold text-slate-800 text-sm">Ghi chú bài giảng:</h4>
-                <div 
-                  className="text-slate-655 text-xs leading-relaxed space-y-2"
-                  dangerouslySetInnerHTML={{ __html: selectedLesson.textContent }}
-                />
-              </div>
-            )}
           </div>
         )}
       </Dialog>
