@@ -80,7 +80,9 @@ export default function CourseDetailPage() {
   }, [user, course, enrollment]);
 
   const handleLessonClick = (lesson: any) => {
-    if (isEnrolled || lesson.isPreview) {
+    if (isEnrolled) {
+      router.push(`/courses/${course.slug}/learn?lessonId=${lesson.id}`);
+    } else if (lesson.isPreview) {
       setSelectedLesson(lesson);
       setIsLessonModalOpen(true);
     } else {

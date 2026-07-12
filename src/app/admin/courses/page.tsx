@@ -111,7 +111,8 @@ export default function AdminCoursesPage() {
       .replace(/[đĐ]/g, 'd')
       .replace(/[^a-z0-9\s-]/g, '')
       .trim()
-      .replace(/\s+/g, '-');
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
 
     const courseData = {
       id: editingCourse ? editingCourse.id : 'c-' + Date.now(),

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../../../context/auth-context';
 import { Button } from '../../../../components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../../components/ui/card';
@@ -14,6 +14,8 @@ export default function StudentClassroomPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const urlLessonId = searchParams ? searchParams.get('lessonId') : null;
 
   const slug = params?.slug as string;
 
@@ -66,14 +68,27 @@ export default function StudentClassroomPage() {
           }
         }
 
-        // Expand the first chapter by default
-        if (courseData.chapters && courseData.chapters.length > 0) {
-          setExpandedChapters({ [courseData.chapters[0].id]: true });
-          
-          // Auto select first lesson
-          if (courseData.chapters[0].lessons && courseData.chapters[0].lessons.length > 0) {
-            setActiveLesson(courseData.chapters[0].lessons[0]);
+        // Expand and select lesson based on lessonId parameter if present
+        let targetLesson = null;
+        let targetChapterId = null;
+
+        if (urlLessonId && courseData.chapters) {
+          for (const ch of courseData.chapters) {
+            const found = ch.lessons?.find((l: any) => l.id === urlLessonId);
+            if (found) {
+              targetLesson = found;
+              targetChapterId = ch.id;
+              break;
+            }
           }
+        }
+
+        if (courseData.chapters && courseData.chapters.length > 0) {
+          setExpandedChapters({ 
+            [targetChapterId || courseData.chapters[0].id]: true 
+          });
+          
+          setActiveLesson(targetLesson || courseData.chapters[0].lessons?.[0] || null);
         }
       } catch (err) {
         console.error('Failed to load classroom data:', err);
