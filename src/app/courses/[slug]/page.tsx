@@ -156,16 +156,16 @@ export default function CourseDetailPage() {
               <Badge variant="default" className="bg-indigo-600 text-white border-0">
                 {course.category}
               </Badge>
-              <Badge 
+              <span 
                 className={cn(
-                  "text-white border-0 font-semibold px-2.5 py-0.5 text-[11px] shadow-sm select-none",
+                  "inline-flex items-center rounded-full text-white border-0 font-semibold px-2.5 py-0.5 text-[11px] shadow-sm select-none transition-colors duration-150",
                   course.level === 'Beginner' 
                     ? "bg-emerald-600 hover:bg-emerald-700" 
                     : "bg-amber-500 hover:bg-amber-600"
                 )}
               >
                 {course.level === 'Beginner' ? 'Cơ bản' : course.level === 'Advanced' ? 'Nâng cao' : 'Trung cấp'}
-              </Badge>
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
               {course.title}

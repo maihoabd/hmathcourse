@@ -45,6 +45,17 @@ export async function GET(request: Request) {
         }
       }
 
+      // Sort chapters numerically based on "Chương X" in title to ensure correct sequence (e.g., Chương 0 -> 1 -> 2 -> 3)
+      if (course.chapters) {
+        course.chapters.sort((a: any, b: any) => {
+          const matchA = a.title.match(/Chương\s+(\d+)/i);
+          const matchB = b.title.match(/Chương\s+(\d+)/i);
+          const numA = matchA ? parseInt(matchA[1], 10) : 999;
+          const numB = matchB ? parseInt(matchB[1], 10) : 999;
+          return numA - numB;
+        });
+      }
+
       // Strip sensitive urls from locked lessons if user is not enrolled
       if (!isEnrolled && course.chapters) {
         course.chapters.forEach((chapter) => {

@@ -380,7 +380,7 @@ export default function StudentClassroomPage() {
                     className="w-full flex items-center justify-between px-4 py-3.5 bg-slate-50/40 hover:bg-slate-50 transition-colors text-left"
                   >
                     <span className="font-bold text-xs text-slate-800 line-clamp-2">
-                      Chương {index + 1}: {chapter.title}
+                      {chapter.title}
                     </span>
                     <span className="text-slate-400 shrink-0 ml-2">
                       {isExpanded ? (
