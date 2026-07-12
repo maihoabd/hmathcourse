@@ -288,7 +288,8 @@ export default function StudentClassroomPage() {
               </div>
 
                             {/* Document files list directly */}
-              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+              {course?.productType !== 'book' && (
+                <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                     <span className="text-base">📂</span>
@@ -326,6 +327,7 @@ export default function StudentClassroomPage() {
                   )}
                 </div>
               </div>
+              )}
 
             </div>
           ) : (
