@@ -51,7 +51,7 @@ export default function CourseDetailPage() {
     if (!slug) return;
     const fetchCourse = async () => {
       try {
-        const res = await fetch(`/api/courses?slug=${slug}`);
+        const res = await fetch(`/api/courses?slug=${slug}${user ? `&userId=${user.id}` : ''}`);
         if (res.ok) {
           const data = await res.json();
           setCourse(data);
@@ -67,7 +67,7 @@ export default function CourseDetailPage() {
       }
     };
     fetchCourse();
-  }, [slug]);
+  }, [slug, user]);
 
   // Check enrollment status of logged-in student (or admin access)
   const isEnrolled = useMemo(() => {

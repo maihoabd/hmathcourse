@@ -46,7 +46,7 @@ export default function StudentClassroomPage() {
     const loadData = async () => {
       try {
         // Fetch course details
-        const courseRes = await fetch(`/api/courses?slug=${slug}`);
+        const courseRes = await fetch(`/api/courses?slug=${slug}&userId=${user.id}`);
         if (!courseRes.ok) {
           throw new Error('Course not found');
         }

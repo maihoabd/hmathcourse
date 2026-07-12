@@ -25,6 +25,41 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Không tìm thấy khóa học.' }, { status: 404 });
       }
 
+      // Check enrollment to decide whether to strip locked lesson details
+      const userId = searchParams.get('userId');
+      let isEnrolled = false;
+
+      if (userId) {
+        const u = await db.user.findUnique({ where: { id: userId } });
+        if (u) {
+          if (u.role === 'admin') {
+            isEnrolled = true;
+          } else {
+            const enroll = await db.enrollment.findFirst({
+              where: { userId, courseId: course.id }
+            });
+            if (enroll) {
+              isEnrolled = true;
+            }
+          }
+        }
+      }
+
+      // Strip sensitive urls from locked lessons if user is not enrolled
+      if (!isEnrolled && course.chapters) {
+        course.chapters.forEach((chapter) => {
+          if (chapter.lessons) {
+            chapter.lessons.forEach((lesson) => {
+              if (!lesson.isPreview) {
+                lesson.videoUrl = null;
+                lesson.documentUrl = null;
+                lesson.textContent = null;
+              }
+            });
+          }
+        });
+      }
+
       // Map DB Course to match the frontend signature structure (instructor info nesting)
       return NextResponse.json({
         ...course,
