@@ -227,27 +227,36 @@ export default function StudentClassroomPage() {
           
           {activeLesson ? (
             <div className="space-y-6">
-              {/* Video Player Card */}
-              <div className="bg-slate-950 rounded-2xl overflow-hidden shadow-lg aspect-video border border-slate-800 relative group">
-                {activeLesson.videoUrl ? (
-                  <iframe
-                    src={activeLesson.videoUrl.includes('youtube.com/embed') 
-                      ? activeLesson.videoUrl 
-                      : `https://www.youtube.com/embed/${activeLesson.videoUrl.split('v=')[1] || activeLesson.videoUrl}`}
-                    title={activeLesson.title}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 space-y-2">
-                    <svg className="h-12 w-12 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                    <p className="text-sm">Video bài học đang được cập nhật</p>
-                  </div>
-                )}
-              </div>
+              {/* Widescreen Video Player Card / Flipbook Reader */}
+              {course?.productType === 'book' ? (
+                <FlipbookPlayer
+                  bookId={course.id}
+                  documentKey={activeLesson.documentUrl || 'amc8_2025'}
+                  totalPages={160}
+                  user={user}
+                />
+              ) : (
+                <div className="bg-slate-950 rounded-2xl overflow-hidden shadow-lg aspect-video border border-slate-800 relative group">
+                  {activeLesson.videoUrl ? (
+                    <iframe
+                      src={activeLesson.videoUrl.includes('youtube.com/embed') 
+                        ? activeLesson.videoUrl 
+                        : `https://www.youtube.com/embed/${activeLesson.videoUrl.split('v=')[1] || activeLesson.videoUrl}`}
+                      title={activeLesson.title}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 space-y-2">
+                      <svg className="h-12 w-12 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-sm">Video bài học đang được cập nhật</p>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Lesson Title and Completion Action Panel */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl bg-white border border-slate-200 shadow-xs">
@@ -431,6 +440,343 @@ export default function StudentClassroomPage() {
           </div>
         </div>
 
+      </div>
+    </div>
+  );
+}
+
+interface FlipbookPlayerProps {
+  bookId: string;
+  documentKey: string;
+  totalPages: number;
+  user: any;
+}
+
+function FlipbookPlayer({ bookId, documentKey, totalPages, user }: FlipbookPlayerProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pdfjsLoaded, setPdfjsLoaded] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1.5);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [jumpPageInput, setJumpPageInput] = useState('1');
+
+  const leftCanvasRef = React.useRef<HTMLCanvasElement | null>(null);
+  const rightCanvasRef = React.useRef<HTMLCanvasElement | null>(null);
+  const readerContainerRef = React.useRef<HTMLDivElement | null>(null);
+
+  // 1. Script injection for PDF.js CDN
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const checkPdfjs = () => {
+      if ((window as any).pdfjsLib) {
+        setPdfjsLoaded(true);
+        (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        return true;
+      }
+      return false;
+    };
+
+    if (checkPdfjs()) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    script.async = true;
+    script.onload = () => {
+      checkPdfjs();
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  }, []);
+
+  // 2. Block keyboard copy/save shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        (e.ctrlKey && (e.key === 'c' || e.key === 's' || e.key === 'p' || e.key === 'u' || e.key === 'a')) ||
+        e.key === 'F12'
+      ) {
+        e.preventDefault();
+        alert('Tài liệu ebook đã được bảo mật bản quyền. Không được phép sao chép hoặc tải về.');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // 3. Render page logic
+  const renderPage = async (pageNo: number, canvas: HTMLCanvasElement) => {
+    if (!canvas || !user) return;
+    try {
+      const res = await fetch(`/api/books/page?userId=${user.id}&bookId=${bookId}&pageIndex=${pageNo}`);
+      if (!res.ok) {
+        throw new Error('Failed to load page PDF');
+      }
+      const bytes = await res.arrayBuffer();
+      const pdfjsLib = (window as any).pdfjsLib;
+      if (!pdfjsLib) return;
+
+      const loadingTask = pdfjsLib.getDocument({ data: bytes });
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1); // Single page PDF has exactly 1 page
+
+      const viewport = page.getViewport({ scale: zoomScale });
+      const context = canvas.getContext('2d');
+      if (!context) return;
+
+      // Adjust high DPI screens
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = viewport.width * ratio;
+      canvas.height = viewport.height * ratio;
+      canvas.style.width = `${viewport.width}px`;
+      canvas.style.height = `${viewport.height}px`;
+      context.scale(ratio, ratio);
+
+      // Render onto canvas
+      await page.render({
+        canvasContext: context,
+        viewport
+      }).promise;
+
+      // Draw custom tiled watermark text
+      const watermarkText = `${user.name} - ${user.phone || 'HMath'} - ${user.email}`;
+      context.save();
+      context.font = 'bold 13px Arial, sans-serif';
+      context.fillStyle = 'rgba(148, 163, 184, 0.16)';
+      context.textAlign = 'center';
+      context.translate(viewport.width / 2, viewport.height / 2);
+      context.rotate(-Math.PI / 6); // -30 degrees rotation
+
+      for (let y = -4; y <= 4; y++) {
+        for (let x = -3; x <= 3; x++) {
+          context.fillText(watermarkText, x * 260, y * 90);
+        }
+      }
+      context.restore();
+    } catch (err) {
+      console.error(`Error rendering page ${pageNo}:`, err);
+    }
+  };
+
+  // Trigger render when states change
+  useEffect(() => {
+    if (!pdfjsLoaded || !user) return;
+
+    let active = true;
+
+    const render = async () => {
+      setPageLoading(true);
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+      const showDual = !isMobile && currentPage > 1;
+
+      if (leftCanvasRef.current) {
+        await renderPage(currentPage, leftCanvasRef.current);
+      }
+
+      if (rightCanvasRef.current) {
+        const nextP = currentPage + 1;
+        if (showDual && nextP <= totalPages) {
+          await renderPage(nextP, rightCanvasRef.current);
+        } else {
+          // Clear right canvas
+          const context = rightCanvasRef.current.getContext('2d');
+          if (context) {
+            context.clearRect(0, 0, rightCanvasRef.current.width, rightCanvasRef.current.height);
+          }
+          rightCanvasRef.current.width = 0;
+          rightCanvasRef.current.height = 0;
+          rightCanvasRef.current.style.width = '0px';
+          rightCanvasRef.current.style.height = '0px';
+        }
+      }
+
+      if (active) {
+        setPageLoading(false);
+      }
+    };
+
+    render();
+
+    return () => {
+      active = false;
+    };
+  }, [currentPage, zoomScale, pdfjsLoaded, user]);
+
+  const handleNext = () => {
+    const isMobile = window.innerWidth < 768;
+    const step = isMobile ? 1 : (currentPage === 1 ? 1 : 2);
+    const nextPage = currentPage + step;
+    if (nextPage <= totalPages) {
+      setCurrentPage(nextPage);
+      setJumpPageInput(nextPage.toString());
+    }
+  };
+
+  const handlePrev = () => {
+    const isMobile = window.innerWidth < 768;
+    if (currentPage === 1) return;
+    
+    let prevPage;
+    if (isMobile) {
+      prevPage = currentPage - 1;
+    } else {
+      prevPage = currentPage === 2 ? 1 : currentPage - 2;
+    }
+    
+    if (prevPage >= 1) {
+      setCurrentPage(prevPage);
+      setJumpPageInput(prevPage.toString());
+    }
+  };
+
+  const handleJump = (e: React.FormEvent) => {
+    e.preventDefault();
+    const p = parseInt(jumpPageInput);
+    if (!isNaN(p) && p >= 1 && p <= totalPages) {
+      // Align to odd/even page boundary if dual page view is active
+      const isMobile = window.innerWidth < 768;
+      if (!isMobile && p > 1 && p % 2 !== 0) {
+        setCurrentPage(p - 1);
+        setJumpPageInput((p - 1).toString());
+      } else {
+        setCurrentPage(p);
+      }
+    }
+  };
+
+  const toggleFullscreen = () => {
+    const container = readerContainerRef.current;
+    if (!container) return;
+
+    if (!document.fullscreenElement) {
+      container.requestFullscreen().then(() => setIsFullscreen(true)).catch(console.error);
+    } else {
+      document.exitFullscreen().then(() => setIsFullscreen(false)).catch(console.error);
+    }
+  };
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const isDualView = !isMobile && currentPage > 1;
+
+  return (
+    <div 
+      ref={readerContainerRef}
+      onContextMenu={(e) => e.preventDefault()}
+      onCopy={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
+      className="flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden min-h-[640px] shadow-2xl relative select-none w-full"
+    >
+      {/* Top control bar */}
+      <div className="bg-slate-950 px-4 py-3 border-b border-slate-800 flex flex-wrap justify-between items-center gap-3 z-35 text-white">
+        <div className="flex items-center gap-2">
+          <Badge className="bg-indigo-650 text-white hover:bg-indigo-650 text-[10px] uppercase font-bold py-0.5 px-2 border-0">
+            Ebook lật
+          </Badge>
+          <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
+            Tài liệu bảo mật cao chống sao chép
+          </span>
+        </div>
+
+        {/* Page selector navigation */}
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handlePrev}
+            disabled={currentPage === 1 || pageLoading}
+            className="h-8 text-xs border-slate-700 bg-slate-900 text-slate-350 hover:bg-slate-800 hover:text-white"
+          >
+            ◀ Trang trước
+          </Button>
+
+          <form onSubmit={handleJump} className="flex items-center gap-1">
+            <input
+              type="text"
+              value={jumpPageInput}
+              onChange={(e) => setJumpPageInput(e.target.value)}
+              className="w-10 h-8 bg-slate-900 border border-slate-700 text-white rounded text-center text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 font-bold"
+            />
+            <span className="text-slate-400 text-xs font-semibold">/ {totalPages}</span>
+          </form>
+
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleNext}
+            disabled={(isDualView ? currentPage + 1 >= totalPages : currentPage >= totalPages) || pageLoading}
+            className="h-8 text-xs border-slate-700 bg-slate-900 text-slate-350 hover:bg-slate-800 hover:text-white"
+          >
+            Trang sau ▶
+          </Button>
+        </div>
+
+        {/* Zoom & Fullscreen buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setZoomScale((z) => Math.max(z - 0.25, 0.75))}
+            className="p-1.5 rounded-lg bg-slate-900 border border-slate-850 hover:bg-slate-800 text-slate-350 hover:text-white text-xs font-bold w-8 h-8 flex items-center justify-center cursor-pointer"
+            title="Thu nhỏ"
+          >
+            A-
+          </button>
+          <span className="text-[10px] text-slate-400 font-bold hidden sm:inline">{Math.round(zoomScale * 100)}%</span>
+          <button
+            onClick={() => setZoomScale((z) => Math.min(z + 0.25, 2.5))}
+            className="p-1.5 rounded-lg bg-slate-900 border border-slate-850 hover:bg-slate-800 text-slate-350 hover:text-white text-xs font-bold w-8 h-8 flex items-center justify-center cursor-pointer"
+            title="Phóng to"
+          >
+            A+
+          </button>
+          <button
+            onClick={toggleFullscreen}
+            className="p-1.5 rounded-lg bg-slate-900 border border-slate-850 hover:bg-slate-800 text-slate-350 hover:text-white text-xs w-8 h-8 flex items-center justify-center cursor-pointer"
+            title="Toàn màn hình"
+          >
+            {isFullscreen ? '⏹' : '📺'}
+          </button>
+        </div>
+      </div>
+
+      {/* Book pages canvas canvas container */}
+      <div className="flex-1 flex justify-center items-center p-6 bg-slate-950 relative overflow-auto min-h-[500px]">
+        {pageLoading && (
+          <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-xs flex justify-center items-center z-30">
+            <div className="flex flex-col items-center gap-3">
+              <div className="h-7 w-7 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+              <span className="text-[11px] text-slate-450 font-bold animate-pulse">Đang tải trang sách bảo mật...</span>
+            </div>
+          </div>
+        )}
+
+        <div className="flex items-center justify-center gap-2 shadow-2xl relative select-none rounded-xl overflow-hidden bg-slate-900 max-w-full">
+          {/* Left page Canvas */}
+          <div className="relative bg-white border border-slate-800 shadow-lg min-w-0">
+            <canvas ref={leftCanvasRef} className="block max-w-full h-auto" />
+            <div className="absolute top-0 bottom-0 left-0 right-0 pointer-events-none select-none bg-transparent z-15" />
+          </div>
+
+          {/* Realistic Center Book Divider Line (Only visible on dual view) */}
+          {isDualView && (
+            <div className="absolute top-0 bottom-0 left-1/2 w-[4px] -translate-x-1/2 bg-gradient-to-r from-black/45 via-black/15 to-black/45 shadow-inner z-25 pointer-events-none" />
+          )}
+
+          {/* Right page Canvas (Only visible on dual view) */}
+          {isDualView && (
+            <div className="relative bg-white border border-slate-800 shadow-lg min-w-0">
+              <canvas ref={rightCanvasRef} className="block max-w-full h-auto" />
+              <div className="absolute top-0 bottom-0 left-0 right-0 pointer-events-none select-none bg-transparent z-15" />
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Bottom status bar */}
+      <div className="bg-slate-950 px-4 py-2 border-t border-slate-800 flex justify-between items-center text-[10px] text-slate-500 font-bold z-20">
+        <span>BẢN QUYỀN THUỘC HMATH COURSE</span>
+        <span>TRANG {currentPage} {isDualView && ` - ${currentPage + 1}`} / {totalPages}</span>
       </div>
     </div>
   );
