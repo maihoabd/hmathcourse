@@ -84,6 +84,18 @@ export default function AdminCoursesPage() {
     setIsDialogOpen(true);
   };
 
+  const handleGradeChange = (gradeValue: string, checked: boolean) => {
+    let list = grade ? grade.split(',').filter(Boolean) : [];
+    if (checked) {
+      if (!list.includes(gradeValue)) {
+        list.push(gradeValue);
+      }
+    } else {
+      list = list.filter((g) => g !== gradeValue);
+    }
+    setGrade(list.join(','));
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -317,20 +329,28 @@ export default function AdminCoursesPage() {
               </select>
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-700">Khối lớp (Grade)</label>
-              <select
-                value={grade}
-                onChange={(e) => setGrade(e.target.value)}
-                className="flex h-10 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-750 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <option value="lop-6">Toán lớp 6 (lop-6)</option>
-                <option value="lop-7">Toán lớp 7 (lop-7)</option>
-                <option value="lop-8">Toán lớp 8 (lop-8)</option>
-                <option value="lop-9">Toán lớp 9 (lop-9)</option>
-                <option value="on-thi-lop-6">Ôn thi lớp 6 (on-thi-lop-6)</option>
-                <option value="on-thi-lop-10">Ôn thi lớp 10 (on-thi-lop-10)</option>
-              </select>
+            <div className="flex flex-col gap-1.5 md:col-span-2">
+              <label className="text-sm font-medium text-slate-700">Khối lớp áp dụng (Chọn nhiều)</label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                {[
+                  { value: 'lop-6', label: 'Toán lớp 6' },
+                  { value: 'lop-7', label: 'Toán lớp 7' },
+                  { value: 'lop-8', label: 'Toán lớp 8' },
+                  { value: 'lop-9', label: 'Toán lớp 9' },
+                  { value: 'on-thi-lop-6', label: 'Ôn thi lớp 6' },
+                  { value: 'on-thi-lop-10', label: 'Ôn thi lớp 10' }
+                ].map((item) => (
+                  <label key={item.value} className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={grade.split(',').includes(item.value)}
+                      onChange={(e) => handleGradeChange(item.value, e.target.checked)}
+                      className="rounded text-indigo-650 focus:ring-indigo-500 h-4 w-4"
+                    />
+                    {item.label}
+                  </label>
+                ))}
+              </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -341,9 +361,7 @@ export default function AdminCoursesPage() {
                 className="flex h-10 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-750 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="video">Khóa học Video (video)</option>
-                <option value="ebook">Sách điện tử Ebook (ebook)</option>
                 <option value="tailieu">Tài liệu học tập (tailieu)</option>
-                <option value="combo">Combo học tập (combo)</option>
               </select>
             </div>
 

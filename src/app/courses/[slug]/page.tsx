@@ -355,11 +355,15 @@ export default function CourseDetailPage() {
                 </div>
 
                 <div className="divide-y divide-slate-100">
-                  {(course.reviews || [
+                  {(course.reviews || (course.id === 'c3' ? [
+                    { id: 'rev1', userName: 'Nguyễn Văn Hải', rating: 5, comment: 'Đề thi dịch Tiếng Việt rất chuẩn xác, dễ đọc. Lời giải chi tiết từng bước giúp con tôi tự luyện đề AMC 8 ở nhà cực kỳ hiệu quả.', date: '2026-03-15' },
+                    { id: 'rev2', userName: 'Trần Thị Mai', rating: 5, comment: 'Giao diện sách lật (flipbook) rất đẹp và mượt mà, cảm giác đọc như sách thật. Dấu chìm bảo mật thông tin giúp con học tập trung và nghiêm túc hơn.', date: '2026-05-24' },
+                    { id: 'rev3', userName: 'Trần Văn Long', rating: 5, comment: 'Tuyển tập đề thi AMC 8 đầy đủ 15 năm chất lượng cao, các câu hỏi hình học và số học được vẽ hình và giải thích vô cùng trực quan.', date: '2026-07-01' }
+                  ] : [
                     { id: 'rev1', userName: 'Nguyễn Văn Hải', rating: 5, comment: 'Bài học 30 buổi rất đầy đủ và chi tiết. Tài liệu và BTVN được đính kèm chuẩn bị sẵn, rất tiện cho việc tự học và ôn thi.', date: '2026-03-15' },
                     { id: 'rev2', userName: 'Trần Thị Mai', rating: 5, comment: 'Con tôi học bám sát chương trình Kết nối tri thức của HMath và tiến bộ rất nhanh. Giao diện xem video và tải PDF mượt mà.', date: '2026-05-24' },
                     { id: 'rev3', userName: 'Trần Văn Long', rating: 5, comment: 'Video bài giảng âm thanh và hình ảnh vô cùng sắc nét, giáo viên giảng bài tỉ mỉ và dễ tiếp thu.', date: '2026-07-01' }
-                  ]).map((rev: any) => (
+                  ])).map((rev: any) => (
                     <div key={rev.id} className="py-4 first:pt-0 last:pb-0 space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-xs text-slate-800">{rev.userName}</span>
@@ -438,25 +442,46 @@ export default function CourseDetailPage() {
 
               {/* Highlights List */}
               <div className="space-y-3 pt-4 border-t border-slate-100 text-xs text-slate-655">
-                <p className="font-bold text-slate-800">Khóa học này bao gồm:</p>
+                <p className="font-bold text-slate-800">
+                  {course.productType === 'tailieu' || course.productType === 'ebook' || course.productType === 'book' ? 'Tài liệu này bao gồm:' : 'Khóa học này bao gồm:'}
+                </p>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Thời lượng video học: <b>{course.duration}</b></span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span>Số lượng: <b>{course.lessonsCount} bài giảng</b></span>
-                  </div>
+                  {course.productType === 'tailieu' || course.productType === 'ebook' || course.productType === 'book' ? (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        <span>Quy mô tài liệu: <b>{course.duration}</b></span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>Giao diện đọc: <b>Sách lật Flipbook trực tuyến</b></span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Thời lượng video học: <b>{course.duration}</b></span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>Số lượng: <b>{course.lessonsCount} bài giảng</b></span>
+                      </div>
+                    </>
+                  )}
                   <div className="flex items-center gap-2">
                     <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Truy cập trọn đời, cập nhật giáo trình miễn phí</span>
+                    <span>Truy cập trọn đời, ôn tập trực tuyến mọi lúc</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

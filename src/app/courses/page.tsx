@@ -159,13 +159,11 @@ function CoursesContent() {
             <select
               value={selectedProductType}
               onChange={(e) => setSelectedProductType(e.target.value)}
-              className="flex h-10 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              className="flex h-10 w-full rounded-lg border border-slate-300 bg-slate-55 px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
             >
               <option value="All">Tất cả loại sản phẩm</option>
               <option value="video">Khóa học Video</option>
-              <option value="ebook">Sách điện tử Ebook</option>
               <option value="tailieu">Tài liệu học tập</option>
-              <option value="combo">Combo học tập</option>
             </select>
           </div>
 
