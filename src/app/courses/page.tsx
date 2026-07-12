@@ -77,7 +77,10 @@ function CoursesContent() {
 
     // Grade filter
     if (selectedGrade !== 'All') {
-      result = result.filter((c) => c.grade === selectedGrade);
+      result = result.filter((c) => {
+        if (c.grade && c.grade.includes(selectedGrade)) return true;
+        return c.grade === selectedGrade;
+      });
     }
 
     // Product Type filter

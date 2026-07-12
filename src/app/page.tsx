@@ -16,7 +16,7 @@ export default function LandingPage() {
         const res = await fetch('/api/courses');
         if (res.ok) {
           const data = await res.json();
-          setFeaturedCourses(data.slice(0, 2));
+          setFeaturedCourses(data.slice(0, 3));
         }
       } catch (err) {
         console.error('Fetch landing page courses error:', err);
@@ -148,7 +148,7 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto w-full">
             {featuredCourses.map((course) => (
               <Card key={course.id} className="flex flex-col h-full overflow-hidden hover:translate-y-[-4px] hover:shadow-lg">
                 <div className="relative aspect-video w-full overflow-hidden bg-slate-100">

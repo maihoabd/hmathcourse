@@ -228,7 +228,7 @@ export default function StudentClassroomPage() {
           {activeLesson ? (
             <div className="space-y-6">
               {/* Widescreen Video Player Card / Flipbook Reader */}
-              {course?.productType === 'book' ? (
+              {(course?.productType === 'book' || course?.productType === 'ebook') ? (
                 <FlipbookPlayer
                   bookId={course.id}
                   documentKey={activeLesson.documentUrl || 'amc8_2025'}
@@ -288,7 +288,7 @@ export default function StudentClassroomPage() {
               </div>
 
                             {/* Document files list directly */}
-              {course?.productType !== 'book' && (
+              {(course?.productType !== 'book' && course?.productType !== 'ebook') && (
                 <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
