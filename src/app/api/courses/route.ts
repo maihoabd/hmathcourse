@@ -56,6 +56,29 @@ export async function GET(request: Request) {
         });
       }
 
+      // Sort lessons within each chapter numerically to prevent alphabetical sorting bugs (e.g. l10 coming before l2)
+      if (course.chapters) {
+        course.chapters.forEach((chapter: any) => {
+          if (chapter.lessons) {
+            chapter.lessons.sort((a: any, b: any) => {
+              const extractNums = (id: string) => {
+                const match = id.match(/l(\d+)(?:-(\d+))?/);
+                if (match) {
+                  const part1 = parseInt(match[1], 10);
+                  const part2 = match[2] ? parseInt(match[2], 10) : 0;
+                  return [part1, part2];
+                }
+                return [999, 999];
+              };
+              const [a1, a2] = extractNums(a.id);
+              const [b1, b2] = extractNums(b.id);
+              if (a1 !== b1) return a1 - b1;
+              return a2 - b2;
+            });
+          }
+        });
+      }
+
       // Strip sensitive urls from locked lessons if user is not enrolled
       if (!isEnrolled && course.chapters) {
         course.chapters.forEach((chapter) => {
